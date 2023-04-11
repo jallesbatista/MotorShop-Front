@@ -1,8 +1,18 @@
-import { Heading, Box, Flex, Text, IconButton, useDisclosure, Collapse } from "@chakra-ui/react";
+import {
+  Heading,
+  Box,
+  Flex,
+  Text,
+  IconButton,
+  useDisclosure,
+  Collapse,
+  Link,
+} from "@chakra-ui/react";
 import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
 import { useState } from "react";
 import DesktopHeaderNav from "./DesktopHeaderNav";
 import MobileHeaderNav from "./MobileHeaderNav";
+import NextLink from "next/link";
 
 const Header = () => {
   // OS ESTADOS SERÃO ATUALIZADOS PELO ESTADO DE "USER" NO CONTEXTO POSTERIORMENTE, ESTÃO DECLARADOS SOMENTE PARA TESTES NO MOMENTO.
@@ -33,8 +43,9 @@ const Header = () => {
       >
         <Flex justify={"start"}>
           <Heading
-            as="h1"
-            fontSize={"24px"}
+            as={NextLink}
+            href={"/"}
+            fontSize={"32px"}
             bgGradient={"linear(to-r, #0B0D0D, #4529E6)"}
             bgClip="text"
           >
