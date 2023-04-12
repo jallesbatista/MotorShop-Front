@@ -1,27 +1,15 @@
-import {
-  Heading,
-  Box,
-  Flex,
-  Text,
-  IconButton,
-  useDisclosure,
-  Collapse,
-  Link,
-} from "@chakra-ui/react";
+import { Heading, Box, Flex, Text, IconButton, useDisclosure, Collapse } from "@chakra-ui/react";
 import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
-import { useState } from "react";
 import DesktopHeaderNav from "./DesktopHeaderNav";
 import MobileHeaderNav from "./MobileHeaderNav";
 import NextLink from "next/link";
+import { mockedUser } from "@/mocks";
 
 const Header = () => {
-  // OS ESTADOS SERÃO ATUALIZADOS PELO ESTADO DE "USER" NO CONTEXTO POSTERIORMENTE, ESTÃO DECLARADOS SOMENTE PARA TESTES NO MOMENTO.
+  // AS VARIÁVEIS "USER" SERÃO SUBSTITUÍDAS PELO ESTADO DE "USER" NO CONTEXTO POSTERIORMENTE, ESTÃO DECLARADOS SOMENTE PARA TESTES NO MOMENTO.
 
-  const [user, setUser] = useState({
-    name: "Kenzinho Academilson",
-    is_seller: true,
-  });
-  // const [user, setUser] = useState(null);
+  const user = mockedUser;
+  // const user = null;
 
   const { isOpen, onToggle } = useDisclosure();
 

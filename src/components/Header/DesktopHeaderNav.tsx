@@ -1,4 +1,4 @@
-import { INavProps } from "@/interfaces/test.interfaces";
+import { IHeaderNavProps } from "@/interfaces/test.interfaces";
 import {
   Menu,
   MenuButton,
@@ -13,7 +13,7 @@ import {
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 
-const DesktopHeaderNav = ({ user }: INavProps) => {
+const DesktopHeaderNav = ({ user }: IHeaderNavProps) => {
   return (
     <>
       {user ? (

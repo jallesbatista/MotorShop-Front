@@ -1,4 +1,4 @@
-import { INavProps } from "@/interfaces/test.interfaces";
+import { IHeaderNavProps } from "@/interfaces/test.interfaces";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import {
   useDisclosure,
@@ -17,7 +17,7 @@ import {
 import NextLink from "next/link";
 import { useRef } from "react";
 
-const MobileHeaderNav = ({ user }: INavProps) => {
+const MobileHeaderNav = ({ user }: IHeaderNavProps) => {
   const { isOpen, onToggle, onClose } = useDisclosure();
 
   const ref: any = useRef();
