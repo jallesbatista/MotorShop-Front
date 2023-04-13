@@ -13,6 +13,8 @@
     "@chakra-ui/react": "^2.5.3",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
+    "@fontsource/inter": "^4.5.15",
+    "@fontsource/lexend": "^4.5.15",
     "@hookform/resolvers": "^3.0.0",
     "@types/node": "18.15.11",
     "@types/react": "18.0.33",
