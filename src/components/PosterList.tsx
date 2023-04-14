@@ -13,9 +13,10 @@ const PosterList = ({ posterList, w }: { posterList: IMockedPoster[]; w?: string
         gap={"16px"}
         px={"25px"}
         pb={"10px"}
+        justify={"center"}
       >
         {posterList.map((poster, index) => (
-          <PosterCard poster={poster} key={index} />
+          <PosterCard index={index} poster={poster} key={index} />
         ))}
       </Flex>
 
@@ -24,14 +25,14 @@ const PosterList = ({ posterList, w }: { posterList: IMockedPoster[]; w?: string
         templateColumns={{ lg: "repeat(2, 1fr)", xl: "repeat(3, 1fr)" }}
         templateRows={{
           lg: `repeat(${Math.ceil(posterList.length / 2)}, 1fr)`,
-          xl: `repeat(${Math.ceil(posterList.length / 4)}, 1fr)`,
+          xl: `repeat(${posterList.length > 9 ? Math.ceil(posterList.length / 4) : 2}, 1fr)`,
         }}
         w={{ md: "60%", lg: "70%", xl: "80%" }}
         maxW={"1000px"}
         display={{ base: "none", lg: "grid" }}
       >
         {posterList.map((poster, index) => (
-          <PosterCard key={index} poster={poster} />
+          <PosterCard key={index} index={index} poster={poster} />
         ))}
       </Grid>
     </>

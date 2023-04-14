@@ -13,7 +13,10 @@ import {
 } from "@chakra-ui/react";
 import { mockedPoster, mockedUser } from "@/mocks";
 import { IMockedPoster } from "@/interfaces/mocks.interfaces";
-const PosterCard = ({ poster }: { poster: IMockedPoster }) => {
+import { useRouter } from "next/router";
+const PosterCard = ({ poster, index }: { poster: IMockedPoster; index: number }) => {
+  const router = useRouter();
+
   return (
     <>
       <Card
@@ -26,6 +29,8 @@ const PosterCard = ({ poster }: { poster: IMockedPoster }) => {
         rounded={"4px"}
         data-group
         p={0}
+        role="button"
+        onClick={() => router.push(`/poster/${index}`)}
       >
         <CardHeader p={0}>
           <Flex flexDirection={"column"} gap={"12px"}>
