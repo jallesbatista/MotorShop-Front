@@ -79,4 +79,8 @@ export const mockedPosterList: IMockedPoster[] = [
   mockedPoster2,
   mockedPoster,
   mockedPoster2,
+  mockedPoster,
+  mockedPoster2,
+  mockedPoster,
+  mockedPoster2,
 ];

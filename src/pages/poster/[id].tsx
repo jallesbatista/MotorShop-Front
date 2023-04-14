@@ -52,6 +52,7 @@ const PosterDetail: NextPage<Props> = ({ poster }) => {
           maxW={"1200px"}
           w={"90%"}
           color={"grey.1"}
+          minH={"100vh"}
         >
           <Flex maxW={"755px"} direction={{ base: "column" }} gap={"18px"}>
             {/* IMAGEM DO POSTER  */}
