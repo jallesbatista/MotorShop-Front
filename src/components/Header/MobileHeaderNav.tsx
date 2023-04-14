@@ -33,8 +33,8 @@ const MobileHeaderNav = ({ user }: IHeaderNavProps) => {
         <>
           <Flex
             py={2}
-            as={Link}
-            href={"#"}
+            as={"button"}
+            w={"100%"}
             justify={"space-between"}
             align={"center"}
             _hover={{
@@ -65,18 +65,18 @@ const MobileHeaderNav = ({ user }: IHeaderNavProps) => {
               borderColor={useColorModeValue("gray.200", "gray.700")}
               align={"start"}
             >
-              <Button w={"100%"} variant={"outline"} border={"1px solid #CED4DA"} rounded={"4px"}>
+              <Button w={"100%"} variant={"outline1"}>
                 Editar Perfil
               </Button>
-              <Button w={"100%"} variant={"outline"} border={"1px solid #CED4DA"} rounded={"4px"}>
+              <Button w={"100%"} variant={"outline1"}>
                 Editar Endereço
               </Button>
               {user?.is_seller ? (
-                <Button w={"100%"} variant={"outline"} border={"1px solid #CED4DA"} rounded={"4px"}>
+                <Button w={"100%"} variant={"outlineBrand1"}>
                   Meus Anúncios
                 </Button>
               ) : null}
-              <Button w={"100%"} colorScheme="red" rounded={"4px"}>
+              <Button variant={"alert"} w={"100%"}>
                 Sair
               </Button>
             </Stack>
@@ -97,7 +97,6 @@ const MobileHeaderNav = ({ user }: IHeaderNavProps) => {
                 variant={"outline"}
                 color="black"
                 border={"2px solid #CED4DA"}
-                rounded={"4px"}
                 as={NextLink}
                 href="/"
               >

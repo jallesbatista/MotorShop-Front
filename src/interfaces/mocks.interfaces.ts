@@ -1,6 +1,7 @@
 export interface IMockedUser {
   name: string;
   is_seller: boolean;
+  description: string;
 }
 
 export interface IMockedPoster {
@@ -16,6 +17,7 @@ export interface IMockedPoster {
   is_published: boolean;
   createdAt: string;
   images: IMockerImage[];
+  user: IMockedUser;
 }
 
 interface IMockerImage {
