@@ -33,11 +33,13 @@ const DesktopHeaderNav = ({ user }: IHeaderNavProps) => {
               maxW={"200px"}
               overflow={"hidden"}
               textOverflow={"ellipsis"}
+              fontSize={"body.1"}
+              color={"grey.2"}
             >
               {user.name}
             </Text>
           </MenuButton>
-          <MenuList>
+          <MenuList color={"grey.2"}>
             <MenuItem>Editar Perfil</MenuItem>
             <MenuItem>Editar Endereço</MenuItem>
             {user?.is_seller ? <MenuItem>Meus Anúncios</MenuItem> : null}
@@ -52,7 +54,7 @@ const DesktopHeaderNav = ({ user }: IHeaderNavProps) => {
           gap={"36px"}
         >
           <Box display="flex" alignItems={"center"} textAlign={"center"}>
-            <Link as={NextLink} href="/" fontWeight={600}>
+            <Link _hover={{}} color={"grey.2"} as={NextLink} href="/" fontWeight={"semibold"}>
               Fazer Login
             </Link>
           </Box>
@@ -60,12 +62,13 @@ const DesktopHeaderNav = ({ user }: IHeaderNavProps) => {
             <Button
               p={"20px"}
               px={["24px", "24px"]}
-              variant={"outline"}
-              color="black"
+              variant={"outline2"}
+              size={"lg"}
+              color="grey.0"
               border={"2px solid #CED4DA"}
               rounded={"4px"}
               as={NextLink}
-              href="/"
+              href="/register"
             >
               Cadastrar
             </Button>

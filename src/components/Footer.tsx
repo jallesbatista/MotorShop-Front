@@ -1,40 +1,39 @@
-import { Box, Flex, Heading, Icon, IconButton, Text } from "@chakra-ui/react";
+import { Box, Flex, Heading, IconButton, Text } from "@chakra-ui/react";
 import { ChevronUpIcon } from "@chakra-ui/icons";
+import NextLink from "next/link";
 
 function Footer() {
   return (
-    <Box
-      as="footer"
-      bg="black"
-      color="white"
-      py={{ base: "2", md: "4" }}
-      px={{ base: "2", md: "6" }}
-      mt={{ base: "2", md: "4" }}
-      ml={{ base: "2", md: "4" }}
-      mr={{ base: "2", md: "4" }}
-    >
+    <Box as="footer" bg="black" color="white" maxW={"100%"} mt={{ base: "45px", md: "73px" }}>
       <Flex
-        px="25px"
-        py="10px"
+        px={{ md: "60px" }}
+        py={{ base: "45px", md: "56px" }}
         justifyContent={{ base: "center", md: "space-between" }}
         alignItems="center"
         flexWrap="wrap"
         flexDirection={{ base: "column", md: "row" }}
-        gap={{base: "20px"}}
+        gap={{ base: "60px" }}
       >
-        <Heading as="h3" >Motors Shop</Heading>
-        <Text fontSize={{ base: "sm", md: "md" }}>© 2022 - Todos os direitos reservados.</Text>
+        <Heading as={NextLink} href={"/"} fontSize={"heading.4 "} color={"white"}>
+          Motors{" "}
+          <Heading fontSize={"heading.6"} as="span">
+            shop
+          </Heading>
+        </Heading>
+        <Text fontWeight={"normal"} color={"white"} fontSize={"body.2"}>
+          © 2022 - Todos os direitos reservados.
+        </Text>
         <IconButton
           icon={<ChevronUpIcon />}
           aria-label="button-scrool-top"
           color="white"
-          boxSize={{ base: "8", md: "6" }}
-          px="5px"
-          py="5px"
+          width={"50px"}
+          fontSize={"18px"}
+          p={"22px"}
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-          bg="#212529"
+          bg="grey.1"
           border="0px"
-          _hover={{ backgroundColor: "#555" }}
+          _hover={{ bg: "grey.2" }}
         />
       </Flex>
     </Box>

@@ -62,7 +62,7 @@ const buttonTheme = defineStyleConfig({
   baseStyle: {
     display: "flex",
     flexDirection: "row",
-    justify: "center",
+    justifyContent: "center",
     alignItems: "center",
     borderRadius: "4px",
     fontWeight: "semibold",
@@ -269,7 +269,7 @@ const customTheme = extendTheme({
     },
   },
 
-  lineHeight: {
+  lineHeights: {
     heading: {
       1: "56px",
       2: "45px",

@@ -19,13 +19,19 @@ const Header = () => {
       borderBottom={"2px solid #DEE2E6"}
       boxShadow={isOpen ? "lg" : "none"}
       bgColor={"#FDFDFD"}
+      position={"absolute"}
+      top={0}
+      right={0}
+      left={0}
+      minW={"100%"}
     >
       <Flex
         justifyContent={"space-between"}
         alignItems={"center"}
         p={{
           base: "0px 16px 0px 16px",
-          md: "0px 20px 0px 20px",
+          md: "0px 60px 0px 60px",
+          xl: "0px 105px 0px 60px",
         }}
         height={"80px"}
       >
@@ -33,14 +39,14 @@ const Header = () => {
           <Heading
             as={NextLink}
             href={"/"}
-            fontSize={"32px"}
+            fontSize={"heading.4 "}
             bgGradient={"linear(to-r, #0B0D0D, #4529E6)"}
             bgClip="text"
           >
             Motors{" "}
-            <Text as="span" color={"#4529E6"}>
+            <Heading fontSize={"heading.6"} as="span" color={"#4529E6"}>
               shop
-            </Text>
+            </Heading>
           </Heading>
         </Flex>
 
