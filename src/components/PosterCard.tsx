@@ -11,7 +11,7 @@ import {
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { mockedPoster, mockedUser } from "@/mocks";
+import { mockedUser } from "@/mocks";
 import { IMockedPoster } from "@/interfaces/mocks.interfaces";
 import { useRouter } from "next/router";
 const PosterCard = ({ poster, index }: { poster: IMockedPoster; index: number }) => {

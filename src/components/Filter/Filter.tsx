@@ -30,8 +30,8 @@ const Filter = () => {
           <TextFilter filterList={colorList}>Color</TextFilter>
           <TextFilter filterList={yearList}>Year</TextFilter>
           <TextFilter filterList={fuelList}>Fuel</TextFilter>
-          {/* <InputFilter>Km</InputFilter>
-          <InputFilter>Preço</InputFilter> */}
+          <InputFilter>Km</InputFilter>
+          <InputFilter>Preço</InputFilter>
         </Flex>
 
         <Button bottom={0} variant={"brand1"}>
