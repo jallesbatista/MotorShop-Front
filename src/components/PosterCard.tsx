@@ -12,13 +12,15 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { mockedPoster, mockedUser } from "@/mocks";
-const PosterCard = () => {
+import { IMockedPoster } from "@/interfaces/mocks.interfaces";
+const PosterCard = ({ poster }: { poster: IMockedPoster }) => {
   return (
     <>
       <Card
         flexDirection={"column"}
         bgColor={useColorModeValue("white", "gray.700")}
         maxW="320px"
+        minWidth={"300px"}
         gap={"16px"}
         boxShadow={"none"}
         rounded={"4px"}
@@ -47,14 +49,14 @@ const PosterCard = () => {
             >
               <Image
                 transition={".3s"}
-                src={mockedPoster.images[0].url}
+                src={poster.images[0].url}
                 minW={"100%"}
                 w="auto"
                 objectFit="fill"
                 alt="hm"
                 bg={"gray.100"}
               />
-              {mockedPoster.price < mockedPoster.fipe_price && (
+              {poster.price < poster.fipe_price && (
                 <Flex
                   color={"white"}
                   bgColor={"green.500"}
@@ -73,29 +75,35 @@ const PosterCard = () => {
                 </Flex>
               )}
             </Flex>
-            <Heading as={"h3"} fontSize={"1rem"} noOfLines={1}>
-              {mockedPoster.model}
+            <Heading
+              color={"grey.1"}
+              as={"h3"}
+              fontSize={"heading.7"}
+              fontWeight={"semibold"}
+              noOfLines={1}
+            >
+              {poster.model}
             </Heading>
           </Flex>
         </CardHeader>
 
         <CardBody p={0}>
-          <Flex flexDirection={"column"} gap={"16px"}>
-            <Text textAlign={"left"} fontSize={"0.8rem"} noOfLines={2}>
-              {mockedPoster.description}
+          <Flex flexDirection={"column"} gap={"16px"} color={"grey.2"}>
+            <Text textAlign={"left"} fontSize={"body.2"} lineHeight={"body.2"} noOfLines={2}>
+              {poster.description}
             </Text>
             <Flex alignItems={"center"} gap={"8px"}>
               <Avatar
                 sx={{
                   div: {
-                    fontSize: "12px",
+                    fontSize: "body.2",
                   },
                 }}
                 name={mockedUser.name}
                 width="30px"
                 h="30px"
               />
-              <Text fontSize={"sm"} color={"#495057"} fontWeight={500} noOfLines={1}>
+              <Text fontSize={"body.2"} fontWeight={"medium"} noOfLines={1}>
                 {mockedUser.name}
               </Text>
             </Flex>
@@ -105,17 +113,17 @@ const PosterCard = () => {
         <CardFooter p={0}>
           <Flex w={"100%"} justify={"space-between"}>
             <Flex gap={"12px"}>
-              <Tag bgColor={"#EDEAFD"} color={"#4529E6"}>
-                {parseFloat(String(mockedPoster.kilometers)).toFixed(0)} KM
+              <Tag fontWeight={"medium"} bgColor={"#EDEAFD"} color={"#4529E6"}>
+                {parseFloat(String(poster.kilometers)).toFixed(0)} KM
               </Tag>
-              <Tag bgColor={"#EDEAFD"} color={"#4529E6"}>
-                {mockedPoster.year}
+              <Tag fontWeight={"medium"} bgColor={"#EDEAFD"} color={"#4529E6"}>
+                {poster.year}
               </Tag>
             </Flex>
 
-            <Text fontSize={"1rem"} fontWeight={600}>
-              {mockedPoster.price.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}
-            </Text>
+            <Heading as={"span"} fontSize={"heading.7"} fontWeight={"medium"}>
+              {poster.price.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}
+            </Heading>
           </Flex>
         </CardFooter>
       </Card>
