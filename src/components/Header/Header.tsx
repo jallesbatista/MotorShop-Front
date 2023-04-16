@@ -24,7 +24,7 @@ const Header = () => {
       right={0}
       left={0}
       minW={"100%"}
-      zIndex={"toast"}
+      zIndex={"skipLink"}
     >
       <Flex
         justifyContent={"space-between"}

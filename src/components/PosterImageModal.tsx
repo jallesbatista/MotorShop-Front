@@ -16,7 +16,7 @@ interface IPosterImageModalProps {
 
 const PosterImageModal = ({ isOpen, onClose, posterImage }: IPosterImageModalProps) => {
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={onClose} isCentered>
       <ModalOverlay />
       <ModalContent bg={"white"} color={"grey.1"} w={"90%"} maxW={"520px"}>
         <Flex

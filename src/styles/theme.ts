@@ -5,6 +5,24 @@ import { createMultiStyleConfigHelpers, defineStyle } from "@chakra-ui/styled-sy
 
 const { defineMultiStyleConfig } = createMultiStyleConfigHelpers(parts.keys);
 
+const zIndices = {
+  zIndices: {
+    hide: -1,
+    auto: "auto",
+    base: 0,
+    docked: 10,
+    dropdown: 1000,
+    sticky: 1100,
+    banner: 1200,
+    overlay: 1300,
+    modal: 1400,
+    popover: 1500,
+    skipLink: 1600,
+    toast: 1700,
+    tooltip: 99999,
+  },
+};
+
 const inputTheme = defineMultiStyleConfig({
   defaultProps: {
     variant: "default",
@@ -296,6 +314,7 @@ const customTheme = extendTheme({
   components: {
     Button: buttonTheme,
     Input: inputTheme,
+    zIndices,
   },
 });
 

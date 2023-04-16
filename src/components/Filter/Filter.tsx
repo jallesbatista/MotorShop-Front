@@ -45,7 +45,13 @@ const Filter = () => {
         </Button>
       </Flex>
 
-      <Modal isOpen={isOpen} onClose={onClose} blockScrollOnMount={false}>
+      <Modal
+        isOpen={isOpen}
+        onClose={onClose}
+        blockScrollOnMount={false}
+        closeOnOverlayClick={false}
+        isCentered
+      >
         <ModalOverlay />
         <ModalContent
           alignSelf={"flex-end"}
@@ -55,14 +61,25 @@ const Filter = () => {
           w={"100%"}
           p={"18px 16px 32px 16px"}
           position={"fixed"}
-          zIndex="overlay"
           maxHeight={"80%"}
+          sx={{
+            "::-webkit-scrollbar": {
+              width: "6px",
+            },
+            "::-webkit-scrollbar-track": {
+              width: "6px",
+            },
+            "::-webkit-scrollbar-thumb": {
+              background: "brand.3",
+              borderRadius: "24px",
+            },
+          }}
         >
-          <Flex justifyContent={"space-between"} mb={"48px"}>
+          <Flex justifyContent={"space-between"} mb={"32px"} mt={"20px"} position={"relative"}>
             <Heading fontSize={"heading.7"} fontWeight={"medium"}>
               Filtro
             </Heading>
-            <ModalCloseButton />
+            <ModalCloseButton top={"-10px"} right={0} />
           </Flex>
           <Flex direction={"column"}>
             <Flex direction={"column"} gap={"12px"}>
