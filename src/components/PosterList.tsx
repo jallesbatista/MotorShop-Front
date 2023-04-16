@@ -2,7 +2,7 @@ import { IMockedPoster } from "@/interfaces/mocks.interfaces";
 import { Flex, Grid } from "@chakra-ui/react";
 import PosterCard from "./PosterCard";
 
-const PosterList = ({ posterList, w }: { posterList: IMockedPoster[]; w?: string }) => {
+const PosterList = ({ posterList }: { posterList: IMockedPoster[] }) => {
   return (
     <>
       <Flex
@@ -13,7 +13,7 @@ const PosterList = ({ posterList, w }: { posterList: IMockedPoster[]; w?: string
         gap={"16px"}
         px={"25px"}
         pb={"10px"}
-        justify={"center"}
+        justify={posterList.length == 1 ? "center" : "normal"}
       >
         {posterList.map((poster, index) => (
           <PosterCard index={index} poster={poster} key={index} />
