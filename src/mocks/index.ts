@@ -5,14 +5,23 @@ export const mockedUser: IMockedUser = {
   is_seller: true,
   description: "Um carinha legal",
 };
-export const mockedPosterUser: IMockedUser = {
+export const mockedUser2: IMockedUser = {
   name: "Lojas KA",
   is_seller: true,
   description: "Loja que te deixa de queixo caído com seus produtos",
 };
 
+export const mockedUserList = [
+  mockedUser,
+  mockedUser2,
+  mockedUser,
+  mockedUser2,
+  mockedUser,
+  mockedUser2,
+];
+
 export const mockedPoster: IMockedPoster = {
-  user: mockedPosterUser,
+  user: mockedUser2,
   brand: "Citroên",
   model: "Mercedes Benz A 200 CGI ADVANCE SEDAN Mercedes Benz A 200",
   year: "2022",
@@ -79,8 +88,12 @@ export const mockedPosterList: IMockedPoster[] = [
   mockedPoster2,
   mockedPoster,
   mockedPoster2,
-  mockedPoster,
-  mockedPoster2,
-  mockedPoster,
-  mockedPoster2,
+  // mockedPoster,
+  // mockedPoster2,
+  // mockedPoster,
+  // mockedPoster2,
+  // mockedPoster,
+  // mockedPoster2,
+  // mockedPoster,
+  // mockedPoster2,
 ];

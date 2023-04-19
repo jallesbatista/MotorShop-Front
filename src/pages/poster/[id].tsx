@@ -41,7 +41,7 @@ const PosterDetail: NextPage<Props> = ({ poster }) => {
         w={"100%"}
         bgGradient={{
           base: "linear(to-b, brand.1 0%, brand.1 23%, grey.8 23%, grey.8 100%)",
-          md: "linear(to-b, brand.1 0%, brand.1 55%, grey.8 55%, grey.8 100%)",
+          md: "linear(to-b, brand.1 0px, brand.1 600px, grey.8 600px, grey.8 100%)",
         }}
       >
         <Container
@@ -49,12 +49,12 @@ const PosterDetail: NextPage<Props> = ({ poster }) => {
           gap={{ base: "16px", md: "46px" }}
           p={0}
           flexDirection={{ base: "column", md: "row" }}
-          maxW={"1200px"}
+          maxW={"1300px"}
           w={"90%"}
           color={"grey.1"}
           minH={"100vh"}
         >
-          <Flex maxW={"755px"} direction={{ base: "column" }} gap={"18px"}>
+          <Flex w={{ base: "100%", md: "65%" }} direction={{ base: "column" }} gap={"18px"}>
             {/* IMAGEM DO POSTER  */}
             <Flex
               rounded={"4px"}
@@ -97,6 +97,7 @@ const PosterDetail: NextPage<Props> = ({ poster }) => {
                     fontWeight={"semibold"}
                     bgColor={"brand.4"}
                     color={"brand.1"}
+                    rounded={"4px"}
                   >
                     {poster.year}
                   </Tag>
@@ -105,6 +106,7 @@ const PosterDetail: NextPage<Props> = ({ poster }) => {
                     fontWeight={"semibold"}
                     bgColor={"brand.4"}
                     color={"brand.1"}
+                    rounded={"4px"}
                   >
                     {poster.kilometers} KM
                   </Tag>
@@ -150,18 +152,17 @@ const PosterDetail: NextPage<Props> = ({ poster }) => {
 
           {/* SECOND COLUMN */}
           <Flex
-            w={{ base: "100%", md: "40%" }}
+            w={{ base: "100%", md: "35%" }}
             direction={"column"}
             gap={{ base: "52px", md: "34px" }}
           >
             {/* IMAGES */}
             <Flex
-              maxW={{ md: "440px" }}
               w={"100%"}
               direction={"column"}
               gap={"32px"}
               bg={"grey.10"}
-              p={"36px 40px"}
+              p={{ base: "36px 40px", md: "36px 24px", lg: "36px 40px" }}
               rounded={"4px"}
             >
               <Heading fontSize={"heading.6"} fontWeight={"semibold"}>
@@ -225,7 +226,12 @@ const PosterDetail: NextPage<Props> = ({ poster }) => {
                 justify={"center"}
                 gap={{ base: "28px", md: "32px" }}
               >
-                <Heading fontWeight={"semibold"} fontSize={"heading.6"} as={"h2"}>
+                <Heading
+                  textAlign={"center"}
+                  fontWeight={"semibold"}
+                  fontSize={"heading.6"}
+                  as={"h2"}
+                >
                   {poster.user.name}
                 </Heading>
                 <Text
@@ -234,7 +240,9 @@ const PosterDetail: NextPage<Props> = ({ poster }) => {
                   color={"grey.2"}
                   fontSize={"body.1"}
                 >
-                  {poster.user.description}
+                  {/* {poster.user.description} */}
+                  Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
+                  Ipsum has been the industry's
                 </Text>
 
                 <Button size={"lg"}>Ver todos os anuncios</Button>

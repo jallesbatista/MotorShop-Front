@@ -1,8 +1,32 @@
 import { IMockedPoster } from "@/interfaces/mocks.interfaces";
-import { Flex, Grid } from "@chakra-ui/react";
+import { Button, Flex, Grid } from "@chakra-ui/react";
 import PosterCard from "./PosterCard";
 
-const PosterList = ({ posterList }: { posterList: IMockedPoster[] }) => {
+interface IPosterList {
+  posterList: IMockedPoster[];
+  maxWidth: string;
+  maxColumns: number;
+  width: {
+    lg: string;
+    xl: string;
+  };
+  columns: {
+    lg: number;
+    xl: number;
+  };
+  edit?: boolean;
+  showPromoTag: boolean;
+}
+
+const PosterList = ({
+  posterList,
+  columns,
+  width,
+  maxWidth,
+  edit,
+  maxColumns,
+  showPromoTag,
+}: IPosterList) => {
   return (
     <>
       <Flex
@@ -16,23 +40,44 @@ const PosterList = ({ posterList }: { posterList: IMockedPoster[] }) => {
         justify={posterList.length == 1 ? "center" : "normal"}
       >
         {posterList.map((poster, index) => (
-          <PosterCard index={index} poster={poster} key={index} />
+          <Flex direction={"column"} key={index} gap={"12px"}>
+            <PosterCard index={index} poster={poster} showPromoTag={showPromoTag} />
+            {edit && (
+              <Flex color={"grey.1"} gap={"16px"}>
+                <Button variant={"outline1"}>Editar</Button>
+                <Button variant={"outline1"}>Ver detalhes</Button>
+              </Flex>
+            )}
+          </Flex>
         ))}
       </Flex>
 
       <Grid
-        gap={{ md: "100px 0px", lg: "100px 48px" }}
-        templateColumns={{ lg: "repeat(2, 1fr)", xl: "repeat(3, 1fr)" }}
-        templateRows={{
-          lg: `repeat(${Math.ceil(posterList.length / 2)}, 1fr)`,
-          xl: `repeat(${posterList.length > 9 ? Math.ceil(posterList.length / 4) : 2}, 1fr)`,
-        }}
-        w={{ md: "60%", lg: "70%", xl: "80%" }}
-        maxW={"1000px"}
+        gap={{ md: "100px 0px", lg: "100px 32px" }}
+        templateColumns={{ lg: `repeat(${columns?.lg}, 1fr)`, xl: `repeat(${columns?.xl}, 1fr)` }}
+        gridTemplateRows={"auto"}
+        w={width}
+        alignContent={"center"}
+        maxW={maxWidth}
         display={{ base: "none", lg: "grid" }}
+        h={"max-content"}
+        justifyItems={"center"}
+        sx={{
+          "@media (min-width: 1320px)": {
+            gridTemplateColumns: `repeat(${maxColumns},1fr)`,
+          },
+        }}
       >
         {posterList.map((poster, index) => (
-          <PosterCard key={index} index={index} poster={poster} />
+          <Flex direction={"column"} key={index} gap={"12px"}>
+            <PosterCard index={index} poster={poster} showPromoTag={showPromoTag} />
+            {edit && (
+              <Flex color={"grey.1"} gap={"16px"}>
+                <Button variant={"outline1"}>Editar</Button>
+                <Button variant={"outline1"}>Ver detalhes</Button>
+              </Flex>
+            )}
+          </Flex>
         ))}
       </Grid>
     </>

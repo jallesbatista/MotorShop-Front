@@ -9,21 +9,29 @@ import {
   Image,
   Tag,
   Text,
-  useColorModeValue,
 } from "@chakra-ui/react";
 import { mockedUser } from "@/mocks";
 import { IMockedPoster } from "@/interfaces/mocks.interfaces";
 import { useRouter } from "next/router";
-const PosterCard = ({ poster, index }: { poster: IMockedPoster; index: number }) => {
+
+const PosterCard = ({
+  poster,
+  index,
+  showPromoTag,
+}: {
+  poster: IMockedPoster;
+  index: number;
+  showPromoTag: boolean;
+}) => {
   const router = useRouter();
 
   return (
     <>
       <Card
         flexDirection={"column"}
-        bgColor={useColorModeValue("white", "gray.700")}
+        bgColor={"transparent"}
         maxW="320px"
-        minWidth={"300px"}
+        minWidth={"290px"}
         gap={"16px"}
         boxShadow={"none"}
         rounded={"4px"}
@@ -39,7 +47,6 @@ const PosterCard = ({ poster, index }: { poster: IMockedPoster; index: number })
               overflow={"hidden"}
               h={"150px"}
               rounded={"0px 0px 4px 4px"}
-              bgColor={"gray.100"}
               justifyContent={"center"}
               border={"2px solid transparent"}
               transition={".3s"}
@@ -59,9 +66,9 @@ const PosterCard = ({ poster, index }: { poster: IMockedPoster; index: number })
                 w="auto"
                 objectFit="fill"
                 alt="hm"
-                bg={"gray.100"}
+                bg={"grey.7"}
               />
-              {poster.price < poster.fipe_price && (
+              {poster.price < poster.fipe_price && showPromoTag && (
                 <Flex
                   color={"white"}
                   bgColor={"green.500"}
@@ -118,10 +125,22 @@ const PosterCard = ({ poster, index }: { poster: IMockedPoster; index: number })
         <CardFooter p={0}>
           <Flex w={"100%"} justify={"space-between"}>
             <Flex gap={"12px"}>
-              <Tag fontWeight={"medium"} bgColor={"#EDEAFD"} color={"#4529E6"}>
+              <Tag
+                p={"4px 8px"}
+                fontWeight={"medium"}
+                bgColor={"brand.4"}
+                color={"brand.1"}
+                rounded={"4px"}
+              >
                 {parseFloat(String(poster.kilometers)).toFixed(0)} KM
               </Tag>
-              <Tag fontWeight={"medium"} bgColor={"#EDEAFD"} color={"#4529E6"}>
+              <Tag
+                p={"4px 8px"}
+                fontWeight={"medium"}
+                bgColor={"brand.4"}
+                color={"brand.1"}
+                rounded={"4px"}
+              >
                 {poster.year}
               </Tag>
             </Flex>
