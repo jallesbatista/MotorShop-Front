@@ -66,7 +66,14 @@ const Home = () => {
           justify={{ base: "none", md: "space-between" }}
           p={{ base: "70px 0px 70px 0px", lg: "60px 63px 60px 30px" }}
         >
-          <PosterList posterList={posterList} />
+          <PosterList
+            maxWidth="1000px"
+            width={{ lg: "70%", xl: "80%" }}
+            columns={{ lg: 2, xl: 3 }}
+            maxColumns={3}
+            posterList={posterList}
+            showPromoTag={true}
+          />
           <Filter />
         </Flex>
       </Container>
@@ -97,5 +104,6 @@ const Home = () => {
     </>
   );
 };
+// FAZER O SSR
 
 export default Home;

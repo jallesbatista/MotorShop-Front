@@ -45,23 +45,15 @@ const Filter = () => {
         </Button>
       </Flex>
 
-      <Modal
-        isOpen={isOpen}
-        onClose={onClose}
-        blockScrollOnMount={false}
-        closeOnOverlayClick={false}
-        isCentered
-      >
+      <Modal isOpen={isOpen} onClose={onClose} closeOnOverlayClick isCentered>
         <ModalOverlay />
         <ModalContent
-          alignSelf={"flex-end"}
-          overflow={"scroll"}
           bg={"white"}
           color={"grey.1"}
           w={"100%"}
           p={"18px 16px 32px 16px"}
-          position={"fixed"}
-          maxHeight={"80%"}
+          maxH={"80%"}
+          overflowY={"scroll"}
           sx={{
             "::-webkit-scrollbar": {
               width: "6px",
@@ -75,7 +67,7 @@ const Filter = () => {
             },
           }}
         >
-          <Flex justifyContent={"space-between"} mb={"32px"} mt={"20px"} position={"relative"}>
+          <Flex justifyContent={"space-between"} mb={"32px"} position={"relative"}>
             <Heading fontSize={"heading.7"} fontWeight={"medium"}>
               Filtro
             </Heading>
@@ -92,7 +84,7 @@ const Filter = () => {
               <InputFilter>Preço</InputFilter>
             </Flex>
 
-            <Button bottom={0} variant={"brand1"}>
+            <Button onClick={onClose} bottom={0} variant={"brand1"}>
               Limpar filtros
             </Button>
           </Flex>
