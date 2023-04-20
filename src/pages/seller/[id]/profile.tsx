@@ -2,7 +2,7 @@ import Footer from "@/components/Footer";
 import Header from "@/components/Header/Header";
 import PosterCreateEditModal from "@/components/PosterCreateEditModal";
 import PosterList from "@/components/PosterList";
-import { IMockedUser } from "@/interfaces/mocks.interfaces";
+import { IMockedPoster, IMockedUser } from "@/interfaces/mocks.interfaces";
 import { mockedPosterList, mockedUserList } from "@/mocks";
 import { Avatar, Box, Button, Flex, Heading, Tag, Text, useDisclosure } from "@chakra-ui/react";
 import { GetServerSideProps, NextPage } from "next";
@@ -10,9 +10,10 @@ import { GetServerSideProps, NextPage } from "next";
 interface Props {
   seller: IMockedUser;
   isThisSeller: boolean;
+  posterList: IMockedPoster[];
 }
 
-const Profile: NextPage<Props> = ({ seller, isThisSeller }) => {
+const Profile: NextPage<Props> = ({ seller, isThisSeller, posterList }) => {
   const {
     isOpen: isCreateModalOpen,
     onClose: onCreateModalClose,
@@ -74,10 +75,7 @@ const Profile: NextPage<Props> = ({ seller, isThisSeller }) => {
 
             <Flex direction={"column"} gap={{ base: "12px", md: "36px" }}>
               <Text fontSize={"body.1"} color={"grey.2"}>
-                {/* {seller.description} */}
-                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Perferendis repellendus
-                molestiae doloremque ad blanditiis facilis quos modi a exercitationem quod. Qui quae
-                suscipit laboriosam quos ducimus sequi, eaque hic facilis!
+                {seller.description}
               </Text>
 
               {isThisSeller && (
@@ -95,7 +93,7 @@ const Profile: NextPage<Props> = ({ seller, isThisSeller }) => {
             maxWidth="1300px"
             columns={{ lg: 3, xl: 3 }}
             width={{ lg: "90%", xl: "100%" }}
-            posterList={mockedPosterList}
+            posterList={posterList}
             edit={isThisSeller}
             maxColumns={4}
             showPromoTag={false}
@@ -136,7 +134,6 @@ const Profile: NextPage<Props> = ({ seller, isThisSeller }) => {
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { id } = ctx.query;
-
   // try {
   //   const response = await api.get(`/poster/${ctx.params}`);
   //   return {
@@ -161,7 +158,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   }
 
   return {
-    props: { seller: mockedUserList[+id!], isThisSeller: true },
+    props: { seller: mockedUserList[+id!], isThisSeller: true, posterList: mockedPosterList },
   };
 };
 

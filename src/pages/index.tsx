@@ -2,15 +2,19 @@ import Filter from "@/components/Filter/Filter";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header/Header";
 import PosterList from "@/components/PosterList";
-import { IMockedPoster } from "@/interfaces/mocks.interfaces";
 import { mockedPosterList } from "@/mocks";
+import api from "@/services/api";
 import { Box, Container, Flex, Heading, Text } from "@chakra-ui/react";
+import { GetServerSideProps, NextPage } from "next";
 import { useState } from "react";
 
-const Home = () => {
-  const backGroundImage = mockedPosterList[0].images[0].url;
+interface Props {
+  posterList: any[];
+  error: string;
+}
 
-  const [posterList, setPosterList] = useState<IMockedPoster[]>(mockedPosterList);
+const Home: NextPage<Props> = ({ posterList, error }) => {
+  const backGroundImage = posterList[0].images[0].url;
   const [page, setPage] = useState<number>(1);
 
   return (
@@ -104,6 +108,17 @@ const Home = () => {
     </>
   );
 };
-// FAZER O SSR
+export const getServerSideProps: GetServerSideProps = async () => {
+  try {
+    const response = await api.get(`/posters/`);
+    return {
+      props: { posterList: response.data.data },
+    };
+  } catch (error: any) {
+    return {
+      props: { error: error.message || error.data.message, posterList: mockedPosterList },
+    };
+  }
+};
 
 export default Home;
