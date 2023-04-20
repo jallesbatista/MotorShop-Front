@@ -96,6 +96,10 @@ const textAreaTheme = defineStyleConfig({
         bg: "grey.8",
         borderColor: "transparent",
       },
+      _invalid: {
+        border: "2px solid",
+        borderColor: "red",
+      },
       "::-webkit-scrollbar": {
         width: "6px",
       },

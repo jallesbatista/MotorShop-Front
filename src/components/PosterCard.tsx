@@ -65,7 +65,7 @@ const PosterCard = ({
                 minW={"100%"}
                 w="auto"
                 objectFit="fill"
-                alt="hm"
+                alt="vehicle image"
                 bg={"grey.7"}
               />
               {poster.price < poster.fipe_price && showPromoTag && (
@@ -101,7 +101,13 @@ const PosterCard = ({
 
         <CardBody p={0}>
           <Flex flexDirection={"column"} gap={"16px"} color={"grey.2"}>
-            <Text textAlign={"left"} fontSize={"body.2"} lineHeight={"body.2"} noOfLines={2}>
+            <Text
+              h={"48px"}
+              textAlign={"left"}
+              fontSize={"body.2"}
+              lineHeight={"body.2"}
+              noOfLines={2}
+            >
               {poster.description}
             </Text>
             <Flex alignItems={"center"} gap={"8px"}>

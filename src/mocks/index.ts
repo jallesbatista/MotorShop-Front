@@ -3,12 +3,15 @@ import { IMockedPoster, IMockedUser } from "@/interfaces/mocks.interfaces";
 export const mockedUser: IMockedUser = {
   name: "Kenzinho Academilson",
   is_seller: true,
-  description: "Um carinha legal",
+  description: `Um carinha legal  com uma lojinha legal. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Perferendis repellendus
+  molestiae doloremque ad blanditiis facilis quos modi a exercitationem quod. Qui quae
+  suscipit laboriosam quos ducimus sequi, eaque hic facilis!`,
 };
 export const mockedUser2: IMockedUser = {
   name: "Lojas KA",
   is_seller: true,
-  description: "Loja que te deixa de queixo caído com seus produtos",
+  description: `Loja que te deixa de queixo caído com seus produtos,lorem ipsum dolor sit, amet consectetur adipisicing elit. Perferendis repellendus
+  molestiae doloremque ads!`,
 };
 
 export const mockedUserList = [
@@ -88,12 +91,8 @@ export const mockedPosterList: IMockedPoster[] = [
   mockedPoster2,
   mockedPoster,
   mockedPoster2,
-  // mockedPoster,
-  // mockedPoster2,
-  // mockedPoster,
-  // mockedPoster2,
-  // mockedPoster,
-  // mockedPoster2,
-  // mockedPoster,
-  // mockedPoster2,
+  mockedPoster,
+  mockedPoster2,
+  mockedPoster,
+  mockedPoster2,
 ];

@@ -3,7 +3,7 @@ import { Button, Flex, Grid } from "@chakra-ui/react";
 import PosterCard from "./PosterCard";
 
 interface IPosterList {
-  posterList: IMockedPoster[];
+  posterList: any[];
   maxWidth: string;
   maxColumns: number;
   width: {
@@ -27,6 +27,10 @@ const PosterList = ({
   maxColumns,
   showPromoTag,
 }: IPosterList) => {
+  if (!posterList) {
+    return null;
+  }
+
   return (
     <>
       <Flex
