@@ -2,6 +2,9 @@ export interface IMockedUser {
   name: string;
   is_seller: boolean;
   description: string;
+  id: string;
+  email: string;
+  password: string;
 }
 
 export interface IMockedPoster {

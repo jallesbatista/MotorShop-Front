@@ -1,17 +1,24 @@
 import { IMockedPoster, IMockedUser } from "@/interfaces/mocks.interfaces";
 
 export const mockedUser: IMockedUser = {
-  name: "Kenzinho Academilson",
+  name: "joão da silva",
   is_seller: true,
   description: `Um carinha legal  com uma lojinha legal. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Perferendis repellendus
   molestiae doloremque ad blanditiis facilis quos modi a exercitationem quod. Qui quae
   suscipit laboriosam quos ducimus sequi, eaque hic facilis!`,
+  id: "9d931a02-a54d-487e-b6e4-70323edecd6e",
+  email: "joaosilva@email.com",
+  password: "1234"
 };
+
 export const mockedUser2: IMockedUser = {
-  name: "Lojas KA",
+  name: "miguel carros ",
   is_seller: true,
   description: `Loja que te deixa de queixo caído com seus produtos,lorem ipsum dolor sit, amet consectetur adipisicing elit. Perferendis repellendus
   molestiae doloremque ads!`,
+  id: "5c35f1c8-6bd0-4c6d-96a9-a7227dec74ab",
+  email: "miguelcarros@email.com",
+  password: "1234"
 };
 
 export const mockedUserList = [
