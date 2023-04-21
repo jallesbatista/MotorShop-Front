@@ -46,7 +46,7 @@ const inputTheme = defineMultiStyleConfig({
     default: {
       field: {
         height: "48px",
-        bg: "grey.9",
+        bg: "transparent",
         border: "2px solid",
         borderColor: "grey.8",
         borderRadius: "4px",
@@ -67,6 +67,48 @@ const inputTheme = defineMultiStyleConfig({
             color: "transparent",
           },
         },
+        _invalid: {
+          border: "2px solid",
+          borderColor: "red",
+        },
+      },
+    },
+  },
+});
+
+const textAreaTheme = defineStyleConfig({
+  defaultProps: {
+    size: "md",
+    variant: "default",
+  },
+  variants: {
+    default: {
+      border: "2px solid",
+      borderColor: "grey.8",
+      color: "grey.2",
+      resize: "none",
+      maxHeight: "80px",
+      overflowY: "scroll",
+      _placeholder: {
+        color: "grey.3",
+      },
+      _hover: {
+        bg: "grey.8",
+        borderColor: "transparent",
+      },
+      _invalid: {
+        border: "2px solid",
+        borderColor: "red",
+      },
+      "::-webkit-scrollbar": {
+        width: "6px",
+      },
+      "::-webkit-scrollbar-track": {
+        width: "2px",
+      },
+      "::-webkit-scrollbar-thumb": {
+        background: "brand.3",
+        borderRadius: "24px",
       },
     },
   },
@@ -315,6 +357,7 @@ const customTheme = extendTheme({
     Button: buttonTheme,
     Input: inputTheme,
     zIndices,
+    Textarea: textAreaTheme,
   },
 });
 
