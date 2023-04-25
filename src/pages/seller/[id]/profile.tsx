@@ -30,6 +30,7 @@ const Profile: NextPage<Props> = ({ seller, isThisSeller, posterList }) => {
           base: "linear(to-b, brand.1 0%, brand.1 20%, grey.8 20%, grey.8 100%)",
           md: "linear(to-b, brand.1 0px, brand.1 350px, grey.8 350px, grey.8 100%)",
         }}
+        pb={{ base: "45px", md: "73px" }}
       >
         {/* ORGANIZAÇÂO DO BODY EM PROFILE DATA E LISTAGEM DE ANUNCIOS */}
         <Flex direction={"column"} color={"grey.1"} w={"100%"} align={"center"} gap={"72px"}>
@@ -123,9 +124,8 @@ const Profile: NextPage<Props> = ({ seller, isThisSeller, posterList }) => {
             </Heading>
           </Flex>
         </Flex>
-
-        <Footer />
       </Box>
+      <Footer />
       {/* MODAL DE CRIAÇÂO */}
       <PosterCreateEditModal isOpen={isCreateModalOpen} onClose={onCreateModalClose} />
     </>

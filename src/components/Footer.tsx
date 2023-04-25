@@ -1,10 +1,10 @@
 import { Box, Flex, Heading, IconButton, Text } from "@chakra-ui/react";
 import { ChevronUpIcon } from "@chakra-ui/icons";
 import NextLink from "next/link";
-
+// mt={{ base: "45px", md: "73px" }}
 function Footer() {
   return (
-    <Box as="footer" bg="black" color="white" maxW={"100%"} mt={{ base: "45px", md: "73px" }}>
+    <Box as="footer" bg="black" color="white" maxW={"100%"}>
       <Flex
         px={{ md: "60px" }}
         py={{ base: "45px", md: "56px" }}

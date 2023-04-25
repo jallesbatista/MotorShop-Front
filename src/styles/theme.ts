@@ -85,6 +85,7 @@ const textAreaTheme = defineStyleConfig({
     default: {
       border: "2px solid",
       borderColor: "grey.8",
+      rounded: "4px",
       color: "grey.2",
       resize: "none",
       maxHeight: "80px",
@@ -95,6 +96,14 @@ const textAreaTheme = defineStyleConfig({
       _hover: {
         bg: "grey.8",
         borderColor: "transparent",
+      },
+      _focus: {
+        bg: "grey.9",
+        border: "2px solid",
+        borderColor: "brand.2",
+        _placeholder: {
+          color: "transparent",
+        },
       },
       _invalid: {
         border: "2px solid",
