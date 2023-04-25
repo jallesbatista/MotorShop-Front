@@ -1,6 +1,6 @@
 import * as z from "zod";
 
-export const createPostSchema = z.object({
+const createPostSchema = z.object({
   brand: z.string().nonempty("Marca é obrigatória"),
   model: z.string().nonempty("Modelo é obrigatório"),
   year: z.string().nonempty("Ano é obrigatório"),
@@ -28,3 +28,5 @@ export const createPostSchema = z.object({
     })
   ),
 });
+
+export default createPostSchema;

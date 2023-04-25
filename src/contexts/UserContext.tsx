@@ -1,12 +1,10 @@
 import { IUserCreate } from "@/interfaces/register.interface";
-import { Dispatch, SetStateAction, createContext, useContext, useState } from "react";
+import { createContext, useContext } from "react";
 import api from "@/services/api";
 import { useToast } from "@chakra-ui/react";
 
 interface IUserProviderData {
-  userCreate: (data: IUserCreate) => Promise<void>;
-  successModal: boolean;
-  setSuccessModal: Dispatch<SetStateAction<boolean>>;
+  userCreate: (data: IUserCreate) => Promise<true | undefined>;
 }
 
 export const UserContext = createContext<IUserProviderData>({} as IUserProviderData);
@@ -14,18 +12,16 @@ export const UserContext = createContext<IUserProviderData>({} as IUserProviderD
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const toast = useToast();
 
-  const [successModal, setSuccessModal] = useState(false);
-
   const userCreate = async (data: IUserCreate) => {
     try {
       await api.post("/users", data);
-
-      setSuccessModal(true);
-    } catch (error) {
+      return true;
+    } catch (error: any) {
       console.error(error);
       toast({
         status: "error",
-        description: "Ops, ocorreu um erro...",
+        description:
+          error.response.data.message || "Ops, ocorreu um erro. Tente novamente mais tarde",
         duration: 3000,
         position: "top-right",
         containerStyle: {
@@ -38,11 +34,9 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <>
-      <UserContext.Provider value={{ userCreate, successModal, setSuccessModal }}>
-        {children}
-      </UserContext.Provider>
+      <UserContext.Provider value={{ userCreate }}>{children}</UserContext.Provider>
     </>
   );
 };
 
-export const userContex = () => useContext(UserContext);
+export const userContext = () => useContext(UserContext);

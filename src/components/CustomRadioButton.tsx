@@ -10,22 +10,21 @@ const CustomRadioButton = (props: any) => {
     <Box as="label" w={"50%"}>
       <input {...input} />
       <Box
+        fontSize={"button.lg"}
         {...checkbox}
         cursor="pointer"
-        borderWidth="1px"
-        borderRadius="md"
-        boxShadow="md"
-        borderColor={"grey.1"}
+        border={"2px solid"}
+        borderColor={"grey.4"}
         textAlign={"center"}
+        color={"black"}
+        fontWeight={"semibold"}
+        rounded={"4px"}
         _checked={{
           bg: "brand.1",
           color: "white.1",
-          borderColor: "brand.1",
+          borderColor: "transparent",
         }}
-        _focus={{
-          boxShadow: "outline",
-        }}
-        px={5}
+        px={"8px"}
         py={3}
       >
         {props.children}
