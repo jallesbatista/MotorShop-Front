@@ -1,4 +1,7 @@
 import axios from "axios";
+import { parseCookies } from "nookies";
+
+const { "ecommerce.token": token } = parseCookies();
 
 const localUrl = "http://localhost:3099";
 const api = axios.create({
@@ -9,5 +12,9 @@ const api = axios.create({
     "Access-Control-Allow-Credentials": "true",
   },
 });
+
+if (token) {
+  api.defaults.headers["Authorization"] = `Bearer ${token}`;
+}
 
 export default api;

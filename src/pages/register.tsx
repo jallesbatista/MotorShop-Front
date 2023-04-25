@@ -21,7 +21,7 @@ import {
 import { useForm, useController } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { registerSchema } from "@/schemas";
-import { IRegister } from "@/interfaces/register.interface";
+import { IRegister } from "@/interfaces/user.interfaces";
 import { useState } from "react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import CustomRadioButton from "@/components/CustomRadioButton";
