@@ -111,7 +111,7 @@ const Home: NextPage<Props> = ({ posterList, error }) => {
 };
 export const getServerSideProps: GetServerSideProps = async () => {
   try {
-    const response = await api.get(`/posters/`);
+    const response = await api.get(`/posters`);
     return {
       props: { posterList: response.data.data },
     };

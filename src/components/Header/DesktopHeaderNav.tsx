@@ -54,7 +54,7 @@ const DesktopHeaderNav = ({ user }: IHeaderNavProps) => {
           gap={"36px"}
         >
           <Box display="flex" alignItems={"center"} textAlign={"center"}>
-            <Link _hover={{}} color={"grey.2"} as={NextLink} href="/" fontWeight={"semibold"}>
+            <Link _hover={{}} color={"grey.2"} as={NextLink} href="/login" fontWeight={"semibold"}>
               Fazer Login
             </Link>
           </Box>
@@ -64,7 +64,6 @@ const DesktopHeaderNav = ({ user }: IHeaderNavProps) => {
               px={["24px", "24px"]}
               variant={"outline2"}
               size={"lg"}
-              color="grey.0"
               border={"2px solid #CED4DA"}
               rounded={"4px"}
               as={NextLink}

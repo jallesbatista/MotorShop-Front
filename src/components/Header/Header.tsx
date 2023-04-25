@@ -8,8 +8,8 @@ import { mockedUser } from "@/mocks";
 const Header = () => {
   // AS VARIÁVEIS "USER" SERÃO SUBSTITUÍDAS PELO ESTADO DE "USER" NO CONTEXTO POSTERIORMENTE, ESTÃO DECLARADOS SOMENTE PARA TESTES NO MOMENTO.
 
-  const user = mockedUser;
-  // const user = null;
+  // const user = mockedUser;
+  const user = null;
 
   const { isOpen, onToggle } = useDisclosure();
 

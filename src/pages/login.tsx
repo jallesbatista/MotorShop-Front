@@ -1,41 +1,130 @@
 import Footer from "@/components/Footer";
 import Header from "@/components/Header/Header";
-import { Button, Flex, FormControl, FormLabel, Input, Text } from "@chakra-ui/react";
-import { NextApiRequest, NextApiResponse } from "next";
+import { authContext } from "@/contexts/AuthContext";
+import { IUserLogin } from "@/interfaces/user.interfaces";
+import { loginSchema } from "@/schemas";
+import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
+import {
+  Box,
+  Button,
+  Flex,
+  FormControl,
+  FormLabel,
+  Heading,
+  Input,
+  InputGroup,
+  Text,
+  VStack,
+  InputRightElement,
+  FormErrorMessage,
+} from "@chakra-ui/react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
 
-const user = {
-    name: "Lucas",
-    password: "123456"
-}
+const Login = () => {
+  const [showPassword, setShowPassword] = useState(false);
+  const { logIn } = authContext();
 
-const Login = (req: NextApiRequest, res: NextApiResponse) => {
-    // const { name, password } = req.body
+  const {
+    handleSubmit,
+    register,
+    reset,
+    formState: { errors },
+  } = useForm<IUserLogin>({
+    resolver: zodResolver(loginSchema),
+  });
 
-    // if(name != user.name || password != user.password) {
-    //     return res.status(401).json({message: "invalid credentials"})
-    // }
+  const onSubmit = (data: IUserLogin) => {
+    logIn(data);
+  };
+  return (
+    <>
+      <Header />
 
-    return (
-        <>
-            <Header />
-            <Flex w={"100vw"} h={"73vh"} bg={"grey.8"} align={"center"} justify={"center"}>
-                <Flex w={{base:"320px", sm:"320px", md:"320x"}} marginTop={"10%"} marginLeft={"10px"} marginRight={"10px"} h={"450px"} bg={"white.1"}>
-                    <FormControl padding={"30px"}>
-                        <Text fontWeight="bold" fontSize="xl" marginBottom={"20px"}>Login</Text>
-                        <FormLabel fontWeight="bold" textAlign="start">Email</FormLabel>
-                        <Input type='email' marginBottom={"15px"}/>
-                        <FormLabel fontWeight="bold" textAlign="start">Password</FormLabel>
-                        <Input type="password" marginBottom={"10px"}/>
-                        <Text textAlign="end" fontSize="13px" marginBottom={"20px"}>Forgot your password?</Text>
-                        <Button width={"100%"} bg={"brand.1"} marginBottom={"15px"}>Login</Button>
-                        <Text textAlign="center" fontSize="13px" marginBottom={"15px"}>Don't have an account yet?</Text>
-                        <Button width={"100%"}>Register</Button>
-                    </FormControl>
-                </Flex>
-            </Flex>
-            <Footer />
-        </>
-    )
-}
+      <Flex
+        w={"100%"}
+        pt={{ base: "132px", md: "200px" }}
+        pb={{ base: "70px", sm: "120px" }}
+        minH={"100vh"}
+        bg={"grey.8"}
+        align={"flex-start"}
+        justify={"center"}
+      >
+        <Box
+          w={"90%"}
+          maxW={"412px"}
+          bg={"white.1"}
+          color={"grey.1"}
+          p={{ base: "44px 28px", sm: "44px 48px" }}
+          rounded={"4px"}
+          as="form"
+          onSubmit={handleSubmit(onSubmit)}
+        >
+          <Heading
+            color={"black"}
+            fontWeight={"semibold"}
+            fontSize={"heading.5"}
+            textAlign={"initial"}
+            mb={"32px"}
+          >
+            Login
+          </Heading>
+          <VStack spacing={"24px"}>
+            <FormControl isInvalid={!!errors.email?.message}>
+              <FormLabel fontWeight="semibold" fontSize={"body.2"}>
+                Email
+              </FormLabel>
+              <Input {...register("email")} placeholder="Digitar email" type="email" />
+              <FormErrorMessage>{errors.email?.message}</FormErrorMessage>
+            </FormControl>
+            <FormControl isInvalid={!!errors.password?.message}>
+              <FormLabel fontWeight="semibold" fontSize={"body.2"}>
+                Senha
+              </FormLabel>
+              <InputGroup>
+                <Input
+                  focusBorderColor="blue.300"
+                  errorBorderColor="red.300"
+                  type={showPassword ? "text" : "password"}
+                  {...register("password")}
+                  placeholder="Digitar senha"
+                />
+
+                <InputRightElement h={"full"}>
+                  <Button
+                    variant={"ghost"}
+                    _hover={{}}
+                    _active={{}}
+                    onClick={() => setShowPassword((showPassword) => !showPassword)}
+                  >
+                    {showPassword ? <ViewIcon /> : <ViewOffIcon />}
+                  </Button>
+                </InputRightElement>
+              </InputGroup>
+              <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
+            </FormControl>
+          </VStack>
+          <Text textAlign="end" fontSize={"body.2"} mt={"4px"} mb={"22px"}>
+            Esqueci minha senha
+          </Text>
+          <VStack w={"100%"} spacing={"24px"}>
+            <Button size={"lg"} w={"100%"} type="submit" variant={"brand1"}>
+              Entrar
+            </Button>
+            <Text textAlign="center" fontSize={"body.2"}>
+              Ainda não possui conta?
+            </Text>
+            <Button as={Link} href={"/register"} variant={"outline2"} size={"lg"} w={"100%"}>
+              Cadastrar
+            </Button>
+          </VStack>
+        </Box>
+      </Flex>
+      <Footer />
+    </>
+  );
+};
 
 export default Login;

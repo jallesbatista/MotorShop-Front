@@ -1,4 +1,5 @@
-import createPostSchema from "./poster.schemas";
+import createPostSchema from "./createPoster.schema";
+import loginSchema from "./login.schema";
 import registerSchema from "./register.schema";
 
-export { registerSchema, createPostSchema };
+export { registerSchema, createPostSchema, loginSchema };

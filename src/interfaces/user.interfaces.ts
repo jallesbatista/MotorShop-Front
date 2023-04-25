@@ -1,4 +1,4 @@
-import { registerSchema } from "@/schemas";
+import { loginSchema, registerSchema } from "@/schemas";
 import { z } from "zod";
 
 type IRegister = z.infer<typeof registerSchema>;
@@ -24,4 +24,6 @@ interface IUserCreate {
   address: IUserAddress;
 }
 
-export type { IRegister, IUserCreate };
+type IUserLogin = z.infer<typeof loginSchema>;
+
+export type { IRegister, IUserCreate, IUserLogin };

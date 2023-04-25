@@ -62,13 +62,13 @@ const MobileHeaderNav = ({ user }: IHeaderNavProps) => {
               pl={4}
               borderLeft={1}
               borderStyle={"solid"}
-              borderColor={useColorModeValue("gray.200", "gray.700")}
+              borderColor={useColorModeValue("grey.6", "gray.700")}
               align={"start"}
             >
-              <Button w={"100%"} variant={"outline1"}>
+              <Button w={"100%"} variant={"outline2"}>
                 Editar Perfil
               </Button>
-              <Button w={"100%"} variant={"outline1"}>
+              <Button w={"100%"} variant={"outline2"}>
                 Editar Endereço
               </Button>
               {user?.is_seller ? (
@@ -86,20 +86,12 @@ const MobileHeaderNav = ({ user }: IHeaderNavProps) => {
         <Stack spacing={4}>
           <Flex p={2} gap={"32px"} flexDirection={"column"}>
             <Box display="flex" alignItems={"center"} textAlign={"center"}>
-              <Link as={NextLink} href="/" fontWeight={600}>
+              <Link as={NextLink} href="/login" fontWeight={"semibold"}>
                 Fazer Login
               </Link>
             </Box>
             <Box>
-              <Button
-                p={"20px"}
-                w={"100%"}
-                variant={"outline"}
-                color="black"
-                border={"2px solid #CED4DA"}
-                as={NextLink}
-                href="/"
-              >
+              <Button size={"lg"} w={"100%"} variant={"outline2"} as={NextLink} href="/register">
                 Cadastrar
               </Button>
             </Box>
