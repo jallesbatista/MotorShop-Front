@@ -25,9 +25,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FiTrash } from "react-icons/fi";
 import React, { useContext, useEffect, useState } from "react";
 import { brlCurrencyMask } from "@/functions/masks";
-import { createPostSchema } from "@/schemas/poster.schemas";
 import { TCreatePost } from "@/interfaces/poster.interfaces";
-import { PosterContext } from "@/contexts/PosterContext";
+import { createPostSchema } from "@/schemas";
+import { posterContext } from "@/contexts/PosterContext";
 
 interface IPosterCreateEditModal {
   isOpen: boolean;
@@ -55,7 +55,7 @@ const PosterCreateEditModal = ({ isOpen, onClose }: IPosterCreateEditModal) => {
   const [carArray, setCarArray] = useState<iCar[]>([]);
   const [carBrandModel, setCarBrandModel] = useState("");
 
-  const { posterCreate } = useContext(PosterContext);
+  const { posterCreate } = posterContext();
 
   const {
     register,
@@ -69,8 +69,6 @@ const PosterCreateEditModal = ({ isOpen, onClose }: IPosterCreateEditModal) => {
       images: [{ url: "" }, { url: "" }, { url: "" }],
     },
   });
-
-  console.log(errors);
 
   const { fields, append, remove } = useFieldArray({
     control,

@@ -1,14 +1,13 @@
 import { TCreatePost } from "@/interfaces/poster.interfaces";
-import { mockedPosterList } from "@/mocks";
 import api from "@/services/api";
 import { useToast } from "@chakra-ui/react";
-import { createContext, useState } from "react";
+import { createContext, useContext, useState } from "react";
 
 interface IPosterProviderData {
   posterCreate: (data: TCreatePost) => Promise<void>;
 }
 
-export const PosterContext = createContext<IPosterProviderData>({} as IPosterProviderData);
+const PosterContext = createContext<IPosterProviderData>({} as IPosterProviderData);
 
 export const PosterProvider = ({ children }: { children: React.ReactNode }) => {
   const toast = useToast();
@@ -19,7 +18,7 @@ export const PosterProvider = ({ children }: { children: React.ReactNode }) => {
     data.price = Number(Number(data.price).toFixed(2));
 
     try {
-      const response = await api.post("/posters", data);
+      await api.post("/posters", data);
 
       toast({
         status: "success",
@@ -58,3 +57,5 @@ export const PosterProvider = ({ children }: { children: React.ReactNode }) => {
     </>
   );
 };
+
+export const posterContext = () => useContext(PosterContext);

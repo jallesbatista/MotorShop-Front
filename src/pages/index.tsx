@@ -87,6 +87,7 @@ const Home: NextPage<Props> = ({ posterList, error }) => {
         align={"center"}
         justify={"center"}
         gap={"32px"}
+        pb={{ base: "45px", md: "73px" }}
       >
         <Heading
           lineHeight={"heading.5"}
