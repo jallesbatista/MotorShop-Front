@@ -1,4 +1,4 @@
-import { IHeaderNavProps } from "@/interfaces/test.interfaces";
+import { authContext } from "@/contexts/AuthContext";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import {
   useDisclosure,
@@ -7,7 +7,6 @@ import {
   Avatar,
   Icon,
   Collapse,
-  useColorModeValue,
   Button,
   Link,
   Box,
@@ -17,7 +16,7 @@ import {
 import NextLink from "next/link";
 import { useRef } from "react";
 
-const MobileHeaderNav = ({ user }: IHeaderNavProps) => {
+const MobileHeaderNav = () => {
   const { isOpen, onToggle, onClose } = useDisclosure();
 
   const ref: any = useRef();
@@ -26,6 +25,8 @@ const MobileHeaderNav = ({ user }: IHeaderNavProps) => {
     ref: ref,
     handler: () => onClose(),
   });
+
+  const { user, logOut } = authContext();
 
   return (
     <Stack display={{ md: "none" }} p={"20px"} ref={ref}>
@@ -43,9 +44,9 @@ const MobileHeaderNav = ({ user }: IHeaderNavProps) => {
             onClick={onToggle}
           >
             <Flex justify={"flex-start"} gap={"12px"} align={"center"}>
-              <Avatar name={user.name} width="40px" h="40px" />
+              <Avatar name={user?.name} width="40px" h="40px" />
               <Text fontWeight={600} color={"black"} noOfLines={1}>
-                {user.name}
+                {user?.name}
               </Text>
             </Flex>
             <Icon
@@ -62,7 +63,7 @@ const MobileHeaderNav = ({ user }: IHeaderNavProps) => {
               pl={4}
               borderLeft={1}
               borderStyle={"solid"}
-              borderColor={useColorModeValue("grey.6", "gray.700")}
+              borderColor={"grey.6"}
               align={"start"}
             >
               <Button w={"100%"} variant={"outline2"}>
@@ -76,7 +77,7 @@ const MobileHeaderNav = ({ user }: IHeaderNavProps) => {
                   Meus Anúncios
                 </Button>
               ) : null}
-              <Button variant={"alert"} w={"100%"}>
+              <Button onClick={logOut} variant={"alert"} w={"100%"}>
                 Sair
               </Button>
             </Stack>

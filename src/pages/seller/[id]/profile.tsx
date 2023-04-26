@@ -2,6 +2,7 @@ import Footer from "@/components/Footer";
 import Header from "@/components/Header/Header";
 import PosterCreateEditModal from "@/components/PosterCreateEditModal";
 import PosterList from "@/components/PosterList";
+import SucessModal from "@/components/SuccessModal";
 import { IMockedPoster, IMockedUser } from "@/interfaces/mocks.interfaces";
 import { mockedPosterList, mockedUserList } from "@/mocks";
 import { Avatar, Box, Button, Flex, Heading, Tag, Text, useDisclosure } from "@chakra-ui/react";
@@ -18,6 +19,12 @@ const Profile: NextPage<Props> = ({ seller, isThisSeller, posterList }) => {
     isOpen: isCreateModalOpen,
     onClose: onCreateModalClose,
     onOpen: onCreateModalOpen,
+  } = useDisclosure();
+
+  const {
+    isOpen: isSucessModalOpen,
+    onClose: onSucessModalClose,
+    onOpen: onSucessModalOpen,
   } = useDisclosure();
 
   return (
@@ -98,6 +105,7 @@ const Profile: NextPage<Props> = ({ seller, isThisSeller, posterList }) => {
             edit={isThisSeller}
             maxColumns={4}
             showPromoTag={false}
+            showStatusTag={false}
           />
 
           <Flex
@@ -127,7 +135,17 @@ const Profile: NextPage<Props> = ({ seller, isThisSeller, posterList }) => {
       </Box>
       <Footer />
       {/* MODAL DE CRIAÇÂO */}
-      <PosterCreateEditModal isOpen={isCreateModalOpen} onClose={onCreateModalClose} />
+      <PosterCreateEditModal
+        isOpen={isCreateModalOpen}
+        onClose={onCreateModalClose}
+        onSucessModalOpen={onSucessModalOpen}
+      />
+      <SucessModal
+        isOpen={isSucessModalOpen}
+        onClose={onSucessModalClose}
+        title="Seu anúncio foi criado com sucesso!"
+        description="Agora você poderá ver seus negócios crescendo em grande escala"
+      />
     </>
   );
 };

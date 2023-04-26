@@ -1,6 +1,7 @@
 import Footer from "@/components/Footer";
 import Header from "@/components/Header/Header";
 import PosterImageModal from "@/components/PosterImageModal";
+import { authContext } from "@/contexts/AuthContext";
 import { IMockedPoster } from "@/interfaces/mocks.interfaces";
 import { mockedPoster, mockedPosterList, mockedUser } from "@/mocks";
 import api from "@/services/api";
@@ -30,8 +31,7 @@ const PosterDetail: NextPage<Props> = ({ poster }) => {
   const { isOpen, onClose, onOpen } = useDisclosure();
   const [posterImage, setPosterImage] = useState<string>("");
   const router = useRouter();
-  // const user = null;
-  const user = mockedUser;
+  const { user } = authContext();
 
   return (
     <>
