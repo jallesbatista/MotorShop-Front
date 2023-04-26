@@ -1,5 +1,6 @@
 import {
   Avatar,
+  Box,
   Card,
   CardBody,
   CardFooter,
@@ -18,10 +19,12 @@ const PosterCard = ({
   poster,
   index,
   showPromoTag,
+  showStatusTag,
 }: {
   poster: IMockedPoster;
   index: number;
   showPromoTag: boolean;
+  showStatusTag: boolean;
 }) => {
   const router = useRouter();
 
@@ -74,16 +77,34 @@ const PosterCard = ({
                   bgColor={"green.500"}
                   position={"absolute"}
                   w={"16px"}
+                  h={"27px"}
                   textAlign={"center"}
-                  fontWeight={600}
+                  fontWeight={"medium"}
                   rounded={"2px 0px 2px 2px"}
-                  fontSize={"1.2rem"}
+                  fontSize={"body.2 "}
                   top={0}
                   right={0}
                   alignItems={"center"}
                   justifyContent={"center"}
                 >
                   $
+                </Flex>
+              )}
+
+              {showStatusTag && (
+                <Flex
+                  px={"8px"}
+                  position={"absolute"}
+                  top={"10px"}
+                  left={"16px"}
+                  bg={poster.is_published ? "brand.1" : "grey.4"}
+                  color={"white"}
+                  fontSize={"body.2"}
+                  textAlign={"center"}
+                  alignItems={"center"}
+                  h={"24px"}
+                >
+                  {poster.is_published ? <Text>Ativo</Text> : <Text>Inativo</Text>}
                 </Flex>
               )}
             </Flex>

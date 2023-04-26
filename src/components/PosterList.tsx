@@ -16,6 +16,7 @@ interface IPosterList {
   };
   edit?: boolean;
   showPromoTag: boolean;
+  showStatusTag: boolean;
 }
 
 const PosterList = ({
@@ -26,6 +27,7 @@ const PosterList = ({
   edit,
   maxColumns,
   showPromoTag,
+  showStatusTag,
 }: IPosterList) => {
   if (!posterList) {
     return null;
@@ -45,7 +47,12 @@ const PosterList = ({
       >
         {posterList.map((poster, index) => (
           <Flex direction={"column"} key={index} gap={"12px"}>
-            <PosterCard index={index} poster={poster} showPromoTag={showPromoTag} />
+            <PosterCard
+              index={index}
+              poster={poster}
+              showPromoTag={showPromoTag}
+              showStatusTag={showStatusTag}
+            />
             {edit && (
               <Flex color={"grey.1"} gap={"16px"}>
                 <Button variant={"outline1"}>Editar</Button>
@@ -74,7 +81,12 @@ const PosterList = ({
       >
         {posterList.map((poster, index) => (
           <Flex direction={"column"} key={index} gap={"12px"}>
-            <PosterCard index={index} poster={poster} showPromoTag={showPromoTag} />
+            <PosterCard
+              index={index}
+              poster={poster}
+              showPromoTag={showPromoTag}
+              showStatusTag={showStatusTag}
+            />
             {edit && (
               <Flex color={"grey.1"} gap={"16px"}>
                 <Button variant={"outline1"}>Editar</Button>

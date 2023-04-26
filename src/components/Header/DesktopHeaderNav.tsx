@@ -1,4 +1,4 @@
-import { IHeaderNavProps } from "@/interfaces/test.interfaces";
+import { authContext } from "@/contexts/AuthContext";
 import {
   Menu,
   MenuButton,
@@ -13,7 +13,8 @@ import {
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 
-const DesktopHeaderNav = ({ user }: IHeaderNavProps) => {
+const DesktopHeaderNav = () => {
+  const { user, logOut } = authContext();
   return (
     <>
       {user ? (
@@ -43,7 +44,7 @@ const DesktopHeaderNav = ({ user }: IHeaderNavProps) => {
             <MenuItem>Editar Perfil</MenuItem>
             <MenuItem>Editar Endereço</MenuItem>
             {user?.is_seller ? <MenuItem>Meus Anúncios</MenuItem> : null}
-            <MenuItem>Sair</MenuItem>
+            <MenuItem onClick={logOut}>Sair</MenuItem>
           </MenuList>
         </Menu>
       ) : (

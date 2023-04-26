@@ -8,14 +8,28 @@ import {
   ModalOverlay,
   Text,
 } from "@chakra-ui/react";
+import { Url } from "next/dist/shared/lib/router/router";
 import Link from "next/link";
 
 interface ModalSucessRegisterProps {
   isOpen: boolean;
   onClose: () => void;
+  title: string;
+  description: string;
+  redirect?: {
+    redirectButton?: boolean;
+    redirectTo: Url;
+    buttonText: string;
+  };
 }
 
-const ModalSuccessRegister = ({ isOpen, onClose }: ModalSucessRegisterProps) => {
+const SucessModal = ({
+  isOpen,
+  onClose,
+  description,
+  title,
+  redirect,
+}: ModalSucessRegisterProps) => {
   return (
     <>
       <Modal isOpen={isOpen} onClose={onClose}>
@@ -35,15 +49,17 @@ const ModalSuccessRegister = ({ isOpen, onClose }: ModalSucessRegisterProps) => 
 
           <Flex direction={"column"} align={"flex-start"} gap={"18px"}>
             <Heading mb={"20px"} fontSize={"heading.7"}>
-              Sua conta foi criada com sucesso!
+              {title}
             </Heading>
             <Text fontSize={"body.1"} color={"grey.2"}>
-              Agora você poderá ver seus negócios crescendo em grande escala
+              {description}
             </Text>
 
-            <Button size={"md"} as={Link} href={"/login"} variant={"brand1"}>
-              Ir para o login
-            </Button>
+            {redirect?.redirectButton && (
+              <Button size={"md"} as={Link} href={redirect?.redirectTo} variant={"brand1"}>
+                {redirect.buttonText}
+              </Button>
+            )}
           </Flex>
         </ModalContent>
       </Modal>
@@ -51,4 +67,4 @@ const ModalSuccessRegister = ({ isOpen, onClose }: ModalSucessRegisterProps) => 
   );
 };
 
-export default ModalSuccessRegister;
+export default SucessModal;

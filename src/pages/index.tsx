@@ -77,6 +77,7 @@ const Home: NextPage<Props> = ({ posterList, error }) => {
             maxColumns={3}
             posterList={posterList}
             showPromoTag={true}
+            showStatusTag={false}
           />
           <Filter />
         </Flex>

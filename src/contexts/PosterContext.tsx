@@ -1,10 +1,10 @@
 import { TCreatePost } from "@/interfaces/poster.interfaces";
 import api from "@/services/api";
 import { useToast } from "@chakra-ui/react";
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext } from "react";
 
 interface IPosterProviderData {
-  posterCreate: (data: TCreatePost) => Promise<void>;
+  posterCreate: (data: TCreatePost) => Promise<true | undefined>;
 }
 
 const PosterContext = createContext<IPosterProviderData>({} as IPosterProviderData);
@@ -21,16 +21,16 @@ export const PosterProvider = ({ children }: { children: React.ReactNode }) => {
       await api.post("/posters", data);
 
       toast({
-        status: "success",
-        title: "O anúncio foi criado",
-        description: "Para que fique visível é necessário publicar :D",
-        duration: 5000,
-        position: "top-right",
+        status: "warning",
+        description: "Para ficar visível é necessário publicar :D",
+        duration: 3000,
+        position: "bottom-right",
         containerStyle: {
           color: "white",
         },
         isClosable: true,
       });
+      return true;
     } catch (error: any) {
       console.log(error);
       toast({

@@ -8,13 +8,14 @@ import { createContext, useContext, useEffect, useState } from "react";
 interface IAuthProviderData {
   logIn: (data: IUserLogin) => Promise<void>;
   logOut: () => void;
+  user: any;
 }
 
 const AuthContext = createContext({} as IAuthProviderData);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<any | null>(null); // Colocar tipagem a partir dos dados retornados do usuário
-
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const toast = useToast();
   const router = useRouter();
 
@@ -31,23 +32,28 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           setUser(response.data);
         } catch (error: any) {
           console.log(error);
+          if (!toast.isActive("expired")) {
+            toast({
+              position: "bottom-right",
+              title: "Sua sessão expirou :(",
+              containerStyle: {
+                color: "white",
+              },
+              status: "warning",
+              duration: 3000,
+              isClosable: true,
+              id: "expired",
+            });
+          }
+
           destroyCookie(null, "ecommerce.token");
-          router.push("/login");
-          toast({
-            position: "bottom-right",
-            title: "Sua sessão expirou :(",
-            containerStyle: {
-              color: "white",
-            },
-            status: "warning",
-            duration: 3000,
-            isClosable: true,
-          });
+          setUser(null);
+          // router.push("/home");
         }
       }
     };
     getUserData();
-  }, []);
+  }, [, isAuthenticated]);
 
   const logIn = async (data: IUserLogin) => {
     try {
@@ -68,7 +74,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         duration: 3000,
         isClosable: true,
       });
-
+      setIsAuthenticated(true);
       router.push("/");
     } catch (error: any) {
       console.log(error);
@@ -88,10 +94,21 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const logOut = () => {
     destroyCookie(null, "ecommerce.token");
     setUser(null);
+    setIsAuthenticated(false);
     router.push("/login");
+    toast({
+      position: "bottom-right",
+      title: "Deslogado com sucesso",
+      containerStyle: {
+        color: "white",
+      },
+      status: "success",
+      duration: 3000,
+      isClosable: true,
+    });
   };
 
-  return <AuthContext.Provider value={{ logIn, logOut }}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={{ logIn, logOut, user }}>{children}</AuthContext.Provider>;
 };
 
 export const authContext = () => useContext(AuthContext);

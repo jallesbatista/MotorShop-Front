@@ -1,16 +1,10 @@
-import { Heading, Box, Flex, Text, IconButton, useDisclosure, Collapse } from "@chakra-ui/react";
+import { Heading, Box, Flex, IconButton, useDisclosure, Collapse } from "@chakra-ui/react";
 import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
 import DesktopHeaderNav from "./DesktopHeaderNav";
 import MobileHeaderNav from "./MobileHeaderNav";
 import NextLink from "next/link";
-import { mockedUser } from "@/mocks";
 
 const Header = () => {
-  // AS VARIÁVEIS "USER" SERÃO SUBSTITUÍDAS PELO ESTADO DE "USER" NO CONTEXTO POSTERIORMENTE, ESTÃO DECLARADOS SOMENTE PARA TESTES NO MOMENTO.
-
-  // const user = mockedUser;
-  const user = null;
-
   const { isOpen, onToggle } = useDisclosure();
 
   return (
@@ -66,12 +60,12 @@ const Header = () => {
           height={"100%"}
           paddingLeft={"36px"}
         >
-          <DesktopHeaderNav user={user} />
+          <DesktopHeaderNav />
         </Flex>
       </Flex>
 
       <Collapse in={isOpen}>
-        <MobileHeaderNav user={user} />
+        <MobileHeaderNav />
       </Collapse>
     </Box>
   );

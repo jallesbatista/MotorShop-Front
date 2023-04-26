@@ -8,7 +8,7 @@ export const mockedUser: IMockedUser = {
   suscipit laboriosam quos ducimus sequi, eaque hic facilis!`,
   id: "9d931a02-a54d-487e-b6e4-70323edecd6e",
   email: "joaosilva@email.com",
-  password: "1234"
+  password: "1234",
 };
 
 export const mockedUser2: IMockedUser = {
@@ -18,7 +18,7 @@ export const mockedUser2: IMockedUser = {
   molestiae doloremque ads!`,
   id: "5c35f1c8-6bd0-4c6d-96a9-a7227dec74ab",
   email: "miguelcarros@email.com",
-  password: "1234"
+  password: "1234",
 };
 
 export const mockedUserList = [
@@ -44,7 +44,7 @@ export const mockedPoster: IMockedPoster = {
   cumque alias obcaecati. Placeat ea inventore minima earum, reiciendis provident
   consequatur laborum soluta exercitationem est voluptas possimus maiores
   necessitatibus?`,
-  is_published: true,
+  is_published: false,
   createdAt: new Date().toISOString(),
   images: [
     {

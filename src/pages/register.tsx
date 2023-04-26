@@ -25,9 +25,9 @@ import { IRegister } from "@/interfaces/user.interfaces";
 import { useState } from "react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import CustomRadioButton from "@/components/CustomRadioButton";
-import ModalSuccessRegister from "@/components/RegisterSuccessModal";
 import { userContext } from "@/contexts/UserContext";
 import { CEPMask, CPFMask, PhoneMask } from "@/functions/masks";
+import SucessModal from "@/components/SuccessModal";
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -323,11 +323,16 @@ const Register = () => {
             <Button size={"lg"} type="submit" variant={"brand1"} alignSelf={"center"} w={"100%"}>
               Finalizar cadastro
             </Button>
-            <ModalSuccessRegister isOpen={isOpen} onClose={onClose} />
           </VStack>
         </Box>
       </Flex>
-
+      <SucessModal
+        redirect={{ redirectButton: true, redirectTo: "/login", buttonText: "Ir para o login" }}
+        title="Sua conta foi criada com sucesso!"
+        description="Agora você poderá ver seus negócios crescendo em grande escala"
+        isOpen={isOpen}
+        onClose={onClose}
+      />
       <Footer />
     </>
   );
