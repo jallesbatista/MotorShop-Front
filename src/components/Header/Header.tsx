@@ -3,9 +3,21 @@ import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
 import DesktopHeaderNav from "./DesktopHeaderNav";
 import MobileHeaderNav from "./MobileHeaderNav";
 import NextLink from "next/link";
+import UserEditModal from "../UserEditModal";
+import AddressEditModal from "../AddressEditModal";
 
 const Header = () => {
   const { isOpen, onToggle } = useDisclosure();
+  const {
+    isOpen: isProfileEditOpen,
+    onOpen: onProfileEditOpen,
+    onClose: onProfileEditClose,
+  } = useDisclosure();
+  const {
+    isOpen: isAddressEditOpen,
+    onOpen: onAddressEditOpen,
+    onClose: onAddressEditClose,
+  } = useDisclosure();
 
   return (
     <Box
@@ -56,17 +68,28 @@ const Header = () => {
 
         <Flex
           display={{ base: "none", md: "flex" }}
-          borderLeft={"2px solid #DEE2E6"}
+          borderLeft={"2px solid"}
+          borderColor={"grey.6"}
           height={"100%"}
           paddingLeft={"36px"}
         >
-          <DesktopHeaderNav />
+          <DesktopHeaderNav
+            onProfileEditOpen={onProfileEditOpen}
+            onAddressEditOpen={onAddressEditOpen}
+          />
         </Flex>
       </Flex>
 
       <Collapse in={isOpen}>
-        <MobileHeaderNav />
+        <MobileHeaderNav
+          onProfileEditOpen={onProfileEditOpen}
+          onAddressEditOpen={onAddressEditOpen}
+        />
       </Collapse>
+
+      <UserEditModal isOpen={isProfileEditOpen} onClose={onProfileEditClose} />
+
+      <AddressEditModal isOpen={isAddressEditOpen} onClose={onAddressEditClose} />
     </Box>
   );
 };
