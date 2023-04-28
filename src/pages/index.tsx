@@ -2,19 +2,28 @@ import Filter from "@/components/Filter/Filter";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header/Header";
 import PosterList from "@/components/PosterList";
+import { IPoster, IPosterFilters } from "@/interfaces/poster.interfaces";
 import { mockedPosterList } from "@/mocks";
 import api from "@/services/api";
 import { Box, Container, Flex, Heading, Text } from "@chakra-ui/react";
 import { GetServerSideProps, NextPage } from "next";
 import { useState } from "react";
+import bgImage from "../assets/bgHome.png";
 
 interface Props {
-  posterList: any[];
+  posterList: IPoster[];
   error: string;
+  filters: IPosterFilters;
+  query?: {
+    brand?: string;
+    model?: string;
+    color?: string;
+    year?: string;
+    fuel?: string;
+  };
 }
 
-const Home: NextPage<Props> = ({ posterList, error }) => {
-  const backGroundImage = posterList[0].images[0].url;
+const Home: NextPage<Props> = ({ posterList, error, filters, query }) => {
   const [page, setPage] = useState<number>(1);
 
   return (
@@ -25,7 +34,7 @@ const Home: NextPage<Props> = ({ posterList, error }) => {
         w={"100%"}
         height={{ base: "60vh", md: "50vh" }}
         color={"grey.10"}
-        bg={`url(${backGroundImage}) no-repeat center`}
+        bg={`url(${bgImage.src}) no-repeat center`}
         position={"relative"}
         bgSize={"cover"}
       >
@@ -78,8 +87,9 @@ const Home: NextPage<Props> = ({ posterList, error }) => {
             posterList={posterList}
             showPromoTag={true}
             showStatusTag={false}
+            showSeller={true}
           />
-          <Filter />
+          <Filter filters={filters} query={query} />
         </Flex>
       </Container>
       <Flex
@@ -110,17 +120,35 @@ const Home: NextPage<Props> = ({ posterList, error }) => {
     </>
   );
 };
-export const getServerSideProps: GetServerSideProps = async () => {
-  try {
-    const response = await api.get(`/posters`);
-    return {
-      props: { posterList: response.data.data },
-    };
-  } catch (error: any) {
-    return {
-      props: { error: error.message || error.data.message, posterList: mockedPosterList },
-    };
-  }
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const expectedFilters = ["brand", "model", "color", "year", "fuel"];
+  let queryUrl = "?";
+
+  Object.entries(ctx.query).forEach(([key, value], index) => {
+    if (expectedFilters.includes(key)) {
+      if (index == 0) {
+        queryUrl += `${key}=${value}`;
+      } else {
+        queryUrl += `&${key}=${value}`;
+      }
+    }
+  });
+
+  const [posters, filters] = await Promise.all([
+    api.get(`/posters${queryUrl ? queryUrl + "&perPage=12" : "?perPage=12"}`),
+    api.get(`/posters/filters${queryUrl}`),
+  ]).catch((err) => {
+    console.log(err);
+    return [];
+  });
+
+  return {
+    props: {
+      posterList: posters?.data.data || null,
+      filters: filters?.data || null,
+      query: ctx.query,
+    },
+  };
 };
 
 export default Home;

@@ -24,6 +24,8 @@ interface IUserCreate {
   address: IUserAddress;
 }
 
+type TUser = Omit<IUserCreate, "address" | "password">;
+
 type IUserLogin = z.infer<typeof loginSchema>;
 
-export type { IRegister, IUserCreate, IUserLogin };
+export type { IRegister, IUserCreate, IUserLogin, TUser };

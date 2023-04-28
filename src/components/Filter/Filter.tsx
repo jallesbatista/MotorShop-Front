@@ -1,4 +1,3 @@
-import { mockedPosterList } from "@/mocks";
 import TextFilter from "./TextFilter";
 import {
   Button,
@@ -11,30 +10,52 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import InputFilter from "./InputFilter";
+import { IPosterFilters } from "@/interfaces/poster.interfaces";
+import Link from "next/link";
+import { useRouter } from "next/router";
 
-const Filter = () => {
-  const brandList = [...new Set(mockedPosterList.map((el) => el.brand))];
-  const modelList = [...new Set(mockedPosterList.map((el) => el.model.split(" ")[0]))];
-  const colorList = [...new Set(mockedPosterList.map((el) => el.color))];
-  const yearList = [...new Set(mockedPosterList.map((el) => el.year))];
-  const fuelList = [...new Set(mockedPosterList.map((el) => el.fuel_type))];
+interface IFilterProps {
+  filters: IPosterFilters;
+  query?: {
+    brand?: string;
+    model?: string;
+    color?: string;
+    year?: string;
+    fuel?: string;
+  };
+}
 
+const Filter = ({ filters, query }: IFilterProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const router = useRouter();
 
   return (
     <>
       <Flex direction={"column"} w={"20%"} display={{ base: "none", lg: "flex" }}>
         <Flex direction={"column"} gap={"12px"}>
-          <TextFilter filterList={brandList}>Brand</TextFilter>
-          <TextFilter filterList={modelList}>Model</TextFilter>
-          <TextFilter filterList={colorList}>Color</TextFilter>
-          <TextFilter filterList={yearList}>Year</TextFilter>
-          <TextFilter filterList={fuelList}>Fuel</TextFilter>
+          <TextFilter filterList={filters?.brands} query={query}>
+            Brand
+          </TextFilter>
+          <TextFilter
+            filterList={[...new Set(filters?.models.map((model) => model.split(" ")[0]))]}
+            query={query}
+          >
+            Model
+          </TextFilter>
+          <TextFilter filterList={filters?.colors} query={query}>
+            Color
+          </TextFilter>
+          <TextFilter filterList={filters?.years} query={query}>
+            Year
+          </TextFilter>
+          <TextFilter filterList={filters?.fuel_types} query={query}>
+            Fuel
+          </TextFilter>
           <InputFilter>Km</InputFilter>
           <InputFilter>Preço</InputFilter>
         </Flex>
 
-        <Button bottom={0} variant={"brand1"}>
+        <Button bottom={0} as={Link} href={"/"} variant={"brand1"}>
           Limpar filtros
         </Button>
       </Flex>
@@ -75,16 +96,36 @@ const Filter = () => {
           </Flex>
           <Flex direction={"column"}>
             <Flex direction={"column"} gap={"12px"}>
-              <TextFilter filterList={brandList}>Brand</TextFilter>
-              <TextFilter filterList={modelList}>Model</TextFilter>
-              <TextFilter filterList={colorList}>Color</TextFilter>
-              <TextFilter filterList={yearList}>Year</TextFilter>
-              <TextFilter filterList={fuelList}>Fuel</TextFilter>
+              <TextFilter filterList={filters?.brands} query={query}>
+                Brand
+              </TextFilter>
+              <TextFilter
+                filterList={[...new Set(filters?.models.map((model) => model.split(" ")[0]))]}
+                query={query}
+              >
+                Model
+              </TextFilter>
+              <TextFilter filterList={filters?.colors} query={query}>
+                Color
+              </TextFilter>
+              <TextFilter filterList={filters?.years} query={query}>
+                Year
+              </TextFilter>
+              <TextFilter filterList={filters?.fuel_types} query={query}>
+                Fuel
+              </TextFilter>
               <InputFilter>Km</InputFilter>
               <InputFilter>Preço</InputFilter>
             </Flex>
 
-            <Button onClick={onClose} bottom={0} variant={"brand1"}>
+            <Button
+              onClick={() => {
+                onClose();
+                router.push("/");
+              }}
+              bottom={0}
+              variant={"brand1"}
+            >
               Limpar filtros
             </Button>
           </Flex>
