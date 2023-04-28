@@ -106,6 +106,7 @@ const Profile: NextPage<Props> = ({ seller, isThisSeller, posterList }) => {
             maxColumns={4}
             showPromoTag={false}
             showStatusTag={false}
+            showSeller={false}
           />
 
           <Flex
@@ -152,6 +153,7 @@ const Profile: NextPage<Props> = ({ seller, isThisSeller, posterList }) => {
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { id } = ctx.query;
+  // console.log(ctx.params);
   // try {
   //   const response = await api.get(`/poster/${ctx.params}`);
   //   return {

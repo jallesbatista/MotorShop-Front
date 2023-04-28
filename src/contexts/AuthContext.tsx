@@ -1,4 +1,4 @@
-import { IUserLogin } from "@/interfaces/user.interfaces";
+import { IUser, IUserLogin } from "@/interfaces/user.interfaces";
 import api from "@/services/api";
 import { useToast } from "@chakra-ui/react";
 import { useRouter } from "next/router";
@@ -8,13 +8,14 @@ import { createContext, useContext, useEffect, useState } from "react";
 interface IAuthProviderData {
   logIn: (data: IUserLogin) => Promise<void>;
   logOut: () => void;
-  user: any;
+  user: IUser | null;
+  setUser: React.Dispatch<React.SetStateAction<IUser | null>>;
 }
 
 const AuthContext = createContext({} as IAuthProviderData);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useState<any | null>(null); // Colocar tipagem a partir dos dados retornados do usuário
+  const [user, setUser] = useState<IUser | null>(null); // Colocar tipagem a partir dos dados retornados do usuário
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const toast = useToast();
   const router = useRouter();
@@ -30,6 +31,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             },
           });
           setUser(response.data);
+          api.defaults.headers["Authorization"] = `Bearer ${token}`;
         } catch (error: any) {
           console.log(error);
           if (!toast.isActive("expired")) {
@@ -45,7 +47,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
               id: "expired",
             });
           }
-
           destroyCookie(null, "ecommerce.token");
           setUser(null);
           // router.push("/home");
@@ -64,6 +65,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         path: "/",
       });
 
+      api.defaults.headers["Authorization"] = `Bearer ${response.data.token}`;
       toast({
         position: "bottom-right",
         title: "Logado com sucesso",
@@ -108,7 +110,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     });
   };
 
-  return <AuthContext.Provider value={{ logIn, logOut, user }}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={{ logIn, logOut, user, setUser }}>{children}</AuthContext.Provider>
+  );
 };
 
 export const authContext = () => useContext(AuthContext);

@@ -25,7 +25,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FiTrash } from "react-icons/fi";
 import React, { useEffect, useState } from "react";
 import { brlCurrencyMask } from "@/functions/masks";
-import { TCreatePost } from "@/interfaces/poster.interfaces";
+import { TCreatePoster } from "@/interfaces/poster.interfaces";
 import { createPostSchema } from "@/schemas";
 import { posterContext } from "@/contexts/PosterContext";
 
@@ -64,7 +64,7 @@ const PosterCreateEditModal = ({ isOpen, onClose, onSucessModalOpen }: IPosterCr
     formState: { errors },
     control,
     reset,
-  } = useForm<TCreatePost>({
+  } = useForm<TCreatePoster>({
     resolver: zodResolver(createPostSchema),
     defaultValues: {
       images: [{ url: "" }, { url: "" }, { url: "" }],
@@ -217,7 +217,7 @@ const PosterCreateEditModal = ({ isOpen, onClose, onSucessModalOpen }: IPosterCr
     });
   };
 
-  const onSubmit = async (data: TCreatePost) => {
+  const onSubmit = async (data: TCreatePoster) => {
     const sucess = await posterCreate(data);
     if (sucess) {
       onSucessModalOpen();
