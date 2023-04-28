@@ -24,6 +24,10 @@ interface IUserCreate {
   address: IUserAddress;
 }
 
+interface IResetPasswordRequest {
+  password: string;
+}
+
 type IUserLogin = z.infer<typeof loginSchema>;
 
-export type { IRegister, IUserCreate, IUserLogin };
+export type { IRegister, IUserCreate, IUserLogin, IResetPasswordRequest };
