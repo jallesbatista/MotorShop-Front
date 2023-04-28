@@ -1,27 +1,7 @@
 import { z } from "zod";
+import { addressCreateSchema } from "./register.schema";
 
-export const addressCreateSchema = z.object({
-  zip_code: z
-    .string()
-    .nonempty("Código postal obrigatório")
-    .length(9, "Máximo de 8 caracteres")
-    .transform((cep) => cep.replace(/\D/g, "")),
-  state: z.string().nonempty("Estado obrigatório").max(2),
-  city: z.string().nonempty("Cidade obrigatória").max(50),
-  street: z.string().nonempty("Rua obrigatória").max(127),
-  number: z
-    .string()
-    .max(6, "Deve conter ao máximo 6 dígitos")
-    .nullish()
-    .transform((value) => (value ? value : null)),
-  complement: z
-    .string()
-    .max(127)
-    .nullish()
-    .transform((value) => (value ? value : null)),
-});
-
-const registerSchema = z
+const updateUserSchema = z
   .object({
     name: z.string().nonempty("Nome obrigatorio").max(60, "Máximo 60 caracteres"),
     email: z.string().nonempty("Email obrigatório").email("Deve ser um email válido"),
@@ -60,23 +40,10 @@ const registerSchema = z
       .string()
       .nonempty("Descrição obrigatória")
       .min(20, "Deve ter no mínimo 20 caracteres"),
-    user_type: z.enum(["buyer", "advertiser"]),
-    is_seller: z.boolean().default(false),
-    password: z.string().nonempty("Senha obrigatória").min(6, "Mínimo de 6 caracteres"),
-    confirmPassword: z.string().nonempty("Confirmação de senha obrigatória"),
+    //   password: z.string().nonempty("Senha obrigatória").min(6, "Mínimo de 6 caracteres"),
+    //   confirmPassword: z.string().nonempty("Confirmação de senha obrigatória"),
+    address: addressCreateSchema.partial(),
   })
-  .extend({
-    address: addressCreateSchema,
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Confirmação incorreta",
-    path: ["confirmPassword"],
-  })
-  .transform((data) => {
-    if (data.user_type == "advertiser") {
-      data.is_seller = true;
-    }
-    return data;
-  });
+  .partial();
 
-export default registerSchema;
+export default updateUserSchema;

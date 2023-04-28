@@ -13,7 +13,13 @@ import {
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 
-const DesktopHeaderNav = () => {
+const DesktopHeaderNav = ({
+  onProfileEditOpen,
+  onAddressEditOpen,
+}: {
+  onProfileEditOpen: () => void;
+  onAddressEditOpen: () => void;
+}) => {
   const { user, logOut } = authContext();
   return (
     <>
@@ -41,8 +47,8 @@ const DesktopHeaderNav = () => {
             </Text>
           </MenuButton>
           <MenuList color={"grey.2"}>
-            <MenuItem>Editar Perfil</MenuItem>
-            <MenuItem>Editar Endereço</MenuItem>
+            <MenuItem onClick={onProfileEditOpen}>Editar Perfil</MenuItem>
+            <MenuItem onClick={onAddressEditOpen}>Editar Endereço</MenuItem>
             {user?.is_seller ? <MenuItem>Meus Anúncios</MenuItem> : null}
             <MenuItem onClick={logOut}>Sair</MenuItem>
           </MenuList>

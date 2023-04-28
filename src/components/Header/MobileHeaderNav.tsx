@@ -16,7 +16,13 @@ import {
 import NextLink from "next/link";
 import { useRef } from "react";
 
-const MobileHeaderNav = () => {
+const MobileHeaderNav = ({
+  onProfileEditOpen,
+  onAddressEditOpen,
+}: {
+  onProfileEditOpen: () => void;
+  onAddressEditOpen: () => void;
+}) => {
   const { isOpen, onToggle, onClose } = useDisclosure();
 
   const ref: any = useRef();
@@ -66,10 +72,10 @@ const MobileHeaderNav = () => {
               borderColor={"grey.6"}
               align={"start"}
             >
-              <Button w={"100%"} variant={"outline2"}>
+              <Button onClick={onProfileEditOpen} w={"100%"} variant={"outline2"}>
                 Editar Perfil
               </Button>
-              <Button w={"100%"} variant={"outline2"}>
+              <Button onClick={onAddressEditOpen} w={"100%"} variant={"outline2"}>
                 Editar Endereço
               </Button>
               {user?.is_seller ? (

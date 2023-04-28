@@ -1,4 +1,6 @@
-import { loginSchema, registerSchema } from "@/schemas";
+import { loginSchema, registerSchema, updateAdressSchema } from "@/schemas";
+import { addressCreateSchema } from "@/schemas/register.schema";
+import updateUserSchema from "@/schemas/updateUser.schema";
 import { z } from "zod";
 
 type IRegister = z.infer<typeof registerSchema>;
@@ -24,8 +26,15 @@ interface IUserCreate {
   address: IUserAddress;
 }
 
-type TUser = Omit<IUserCreate, "address" | "password">;
+type TUserUpdate = z.infer<typeof updateUserSchema>;
+
+type TUpdateUserAddress = z.infer<typeof updateAdressSchema>;
+interface IUser extends Omit<IUserCreate, "password"> {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+}
 
 type IUserLogin = z.infer<typeof loginSchema>;
 
-export type { IRegister, IUserCreate, IUserLogin, TUser };
+export type { IRegister, IUserCreate, IUserLogin, IUser, TUserUpdate, TUpdateUserAddress };

@@ -1,10 +1,10 @@
-import { TCreatePost } from "@/interfaces/poster.interfaces";
+import { IPoster } from "@/interfaces/poster.interfaces";
 import api from "@/services/api";
 import { useToast } from "@chakra-ui/react";
 import { createContext, useContext } from "react";
 
 interface IPosterProviderData {
-  posterCreate: (data: TCreatePost) => Promise<true | undefined>;
+  posterCreate: (data: IPoster) => Promise<true | undefined>;
 }
 
 const PosterContext = createContext<IPosterProviderData>({} as IPosterProviderData);
@@ -12,7 +12,7 @@ const PosterContext = createContext<IPosterProviderData>({} as IPosterProviderDa
 export const PosterProvider = ({ children }: { children: React.ReactNode }) => {
   const toast = useToast();
 
-  const posterCreate = async (data: TCreatePost) => {
+  const posterCreate = async (data: IPoster) => {
     data.fipe_price = Number(Number(data.fipe_price).toFixed(2));
     data.kilometers = parseInt(String(data.kilometers));
     data.price = Number(Number(data.price).toFixed(2));
