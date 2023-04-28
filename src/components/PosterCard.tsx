@@ -1,6 +1,5 @@
 import {
   Avatar,
-  Box,
   Card,
   CardBody,
   CardFooter,
@@ -11,20 +10,21 @@ import {
   Tag,
   Text,
 } from "@chakra-ui/react";
-import { mockedUser } from "@/mocks";
-import { IMockedPoster } from "@/interfaces/mocks.interfaces";
 import { useRouter } from "next/router";
+import { IPoster } from "@/interfaces/poster.interfaces";
 
 const PosterCard = ({
   poster,
   index,
   showPromoTag,
   showStatusTag,
+  showSeller,
 }: {
-  poster: IMockedPoster;
+  poster: IPoster;
   index: number;
   showPromoTag: boolean;
   showStatusTag: boolean;
+  showSeller: boolean;
 }) => {
   const router = useRouter();
 
@@ -115,7 +115,7 @@ const PosterCard = ({
               fontWeight={"semibold"}
               noOfLines={1}
             >
-              {poster.model}
+              {`${poster.model[0].toUpperCase()}${poster.model.substring(1)}`}
             </Heading>
           </Flex>
         </CardHeader>
@@ -131,21 +131,23 @@ const PosterCard = ({
             >
               {poster.description}
             </Text>
-            <Flex alignItems={"center"} gap={"8px"}>
-              <Avatar
-                sx={{
-                  div: {
-                    fontSize: "body.2",
-                  },
-                }}
-                name={mockedUser.name}
-                width="30px"
-                h="30px"
-              />
-              <Text fontSize={"body.2"} fontWeight={"medium"} noOfLines={1}>
-                {mockedUser.name}
-              </Text>
-            </Flex>
+            {showSeller && (
+              <Flex alignItems={"center"} gap={"8px"}>
+                <Avatar
+                  sx={{
+                    div: {
+                      fontSize: "body.2",
+                    },
+                  }}
+                  name={poster.user.name}
+                  width="30px"
+                  h="30px"
+                />
+                <Text fontSize={"body.2"} fontWeight={"medium"} noOfLines={1}>
+                  {poster.user.name}
+                </Text>
+              </Flex>
+            )}
           </Flex>
         </CardBody>
 

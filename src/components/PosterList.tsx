@@ -1,4 +1,3 @@
-import { IMockedPoster } from "@/interfaces/mocks.interfaces";
 import { Button, Flex, Grid } from "@chakra-ui/react";
 import PosterCard from "./PosterCard";
 
@@ -17,6 +16,7 @@ interface IPosterList {
   edit?: boolean;
   showPromoTag: boolean;
   showStatusTag: boolean;
+  showSeller: boolean;
 }
 
 const PosterList = ({
@@ -28,6 +28,7 @@ const PosterList = ({
   maxColumns,
   showPromoTag,
   showStatusTag,
+  showSeller,
 }: IPosterList) => {
   if (!posterList) {
     return null;
@@ -52,6 +53,7 @@ const PosterList = ({
               poster={poster}
               showPromoTag={showPromoTag}
               showStatusTag={showStatusTag}
+              showSeller={showSeller}
             />
             {edit && (
               <Flex color={"grey.1"} gap={"16px"}>
@@ -86,6 +88,7 @@ const PosterList = ({
               poster={poster}
               showPromoTag={showPromoTag}
               showStatusTag={showStatusTag}
+              showSeller={showSeller}
             />
             {edit && (
               <Flex color={"grey.1"} gap={"16px"}>
