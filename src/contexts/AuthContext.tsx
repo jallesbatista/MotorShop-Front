@@ -32,6 +32,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           });
           setUser(response.data);
           api.defaults.headers["Authorization"] = `Bearer ${token}`;
+          setCookie(null, "ecommerce.user.id", response.data.id, {
+            maxAge: 60 * 30, // 30 minutos
+            path: "/",
+          });
+          setCookie(null, "ecommerce.user.seller", response.data.is_seller, {
+            maxAge: 60 * 30, // 30 minutos
+            path: "/",
+          });
         } catch (error: any) {
           console.log(error);
           if (!toast.isActive("expired")) {
@@ -47,7 +55,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
               id: "expired",
             });
           }
-          destroyCookie(null, "ecommerce.token");
+          destroyCookie(null, "ecommerce.token", {
+            path: "/",
+          });
+          destroyCookie(null, "ecommerce.user.seller", {
+            path: "/",
+          });
+          destroyCookie(null, "ecommerce.user.id", {
+            path: "/",
+          });
           setUser(null);
           // router.push("/home");
         }
@@ -94,10 +110,17 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const logOut = () => {
-    destroyCookie(null, "ecommerce.token");
+    destroyCookie(null, "ecommerce.token", {
+      path: "/",
+    });
+    destroyCookie(null, "ecommerce.user.seller", {
+      path: "/",
+    });
+    destroyCookie(null, "ecommerce.user.id", {
+      path: "/",
+    });
     setUser(null);
     setIsAuthenticated(false);
-    router.push("/login");
     toast({
       position: "bottom-right",
       title: "Deslogado com sucesso",
@@ -108,6 +131,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       duration: 3000,
       isClosable: true,
     });
+    router.push("/login");
   };
 
   return (

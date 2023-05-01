@@ -49,7 +49,11 @@ const DesktopHeaderNav = ({
           <MenuList color={"grey.2"}>
             <MenuItem onClick={onProfileEditOpen}>Editar Perfil</MenuItem>
             <MenuItem onClick={onAddressEditOpen}>Editar Endereço</MenuItem>
-            {user?.is_seller ? <MenuItem>Meus Anúncios</MenuItem> : null}
+            {user?.is_seller ? (
+              <MenuItem as={NextLink} href={`/seller/${user?.id}/profile`}>
+                Meus Anúncios
+              </MenuItem>
+            ) : null}
             <MenuItem onClick={logOut}>Sair</MenuItem>
           </MenuList>
         </Menu>

@@ -40,7 +40,7 @@ const PosterImageModal = ({ isOpen, onClose, posterImage }: IPosterImageModalPro
             bg={"grey.7"}
           >
             <Image
-              w={"auto"}
+              w={"100%"}
               maxW={"100%"}
               maxH={"100%"}
               objectFit={{ base: "contain", md: "contain" }}
