@@ -25,7 +25,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FiTrash } from "react-icons/fi";
 import React, { useEffect, useState } from "react";
 import { brlCurrencyMask } from "@/functions/masks";
-import { TCreatePoster } from "@/interfaces/poster.interfaces";
+import { IPoster, TCreatePoster } from "@/interfaces/poster.interfaces";
 import { createPostSchema } from "@/schemas";
 import { posterContext } from "@/contexts/PosterContext";
 
@@ -33,6 +33,7 @@ interface IPosterCreateEditModal {
   isOpen: boolean;
   onClose: () => void;
   onSucessModalOpen: () => void;
+  setPosters: React.Dispatch<React.SetStateAction<IPoster[]>>;
 }
 
 interface iCar {
@@ -44,7 +45,12 @@ interface iCar {
   value: number;
 }
 
-const PosterCreateEditModal = ({ isOpen, onClose, onSucessModalOpen }: IPosterCreateEditModal) => {
+const PosterCreateEditModal = ({
+  isOpen,
+  onClose,
+  onSucessModalOpen,
+  setPosters,
+}: IPosterCreateEditModal) => {
   const [brandSearch, setBrandSearch] = useState<string>("");
   const [brandArray, setBrandArray] = useState<string[]>([]);
   const [brandFilterArray, setBrandFilterArray] = useState<string[]>([]);
@@ -218,8 +224,9 @@ const PosterCreateEditModal = ({ isOpen, onClose, onSucessModalOpen }: IPosterCr
   };
 
   const onSubmit = async (data: TCreatePoster) => {
-    const sucess = await posterCreate(data);
-    if (sucess) {
+    const poster = await posterCreate(data);
+    if (poster) {
+      setPosters((old) => [...old, poster]);
       onSucessModalOpen();
     }
     closeAndReset();

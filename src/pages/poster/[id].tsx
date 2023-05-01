@@ -17,9 +17,11 @@ import {
   Image,
   Tag,
   Text,
+  VStack,
   useDisclosure,
 } from "@chakra-ui/react";
 import { GetServerSideProps, NextPage } from "next";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
@@ -33,11 +35,22 @@ const PosterDetail: NextPage<Props> = ({ poster }) => {
   const router = useRouter();
   const { user } = authContext();
 
+  const handleBuy = () => {
+    if (!poster.is_published) {
+      return null;
+    } else if (!user) {
+      return router.push("/login");
+    }
+    // colocar no retorno a função de compra
+    return null;
+  };
+
   return (
     <>
       <Header />
       <Box
         paddingTop={"125px"}
+        pb={{ base: "45px", md: "73px" }}
         w={"100%"}
         bgGradient={{
           base: "linear(to-b, brand.1 0%, brand.1 23%, grey.8 23%, grey.8 100%)",
@@ -65,11 +78,11 @@ const PosterDetail: NextPage<Props> = ({ poster }) => {
             >
               <Image
                 h={"355px"}
-                src={poster.images[0].url}
+                src={poster?.images[0].url}
                 w={"auto"}
                 role={"button"}
                 onClick={() => {
-                  setPosterImage(poster.images[0].url);
+                  setPosterImage(poster?.images[0].url);
                   onOpen();
                 }}
                 maxW={"100%"}
@@ -87,9 +100,23 @@ const PosterDetail: NextPage<Props> = ({ poster }) => {
               gap={{ base: "32px", md: "24px" }}
             >
               <Flex direction={"column"} align={"right"} gap={{ base: "32px", md: "32px" }}>
-                <Heading as={"h2"} fontSize={"heading.6"} lineHeight={"heading.6"}>
-                  {poster.model}
-                </Heading>
+                <VStack align={"right"}>
+                  {!poster?.is_published && (
+                    <Text
+                      as={"span"}
+                      color={"grey.4"}
+                      fontSize={"body.2"}
+                      lineHeight={"heading.6"}
+                      textAlign={"end"}
+                      fontWeight={"semibold"}
+                    >
+                      Anúncio Inativo
+                    </Text>
+                  )}
+                  <Heading as={"h2"} fontSize={"heading.6"} lineHeight={"heading.6"}>
+                    {`${poster?.model.split("")[0].toUpperCase()}${poster?.model.substring(1)}`}
+                  </Heading>
+                </VStack>
 
                 <Flex gap={"12px"}>
                   <Tag
@@ -99,7 +126,7 @@ const PosterDetail: NextPage<Props> = ({ poster }) => {
                     color={"brand.1"}
                     rounded={"4px"}
                   >
-                    {poster.year}
+                    {poster?.year}
                   </Tag>
                   <Tag
                     fontSize={"body.2"}
@@ -108,20 +135,20 @@ const PosterDetail: NextPage<Props> = ({ poster }) => {
                     color={"brand.1"}
                     rounded={"4px"}
                   >
-                    {poster.kilometers} KM
+                    {poster?.kilometers} KM
                   </Tag>
                 </Flex>
               </Flex>
 
               <Text fontSize={"body.1"} fontWeight={"bold"}>
-                {mockedPoster.price.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}
+                {poster?.price.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}
               </Text>
 
               <Box>
                 <Button
                   _disabled={{ _hover: { bg: "grey.5" } }}
-                  variant={user ? "brand1" : "disable"}
-                  onClick={() => (user ? null : router.push("/login"))}
+                  variant={user && poster.is_published ? "brand1" : "disable"}
+                  onClick={handleBuy}
                 >
                   Comprar
                 </Button>
@@ -141,10 +168,8 @@ const PosterDetail: NextPage<Props> = ({ poster }) => {
               <Heading fontSize={"heading.6"} fontWeight={"bold"}>
                 Descrição
               </Heading>
-              <Text color={"grey.2"} lineHeight={"body.1"}>
-                Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolore cupiditate,
-                expedita cumque impedit fuga unde sint officia qui nostrum eaque laudantium quis
-                reiciendis. Eum et, provident nisi pariatur similique quia.
+              <Text color={"grey.2"} fontSize={"body.1"} lineHeight={"body.1"}>
+                {poster?.description}
               </Text>
             </Flex>
             {/* DESCRIPTION */}
@@ -207,7 +232,7 @@ const PosterDetail: NextPage<Props> = ({ poster }) => {
               p={{ base: "40px 28px", md: "36px 44px" }}
             >
               <Avatar
-                name={poster.user.name}
+                name={poster?.user.name}
                 width={{ base: "77px", md: "104px" }}
                 h={{ base: "77px", md: "104px" }}
                 sx={{
@@ -232,61 +257,64 @@ const PosterDetail: NextPage<Props> = ({ poster }) => {
                   fontSize={"heading.6"}
                   as={"h2"}
                 >
-                  {poster.user.name}
+                  {poster?.user.name}
                 </Heading>
                 <Text
                   lineHeight={"body.1"}
                   textAlign={"center"}
                   color={"grey.2"}
                   fontSize={"body.1"}
+                  noOfLines={5}
                 >
-                  {/* {poster.user.description} */}
-                  Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
-                  Ipsum has been the industry's
+                  {poster?.user.description}
                 </Text>
 
-                <Button size={"lg"}>Ver todos os anuncios</Button>
+                <Button size={"lg"} as={Link} href={`/seller/${poster?.user.id}`}>
+                  Ver todos os anuncios
+                </Button>
               </Flex>
             </Flex>
           </Flex>
           {/* SECOND COLUMN */}
         </Container>
-        <Footer />
       </Box>
+      <Footer />
       <PosterImageModal isOpen={isOpen} onClose={onClose} posterImage={posterImage} />
     </>
   );
 };
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const { id } = ctx.query;
+  // const { id } = ctx.query;
+  console.log(ctx.params!.id);
 
-  // try {
-  //   const response = await api.get(`/poster/${ctx.params}`);
-  //   return {
-  //     props: { poster: response.data },
-  //   };
-  // } catch (error: any) {
+  try {
+    const response = await api.get(`/posters/${ctx.params!.id}`);
+    return {
+      props: { poster: response.data },
+    };
+  } catch (error: any) {
+    // return {
+    //   redirect: {
+    //     destination: "/",
+    //     permanent: false,
+    //   },
+    // };
+    // console.log(error.response);
+
+    return {
+      props: { poster: mockedPosterList[1] },
+    };
+  }
+
+  // if (!mockedPosterList[1]) {
   //   return {
   //     redirect: {
-  //       destination: "/",
+  //       destination: "/notfound",
   //       permanent: false,
   //     },
   //   };
   // }
-
-  if (!mockedPosterList[+id!]) {
-    return {
-      redirect: {
-        destination: "/notfound",
-        permanent: false,
-      },
-    };
-  }
-
-  return {
-    props: { poster: mockedPosterList[+id!] },
-  };
 };
 
 export default PosterDetail;

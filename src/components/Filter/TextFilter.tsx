@@ -15,20 +15,20 @@ interface IFilterProps {
 
 const TextFilter = ({ filterList, children, query }: IFilterProps) => {
   const redirect = () => {
-    let redirectLink = "";
+    let redirectLink = "?";
 
     if (query) {
       Object.entries(query).forEach(([key, value], index) => {
         if (!Object.keys(query).includes(String(children).toLowerCase())) {
           if (index == 0) {
-            redirectLink += `?${key}=${value}`;
+            redirectLink += `&${key}=${value}`;
           } else {
             redirectLink += `&${key}=${value}`;
           }
         } else {
           if (key !== String(children).toLowerCase()) {
             if (index == 0) {
-              redirectLink += `?${key}=${value}`;
+              redirectLink += `&${key}=${value}`;
             } else {
               redirectLink += `&${key}=${value}`;
             }
@@ -54,7 +54,7 @@ const TextFilter = ({ filterList, children, query }: IFilterProps) => {
                 href={`/${
                   redirect()
                     ? `${redirect()}&${String(children).toLowerCase()}=${filter}`
-                    : `?${String(children).toLowerCase()}=${filter}`
+                    : `${String(children).toLowerCase()}=${filter}`
                 }`}
                 key={index}
                 color={"grey.3"}

@@ -74,7 +74,7 @@ const Register = () => {
   return (
     <>
       <Header />
-      <Box h={"80px"}></Box>
+      <Box h={"80px"} />
 
       <Flex
         pb={{ base: "45px", md: "73px" }}
