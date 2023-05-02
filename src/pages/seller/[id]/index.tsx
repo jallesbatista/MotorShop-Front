@@ -123,7 +123,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { page } = ctx.query;
 
   try {
-    const response = await api.get(`/users/${ctx.params!.id}/posters`);
+    const response = await api.get(`/users/${ctx.params!.id}/posters?perPage=12`);
 
     return {
       props: {

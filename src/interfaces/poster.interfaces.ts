@@ -18,3 +18,15 @@ export interface IPosterFilters {
   years: string[];
   fuel_types: string[];
 }
+
+export interface Iquery {
+  brand?: string;
+  model?: string;
+  color?: string;
+  year?: string;
+  fuel?: string;
+  priceMAX?: string;
+  priceMIN?: string;
+  kmMAX?: string;
+  kmMIN?: string;
+}

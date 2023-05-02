@@ -7,7 +7,7 @@ import { mockedPosterList } from "@/mocks";
 import api from "@/services/api";
 import { Box, Container, Flex, Heading, Text } from "@chakra-ui/react";
 import { GetServerSideProps, NextPage } from "next";
-import { useState } from "react";
+import React, { useState } from "react";
 import bgImage from "../assets/bgHome.png";
 
 interface Props {
@@ -121,7 +121,17 @@ const Home: NextPage<Props> = ({ posterList, error, filters, query }) => {
   );
 };
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const expectedFilters = ["brand", "model", "color", "year", "fuel"];
+  const expectedFilters = [
+    "brand",
+    "model",
+    "color",
+    "year",
+    "fuel",
+    "priceMAX",
+    "priceMIN",
+    "kmMAX",
+    "kmMIN",
+  ];
   let queryUrl = "?";
 
   Object.entries(ctx.query).forEach(([key, value], index) => {
@@ -157,8 +167,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     console.log(error.cause);
     return {
       props: {
-        posterList: null,
-        filters: null,
+        posterList: [],
+        filters: [],
         query: ctx.query,
       },
     };
