@@ -108,7 +108,15 @@ const Login = () => {
               <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
             </FormControl>
           </VStack>
-          <Text textAlign="end" fontSize={"body.2"} mt={"4px"} mb={"22px"}>
+          <Text
+            as={Link}
+            href={"/forgotPassword"}
+            textAlign="end"
+            fontSize={"body.2"}
+            mt={"4px"}
+            mb={"22px"}
+            display={"block"}
+          >
             Esqueci minha senha
           </Text>
           <VStack w={"100%"} spacing={"24px"}>

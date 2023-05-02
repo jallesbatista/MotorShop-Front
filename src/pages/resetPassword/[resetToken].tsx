@@ -6,7 +6,7 @@ import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
-  Center,
+  Flex,
   FormControl,
   FormErrorMessage,
   FormLabel,
@@ -54,12 +54,18 @@ const ResetPassword = () => {
   return (
     <>
       <Header />
-      <Box h={"90px"} />
-      <Center>
+      {/* <Box h={"80px"} /> */}
+      <Flex
+        pt={{ base: "132px", md: "200px" }}
+        pb={{ base: "45px", md: "73px" }}
+        w={"100%"}
+        justify={"center"}
+        align={"flex-start"}
+        bg={"grey.8"}
+        minH={"100vh"}
+      >
         <Box
           maxW={"560px"}
-          mt={"46px"}
-          mb={"75px"}
           w={"90%"}
           p={{ base: "44px 24px", sm: "44px 48px" }}
           bg={"grey.10"}
@@ -67,7 +73,7 @@ const ResetPassword = () => {
           fontWeight={"semibold"}
         >
           <Heading textAlign={"center"} mb={"32px"} fontSize={"heading.5"}>
-            Crie sua nova senha.
+            Crie sua nova senha
           </Heading>
           <VStack
             as={"form"}
@@ -75,7 +81,9 @@ const ResetPassword = () => {
             spacing={"24px"}
             direction={"column"}
           >
-            <Text>Preencha com a sua nova senha.</Text>
+            <Text fontSize={"body.1"} textAlign={"center"}>
+              Preencha com a sua nova senha
+            </Text>
             <FormControl id="password" isInvalid={!!errors.password?.message}>
               <FormLabel fontWeight={"semibold"} fontSize={"body.2"}>
                 Senha
@@ -132,7 +140,7 @@ const ResetPassword = () => {
             </Button>
           </VStack>
         </Box>
-      </Center>
+      </Flex>
       <Footer />
       <SucessModal
         redirect={{ redirectButton: true, redirectTo: "/login", buttonText: "Ir para o Login" }}

@@ -6,7 +6,7 @@ import { forgotPasswordSchema } from "@/schemas";
 import {
   Box,
   Button,
-  Center,
+  Flex,
   FormControl,
   FormErrorMessage,
   FormLabel,
@@ -36,12 +36,18 @@ const ForgotPassword = () => {
   return (
     <>
       <Header />
-      <Box h={"90px"} />
-      <Center>
+
+      <Flex
+        pt={{ base: "132px", md: "200px" }}
+        pb={{ base: "45px", md: "73px" }}
+        w={"100%"}
+        justify={"center"}
+        align={"flex-start"}
+        bg={"grey.8"}
+        minH={"100vh"}
+      >
         <Box
           maxW={"560px"}
-          mt={"46px"}
-          mb={"75px"}
           w={"90%"}
           p={{ base: "44px 24px", sm: "44px 48px" }}
           bg={"grey.10"}
@@ -49,7 +55,7 @@ const ForgotPassword = () => {
           fontWeight={"semibold"}
         >
           <Heading textAlign={"center"} mb={"32px"} fontSize={"heading.5"}>
-            Esqueceu sua senha ?
+            Esqueceu sua senha?
           </Heading>
           <VStack
             as={"form"}
@@ -57,23 +63,32 @@ const ForgotPassword = () => {
             spacing={"24px"}
             direction={"column"}
           >
-            <Text>
-              Preencha com o e-mail que você usou para se cadastrar. Você receberá um e-mail com
-              instruções sobre como redefinir sua senha.
+            <Text fontSize={"body.1"} textAlign={"justify"}>
+              Preencha com o e-mail que você usou para se cadastrar. Você receberá em instantes um
+              e-mail com instruções sobre como redefinir sua senha.
             </Text>
             <FormControl id="email" isInvalid={!!errors.email?.message}>
               <FormLabel fontWeight={"semibold"} fontSize={"body.2"}>
                 Email
               </FormLabel>
-              <Input type="email" {...register("email")} placeholder="Endereço de email" />
+              <Input type="email" {...register("email")} placeholder="Ex: example@mail.com" />
               <FormErrorMessage>{errors.email?.message}</FormErrorMessage>
             </FormControl>
-            <Button size={"lg"} type="submit" variant={"brand1"} alignSelf={"center"} w={"100%"}>
-              Enviar email
-            </Button>
+            <Box w={"100%"}>
+              <Button
+                mt={"20px"}
+                size={"lg"}
+                type="submit"
+                variant={"brand1"}
+                alignSelf={"center"}
+                w={"100%"}
+              >
+                Enviar email
+              </Button>
+            </Box>
           </VStack>
         </Box>
-      </Center>
+      </Flex>
       <Footer />
     </>
   );

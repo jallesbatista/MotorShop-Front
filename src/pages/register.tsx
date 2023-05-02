@@ -74,7 +74,7 @@ const Register = () => {
   return (
     <>
       <Header />
-      <Box h={"80px"} />
+      <Box h={"80px"}></Box>
 
       <Flex
         pb={{ base: "45px", md: "73px" }}
@@ -108,14 +108,14 @@ const Register = () => {
               <FormLabel fontWeight={"semibold"} fontSize={"body.2"}>
                 Nome
               </FormLabel>
-              <Input type="text" {...register("name")} placeholder="Ex: Samuel leão" />
+              <Input type="text" {...register("name")} placeholder="Ex: Samuel Leão" />
               <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
             </FormControl>
             <FormControl id="email" isInvalid={!!errors.email?.message}>
               <FormLabel fontWeight={"semibold"} fontSize={"body.2"}>
                 Email
               </FormLabel>
-              <Input type="email" {...register("email")} placeholder="Ex: samuel@kenzie.com.br" />
+              <Input type="email" {...register("email")} placeholder="Ex: example@mail.com" />
               <FormErrorMessage>{errors.email?.message}</FormErrorMessage>
             </FormControl>
             <FormControl id="cpf" isInvalid={!!errors.cpf?.message}>
