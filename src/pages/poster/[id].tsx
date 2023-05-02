@@ -3,7 +3,7 @@ import Header from "@/components/Header/Header";
 import PosterImageModal from "@/components/PosterImageModal";
 import { authContext } from "@/contexts/AuthContext";
 import { IMockedPoster } from "@/interfaces/mocks.interfaces";
-import { mockedPoster, mockedPosterList, mockedUser } from "@/mocks";
+import { mockedPosterList } from "@/mocks";
 import api from "@/services/api";
 import {
   Avatar,
@@ -286,7 +286,6 @@ const PosterDetail: NextPage<Props> = ({ poster }) => {
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   // const { id } = ctx.query;
-  console.log(ctx.params!.id);
 
   try {
     const response = await api.get(`/posters/${ctx.params!.id}`);
@@ -306,15 +305,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       props: { poster: mockedPosterList[1] },
     };
   }
-
-  // if (!mockedPosterList[1]) {
-  //   return {
-  //     redirect: {
-  //       destination: "/notfound",
-  //       permanent: false,
-  //     },
-  //   };
-  // }
 };
 
 export default PosterDetail;

@@ -10,19 +10,13 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import InputFilter from "./InputFilter";
-import { IPosterFilters } from "@/interfaces/poster.interfaces";
+import { IPosterFilters, Iquery } from "@/interfaces/poster.interfaces";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
 interface IFilterProps {
   filters: IPosterFilters;
-  query?: {
-    brand?: string;
-    model?: string;
-    color?: string;
-    year?: string;
-    fuel?: string;
-  };
+  query?: Iquery;
 }
 
 const Filter = ({ filters, query }: IFilterProps) => {
@@ -33,26 +27,31 @@ const Filter = ({ filters, query }: IFilterProps) => {
     <>
       <Flex direction={"column"} w={"20%"} display={{ base: "none", lg: "flex" }}>
         <Flex direction={"column"} gap={"12px"}>
-          <TextFilter filterList={filters?.brands} query={query}>
-            Brand
+          <TextFilter filterName="brand" filterList={filters?.brands} query={query}>
+            Marca
           </TextFilter>
           <TextFilter
-            filterList={[...new Set(filters?.models.map((model) => model.split(" ")[0]))]}
+            filterName="model"
+            filterList={[...new Set(filters?.models?.map((model) => model.split(" ")[0]))]}
             query={query}
           >
-            Model
+            Modelo
           </TextFilter>
-          <TextFilter filterList={filters?.colors} query={query}>
-            Color
+          <TextFilter filterName="color" filterList={filters?.colors} query={query}>
+            Cor
           </TextFilter>
-          <TextFilter filterList={filters?.years} query={query}>
-            Year
+          <TextFilter filterName="year" filterList={filters?.years} query={query}>
+            Ano
           </TextFilter>
-          <TextFilter filterList={filters?.fuel_types} query={query}>
-            Fuel
+          <TextFilter filterName="fuel" filterList={filters?.fuel_types} query={query}>
+            Combustível
           </TextFilter>
-          <InputFilter>Km</InputFilter>
-          <InputFilter>Preço</InputFilter>
+          <InputFilter filterName="km" query={query}>
+            Km
+          </InputFilter>
+          <InputFilter filterName="price" query={query}>
+            Preço
+          </InputFilter>
         </Flex>
 
         <Button bottom={0} as={Link} href={"/"} variant={"brand1"}>
@@ -96,26 +95,31 @@ const Filter = ({ filters, query }: IFilterProps) => {
           </Flex>
           <Flex direction={"column"}>
             <Flex direction={"column"} gap={"12px"}>
-              <TextFilter filterList={filters?.brands} query={query}>
-                Brand
+              <TextFilter filterName="brand" filterList={filters?.brands} query={query}>
+                Marca
               </TextFilter>
               <TextFilter
-                filterList={[...new Set(filters?.models.map((model) => model.split(" ")[0]))]}
+                filterName="model"
+                filterList={[...new Set(filters?.models?.map((model) => model.split(" ")[0]))]}
                 query={query}
               >
-                Model
+                Modelo
               </TextFilter>
-              <TextFilter filterList={filters?.colors} query={query}>
-                Color
+              <TextFilter filterName="color" filterList={filters?.colors} query={query}>
+                Cor
               </TextFilter>
-              <TextFilter filterList={filters?.years} query={query}>
-                Year
+              <TextFilter filterName="year" filterList={filters?.years} query={query}>
+                Ano
               </TextFilter>
-              <TextFilter filterList={filters?.fuel_types} query={query}>
-                Fuel
+              <TextFilter filterName="fuel" filterList={filters?.fuel_types} query={query}>
+                Combustível
               </TextFilter>
-              <InputFilter>Km</InputFilter>
-              <InputFilter>Preço</InputFilter>
+              <InputFilter filterName="km" query={query}>
+                Km
+              </InputFilter>
+              <InputFilter filterName="price" query={query}>
+                Preço
+              </InputFilter>
             </Flex>
 
             <Button
