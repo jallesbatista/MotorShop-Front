@@ -91,14 +91,14 @@ const UserEditModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => vo
               <FormLabel fontWeight={"semibold"} fontSize={"body.2"}>
                 Nome
               </FormLabel>
-              <Input type="text" {...register("name")} placeholder="Ex: Samuel leão" />
+              <Input type="text" {...register("name")} placeholder="Ex: Samuel Leão" />
               <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
             </FormControl>
             <FormControl id="email" isInvalid={!!errors.email?.message}>
               <FormLabel fontWeight={"semibold"} fontSize={"body.2"}>
                 Email
               </FormLabel>
-              <Input type="email" {...register("email")} placeholder="Ex: samuel@kenzie.com.br" />
+              <Input type="email" {...register("email")} placeholder="Ex: example@mail.com" />
               <FormErrorMessage>{errors.email?.message}</FormErrorMessage>
             </FormControl>
             <FormControl id="cpf" isInvalid={!!errors.cpf?.message}>
