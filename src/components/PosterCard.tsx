@@ -10,8 +10,8 @@ import {
   Tag,
   Text,
 } from "@chakra-ui/react";
-import { useRouter } from "next/router";
 import { IPoster } from "@/interfaces/poster.interfaces";
+import Link from "next/link";
 
 const PosterCard = ({
   poster,
@@ -26,8 +26,6 @@ const PosterCard = ({
   showStatusTag: boolean;
   showSeller: boolean;
 }) => {
-  const router = useRouter();
-
   return (
     <>
       <Card
@@ -40,8 +38,8 @@ const PosterCard = ({
         rounded={"4px"}
         data-group
         p={0}
-        role="button"
-        onClick={() => router.push(`/poster/${index}`)}
+        as={Link}
+        href={`/poster/${poster.id}`}
       >
         <CardHeader p={0}>
           <Flex flexDirection={"column"} gap={"12px"}>
@@ -64,7 +62,7 @@ const PosterCard = ({
             >
               <Image
                 transition={".3s"}
-                src={poster.images[0].url}
+                src={poster?.images[0].url}
                 minW={"100%"}
                 w="auto"
                 objectFit="fill"
@@ -139,12 +137,12 @@ const PosterCard = ({
                       fontSize: "body.2",
                     },
                   }}
-                  name={poster.user.name}
+                  name={poster?.user?.name}
                   width="30px"
                   h="30px"
                 />
                 <Text fontSize={"body.2"} fontWeight={"medium"} noOfLines={1}>
-                  {poster.user.name}
+                  {poster?.user?.name}
                 </Text>
               </Flex>
             )}

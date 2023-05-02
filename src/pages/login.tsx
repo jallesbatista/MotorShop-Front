@@ -22,6 +22,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import nookies from "nookies";
+import { GetServerSideProps } from "next";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -127,4 +129,20 @@ const Login = () => {
   );
 };
 
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const cookies = nookies.get(ctx);
+  const token = cookies["ecommerce.token"];
+  if (token) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
+};
 export default Login;

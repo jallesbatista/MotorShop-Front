@@ -79,7 +79,12 @@ const MobileHeaderNav = ({
                 Editar Endereço
               </Button>
               {user?.is_seller ? (
-                <Button w={"100%"} variant={"outlineBrand1"}>
+                <Button
+                  as={NextLink}
+                  href={`/seller/${user?.id}/profile`}
+                  w={"100%"}
+                  variant={"outlineBrand1"}
+                >
                   Meus Anúncios
                 </Button>
               ) : null}

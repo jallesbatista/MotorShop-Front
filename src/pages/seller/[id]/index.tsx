@@ -1,44 +1,20 @@
 import Footer from "@/components/Footer";
 import Header from "@/components/Header/Header";
-import PosterCreateEditModal from "@/components/PosterCreateEditModal";
 import PosterList from "@/components/PosterList";
-import SucessModal from "@/components/SuccessModal";
-import { authContext } from "@/contexts/AuthContext";
 import { IPoster } from "@/interfaces/poster.interfaces";
 import { IUser } from "@/interfaces/user.interfaces";
 import { mockedPosterList, mockedUserList } from "@/mocks";
 import api from "@/services/api";
-import { Avatar, Box, Button, Flex, Heading, Tag, Text, useDisclosure } from "@chakra-ui/react";
+import { Avatar, Box, Flex, Heading, Tag, Text } from "@chakra-ui/react";
 import { GetServerSideProps, NextPage } from "next";
-import nookies from "nookies";
-import { useState } from "react";
 
 interface Props {
   seller: IUser;
   posterList: IPoster[];
+  count: number;
 }
 
-const Profile: NextPage<Props> = ({ seller, posterList }) => {
-  const {
-    isOpen: isCreateModalOpen,
-    onClose: onCreateModalClose,
-    onOpen: onCreateModalOpen,
-  } = useDisclosure();
-
-  const {
-    isOpen: isSucessModalOpen,
-    onClose: onSucessModalClose,
-    onOpen: onSucessModalOpen,
-  } = useDisclosure();
-
-  const [posters, setPosters] = useState<IPoster[]>(posterList || []);
-
-  const { user } = authContext();
-
-  if (!user?.is_seller) {
-    return null;
-  }
-
+const SellerPage: NextPage<Props> = ({ seller, posterList }) => {
   return (
     <>
       <Header />
@@ -58,7 +34,7 @@ const Profile: NextPage<Props> = ({ seller, posterList }) => {
             direction={"column"}
             bg={"grey.10"}
             rounded={"4px"}
-            p={{ base: "40px 26px", md: "44px" }}
+            p={{ base: "40px 26px", md: "44px 44px 50px 44px" }}
             w={"90%"}
             maxWidth={"1100px"}
             gap={"24px"}
@@ -97,12 +73,6 @@ const Profile: NextPage<Props> = ({ seller, posterList }) => {
               <Text fontSize={"body.1"} color={"grey.2"}>
                 {seller.description}
               </Text>
-
-              <Box>
-                <Button onClick={onCreateModalOpen} variant={"outlineBrand1"} size={"lg"}>
-                  Criar anuncio
-                </Button>
-              </Box>
             </Flex>
           </Flex>
           {/* LISTAGEM */}
@@ -111,11 +81,11 @@ const Profile: NextPage<Props> = ({ seller, posterList }) => {
             maxWidth="1300px"
             columns={{ lg: 3, xl: 3 }}
             width={{ lg: "90%", xl: "100%" }}
-            posterList={posters}
-            edit={true}
+            posterList={posterList}
+            edit={false}
             maxColumns={4}
             showPromoTag={false}
-            showStatusTag={false}
+            showStatusTag={true}
             showSeller={false}
           />
 
@@ -145,19 +115,6 @@ const Profile: NextPage<Props> = ({ seller, posterList }) => {
         </Flex>
       </Box>
       <Footer />
-      {/* MODAL DE CRIAÇÂO */}
-      <PosterCreateEditModal
-        setPosters={setPosters}
-        isOpen={isCreateModalOpen}
-        onClose={onCreateModalClose}
-        onSucessModalOpen={onSucessModalOpen}
-      />
-      <SucessModal
-        isOpen={isSucessModalOpen}
-        onClose={onSucessModalClose}
-        title="Seu anúncio foi criado com sucesso!"
-        description="Agora você poderá ver seus negócios crescendo em grande escala"
-      />
     </>
   );
 };
@@ -165,46 +122,25 @@ const Profile: NextPage<Props> = ({ seller, posterList }) => {
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { page } = ctx.query;
 
-  const cookies = nookies.get(ctx);
-  const userId = cookies["ecommerce.user.id"];
-  const token = cookies["ecommerce.token"];
+  try {
+    const response = await api.get(`/users/${ctx.params!.id}/posters?perPage=12`);
 
-  if (!token) {
     return {
-      redirect: {
-        destination: `/login`,
-        permanent: false,
+      props: {
+        posterList: response.data.data,
+        seller: response.data.sellerData,
+        count: response.data.count,
       },
     };
-  }
+  } catch (error: any) {
+    // return {
+    //   notFound: true
+    // };
 
-  if (userId == ctx.params!.id) {
-    try {
-      const response = await api.get(`/users/${ctx.params!.id}/posters`);
-      return {
-        props: {
-          posterList: response.data.data,
-          seller: response.data.sellerData,
-          count: response.data.count,
-        },
-      };
-    } catch (error: any) {
-      // return {
-      //   notFound: true,
-      // };
-
-      return {
-        props: { seller: mockedUserList[1], isThisSeller: true, posterList: mockedPosterList },
-      };
-    }
-  } else {
     return {
-      redirect: {
-        destination: `/seller/${ctx.params!.id}`,
-        permanent: false,
-      },
+      props: { seller: mockedUserList[1], posterList: mockedPosterList },
     };
   }
 };
 
-export default Profile;
+export default SellerPage;

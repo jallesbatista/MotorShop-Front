@@ -7,7 +7,7 @@ import { mockedPosterList } from "@/mocks";
 import api from "@/services/api";
 import { Box, Container, Flex, Heading, Text } from "@chakra-ui/react";
 import { GetServerSideProps, NextPage } from "next";
-import { useState } from "react";
+import React, { useState } from "react";
 import bgImage from "../assets/bgHome.png";
 
 interface Props {
@@ -121,7 +121,17 @@ const Home: NextPage<Props> = ({ posterList, error, filters, query }) => {
   );
 };
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const expectedFilters = ["brand", "model", "color", "year", "fuel"];
+  const expectedFilters = [
+    "brand",
+    "model",
+    "color",
+    "year",
+    "fuel",
+    "priceMAX",
+    "priceMIN",
+    "kmMAX",
+    "kmMIN",
+  ];
   let queryUrl = "?";
 
   Object.entries(ctx.query).forEach(([key, value], index) => {
@@ -134,21 +144,35 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     }
   });
 
-  const [posters, filters] = await Promise.all([
-    api.get(`/posters${queryUrl ? queryUrl + "&perPage=12" : "?perPage=12"}`),
-    api.get(`/posters/filters${queryUrl}`),
-  ]).catch((err) => {
-    console.log(err);
-    return [];
-  });
+  try {
+    const [posters, filters] = await Promise.all([
+      // BUSCA ATUALIZADA DOS ANUNCIOS PUBLICADOS E FILTRO PARA OS MESMOS
+      // api.get(
+      //   `/posters${queryUrl ? queryUrl + "&perPage=12&published=1" : "?perPage=12&published=1"}`
+      // ),
+      // api.get(`/posters/filters${queryUrl ? queryUrl + "&published=1" : "?published=1"}`),
 
-  return {
-    props: {
-      posterList: posters?.data.data || null,
-      filters: filters?.data || null,
-      query: ctx.query,
-    },
-  };
+      // BUSCA GERAL DE TODOS OS ANUNCIO E FILTROS (DEIXAR SOMENTE PARA TESTES)
+      api.get(`/posters${queryUrl ? queryUrl + "&perPage=12" : "?perPage=12"}`),
+      api.get(`/posters/filters${queryUrl}`),
+    ]);
+    return {
+      props: {
+        posterList: posters.data.data,
+        filters: filters.data,
+        query: ctx.query,
+      },
+    };
+  } catch (error: any) {
+    console.log(error.cause);
+    return {
+      props: {
+        posterList: [],
+        filters: [],
+        query: ctx.query,
+      },
+    };
+  }
 };
 
 export default Home;
