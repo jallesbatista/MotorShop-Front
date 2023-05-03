@@ -68,9 +68,11 @@
 <a href="https://www.linkedin.com/in/jallesbatista/"><img src="/src/assets/icons8-linkedin.svg" alt="logo lindedin" /><a>
 Jalles Batista<br>
 
-<a href="https://github.com/NicollyAlves"><img src="/src/assets/icons8-github.svg" alt="logo github" /><a> 
-<a href="https://www.linkedin.com/in/nicollyalves/"><img src="/src/assets/icons8-linkedin.svg" alt="logo lindedin" /><a>
-Nicolly Alves<br>
+<h2>Nicolly Alves</h2><br>
+<div align="justify">
+    <a href="https://github.com/NicollyAlves"><img src="/src/assets/icons8-github.svg" alt="logo github" /><a> 
+    <a href="https://www.linkedin.com/in/nicollyalves/"><img src="/src/assets/icons8-linkedin.svg" alt="logo lindedin" /><a>
+</div>
 
 <a href="https://github.com/lucastdelara"><img src="/src/assets/icons8-github.svg" alt="logo github" /><a> 
 <a href="https://www.linkedin.com/in/lucastlara/"><img src="/src/assets/icons8-linkedin.svg" alt="logo lindedin" /><a>
