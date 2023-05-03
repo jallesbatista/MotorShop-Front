@@ -1,10 +1,11 @@
-import { IPoster, TCreatePoster } from "@/interfaces/poster.interfaces";
+import { IPoster, TCreatePoster, TEditPoster } from "@/interfaces/poster.interfaces";
 import api from "@/services/api";
 import { useToast } from "@chakra-ui/react";
 import { createContext, useContext } from "react";
 
 interface IPosterProviderData {
   posterCreate: (data: TCreatePoster) => Promise<IPoster | undefined>;
+  posterEdit: (id: string, data: TEditPoster) => Promise<any>;
 }
 
 const PosterContext = createContext<IPosterProviderData>({} as IPosterProviderData);
@@ -45,11 +46,46 @@ export const PosterProvider = ({ children }: { children: React.ReactNode }) => {
       });
     }
   };
+
+  const posterEdit = async (id: string, data: TEditPoster) => {
+    data.fipe_price = Number(Number(data.fipe_price).toFixed(2));
+    data.kilometers = parseInt(String(data.kilometers));
+    data.price = Number(Number(data.price).toFixed(2));
+
+    try {
+      const response = await api.patch(`/posters/${id}`, data);
+      toast({
+        status: "success",
+        title: "Anúncio atualizado com sucesso",
+        duration: 3000,
+        position: "bottom-right",
+        containerStyle: {
+          color: "white",
+        },
+        isClosable: true,
+      });
+      return response.data;
+    } catch (error: any) {
+      console.log(error);
+      toast({
+        status: "error",
+        description:
+          error.response?.data.message || "Ops... Ocorreu um erro, tente novamente mais tarde",
+        duration: 3000,
+        position: "top-right",
+        containerStyle: {
+          color: "white",
+        },
+        isClosable: true,
+      });
+    }
+  };
   return (
     <>
       <PosterContext.Provider
         value={{
           posterCreate,
+          posterEdit,
         }}
       >
         {children}

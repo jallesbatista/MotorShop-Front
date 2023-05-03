@@ -117,6 +117,7 @@ const Profile: NextPage<Props> = ({ seller, posterList }) => {
             showPromoTag={false}
             showStatusTag={false}
             showSeller={false}
+            setPosters={setPosters}
           />
 
           <Flex

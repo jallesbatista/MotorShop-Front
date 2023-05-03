@@ -19,21 +19,26 @@ import {
   List,
   ListItem,
   InputLeftAddon,
+  HStack,
+  useRadioGroup,
 } from "@chakra-ui/react";
-import { useFieldArray, useForm } from "react-hook-form";
+import { useController, useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FiTrash } from "react-icons/fi";
 import React, { useEffect, useState } from "react";
 import { brlCurrencyMask } from "@/functions/masks";
 import { IPoster, TCreatePoster } from "@/interfaces/poster.interfaces";
-import { createPostSchema } from "@/schemas";
+import { createPostSchema, editPosterSchema } from "@/schemas";
 import { posterContext } from "@/contexts/PosterContext";
+import CustomRadioButton from "./CustomRadioButton";
 
 interface IPosterCreateEditModal {
   isOpen: boolean;
   onClose: () => void;
-  onSucessModalOpen: () => void;
+  onSucessModalOpen?: () => void;
   setPosters: React.Dispatch<React.SetStateAction<IPoster[]>>;
+  poster?: IPoster | null;
+  edit?: boolean;
 }
 
 interface iCar {
@@ -50,6 +55,8 @@ const PosterCreateEditModal = ({
   onClose,
   onSucessModalOpen,
   setPosters,
+  edit,
+  poster,
 }: IPosterCreateEditModal) => {
   const [brandSearch, setBrandSearch] = useState<string>("");
   const [brandArray, setBrandArray] = useState<string[]>([]);
@@ -62,7 +69,7 @@ const PosterCreateEditModal = ({
   const [carArray, setCarArray] = useState<iCar[]>([]);
   const [carBrandModel, setCarBrandModel] = useState("");
 
-  const { posterCreate } = posterContext();
+  const { posterCreate, posterEdit } = posterContext();
 
   const {
     register,
@@ -71,7 +78,7 @@ const PosterCreateEditModal = ({
     control,
     reset,
   } = useForm<TCreatePoster>({
-    resolver: zodResolver(createPostSchema),
+    resolver: zodResolver(editPosterSchema),
     defaultValues: {
       images: [{ url: "" }, { url: "" }, { url: "" }],
     },
@@ -81,6 +88,28 @@ const PosterCreateEditModal = ({
     control,
     name: "images",
   });
+
+  const [radioState, setRadioState] = useState<"y" | "n">("n");
+
+  const radioOptions = ["y", "n"];
+  const radioOptionsName = ["Sim", "Não"];
+
+  const { field: radioField } = useController({
+    control: control,
+    name: "publish_option",
+    defaultValue: radioState,
+  });
+
+  const { getRootProps, getRadioProps } = useRadioGroup({
+    ...radioField,
+    onChange: (e: any) => {
+      radioField.onChange(e);
+      setRadioState(e);
+    },
+    value: radioState,
+  });
+
+  const group = getRootProps();
 
   useEffect(() => {
     const getAllCars = async () => {
@@ -136,6 +165,10 @@ const PosterCreateEditModal = ({
               brand: "",
             });
           }
+
+          if (edit && poster) {
+            setModelSearch(poster.model);
+          }
         } catch (error: any) {
           console.log(error.data.message);
         }
@@ -189,6 +222,26 @@ const PosterCreateEditModal = ({
     getCarData();
   }, [modelSearch]);
 
+  useEffect(() => {
+    if (edit && poster) {
+      setBrandSearch(poster.brand);
+      reset({
+        color: poster.color,
+        kilometers: poster.kilometers,
+        price: poster.price
+          .toLocaleString("pt-BR", {
+            style: "currency",
+            currency: "BRL",
+            maximumFractionDigits: 2,
+          })
+          .split(/\s/g)[1],
+        description: poster.description,
+        images: poster.images,
+      });
+      setRadioState(poster.is_published ? "y" : "n");
+    }
+  }, [edit]);
+
   const handleBrandSearch = (value: string) => {
     setBrandSearch(value);
     if (value) {
@@ -220,14 +273,31 @@ const PosterCreateEditModal = ({
       model: "",
       year: "",
       price: "",
+      images: [{ url: "" }, { url: "" }, { url: "" }],
     });
   };
 
   const onSubmit = async (data: TCreatePoster) => {
-    const poster = await posterCreate(data);
-    if (poster) {
-      setPosters((old) => [...old, poster]);
-      onSucessModalOpen();
+    if (!edit) {
+      const createdPoster = await posterCreate(data);
+      if (createdPoster) {
+        setPosters((old) => [createdPoster, ...old]);
+        onSucessModalOpen!();
+      }
+    } else {
+      if (poster) {
+        const updatedPoster = await posterEdit(poster.id, data);
+        if (updatedPoster) {
+          setPosters((old) =>
+            old.map((el) => {
+              if (el.id == updatedPoster.id) {
+                return updatedPoster;
+              }
+              return el;
+            })
+          );
+        }
+      }
     }
     closeAndReset();
   };
@@ -235,7 +305,7 @@ const PosterCreateEditModal = ({
   return (
     <>
       <Modal isOpen={isOpen} onClose={closeAndReset} closeOnOverlayClick>
-        <ModalOverlay />
+        <ModalOverlay w={"100%"} h={"100%"} />
         <ModalContent
           color={"grey.1"}
           as={"form"}
@@ -251,7 +321,7 @@ const PosterCreateEditModal = ({
         >
           <Flex w={"100%"} align={"center"} px={{ base: "16px", md: "24px" }} position={"relative"}>
             <Heading fontWeight={"medium"} fontSize={"heading.7"}>
-              Criar anúncio
+              {edit ? "Editar anúncio" : "Criar anúncio"}
             </Heading>
             <ModalCloseButton color={"grey.4"} top={"-5px"} right={{ base: "10px", md: "15px" }} />
           </Flex>
@@ -510,6 +580,19 @@ const PosterCreateEditModal = ({
               <FormErrorMessage>{errors.description?.message}</FormErrorMessage>
             </FormControl>
 
+            {edit && poster && (
+              <HStack w={"100%"} {...group}>
+                {radioOptions.map((value, index) => {
+                  const radio = { ...getRadioProps({ value }) };
+                  return (
+                    <CustomRadioButton key={value} {...radio}>
+                      {radioOptionsName[index]}
+                    </CustomRadioButton>
+                  );
+                })}
+              </HStack>
+            )}
+
             {fields.map((field, index) => (
               <FormControl
                 id={`img${index}`}
@@ -555,14 +638,36 @@ const PosterCreateEditModal = ({
                 </Text>
               </Button>
             </Box>
-            <Flex mt={{ base: "12px", md: "18px" }} gap={"10px"} justify={"flex-end"}>
-              <Button w={"50%"} maxW={"130px"} size={"lg"} variant={"negative"}>
-                Cancelar
-              </Button>
-              <Button type="submit" w={"50%"} maxW={"190px"} size={"lg"} variant={"brandDisable"}>
-                Criar anúncio
-              </Button>
-            </Flex>
+            {edit ? (
+              <Flex mt={{ base: "12px", md: "18px" }} gap={"10px"}>
+                <Button
+                  onClick={onClose}
+                  w={{ base: "50%", md: "60%" }}
+                  size={"lg"}
+                  variant={"negative"}
+                >
+                  Excluir anúncio
+                </Button>
+                <Button
+                  type="submit"
+                  w={{ base: "50%", md: "40%" }}
+                  size={"lg"}
+                  variant={"brandDisable"}
+                  minW={"138px"}
+                >
+                  Salvar alterações
+                </Button>
+              </Flex>
+            ) : (
+              <Flex mt={{ base: "12px", md: "18px" }} gap={"10px"} justify={"flex-end"}>
+                <Button onClick={onClose} w={"50%"} maxW={"130px"} size={"lg"} variant={"negative"}>
+                  Cancelar
+                </Button>
+                <Button type="submit" w={"50%"} maxW={"190px"} size={"lg"} variant={"brandDisable"}>
+                  Criar anúncio
+                </Button>
+              </Flex>
+            )}
           </Flex>
         </ModalContent>
       </Modal>

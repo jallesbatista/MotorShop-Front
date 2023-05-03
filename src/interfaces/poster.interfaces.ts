@@ -1,8 +1,9 @@
-import { createPostSchema } from "@/schemas";
+import { createPostSchema, editPosterSchema } from "@/schemas";
 import * as z from "zod";
 import { IUser } from "./user.interfaces";
 
 export type TCreatePoster = z.infer<typeof createPostSchema>;
+export type TEditPoster = z.infer<typeof editPosterSchema>;
 
 export interface IPoster extends TCreatePoster {
   id: string;

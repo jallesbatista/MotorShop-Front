@@ -1,5 +1,8 @@
-import { Button, Flex, Grid } from "@chakra-ui/react";
+import { Button, Flex, Grid, useDisclosure } from "@chakra-ui/react";
 import PosterCard from "./PosterCard";
+import { IPoster } from "@/interfaces/poster.interfaces";
+import PosterCreateEditModal from "./PosterCreateEditModal";
+import { useState } from "react";
 
 interface IPosterList {
   posterList: any[];
@@ -17,6 +20,7 @@ interface IPosterList {
   showPromoTag: boolean;
   showStatusTag: boolean;
   showSeller: boolean;
+  setPosters: React.Dispatch<React.SetStateAction<IPoster[]>>;
 }
 
 const PosterList = ({
@@ -29,10 +33,19 @@ const PosterList = ({
   showPromoTag,
   showStatusTag,
   showSeller,
+  setPosters,
 }: IPosterList) => {
   if (!posterList) {
     return null;
   }
+
+  const {
+    isOpen: isEditModalOpen,
+    onClose: onEditModalClose,
+    onOpen: onEditModalOpen,
+  } = useDisclosure();
+
+  const [poster, setPoster] = useState<IPoster | null>(null);
 
   return (
     <>
@@ -66,7 +79,7 @@ const PosterList = ({
       </Flex>
 
       <Grid
-        gap={{ md: "100px 0px", lg: "100px 32px" }}
+        gap={{ md: "100px 0px", lg: "100px 20px", xl: "100px 32px" }}
         templateColumns={{ lg: `repeat(${columns?.lg}, 1fr)`, xl: `repeat(${columns?.xl}, 1fr)` }}
         gridTemplateRows={"auto"}
         w={width}
@@ -92,13 +105,29 @@ const PosterList = ({
             />
             {edit && (
               <Flex color={"grey.1"} gap={"16px"}>
-                <Button variant={"outline1"}>Editar</Button>
+                <Button
+                  variant={"outline1"}
+                  onClick={() => {
+                    setPoster(poster);
+                    onEditModalOpen();
+                  }}
+                >
+                  Editar
+                </Button>
                 <Button variant={"outline1"}>Ver detalhes</Button>
               </Flex>
             )}
           </Flex>
         ))}
       </Grid>
+
+      <PosterCreateEditModal
+        poster={poster}
+        setPosters={setPosters}
+        isOpen={isEditModalOpen}
+        edit={isEditModalOpen}
+        onClose={onEditModalClose}
+      />
     </>
   );
 };
