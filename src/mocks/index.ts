@@ -60,6 +60,32 @@ export const mockedPoster: IMockedPoster = {
       url: "https://img.lovepik.com/free-png/20211209/lovepik-a-car-png-image_401434179_wh1200.png",
     },
   ],
+  comments: [
+    {
+      content:
+        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse sequi cum atque temporibus ducimus laborum repudiandae vitae corporis amet, nesciunt alias labore, veritatis blanditiis est cumque doloremque nobis, culpa nemo?",
+      createdAt: new Date().toISOString().split("T")[0],
+      user: {
+        name: "Flavin du Pneu",
+      },
+    },
+    {
+      content:
+        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse sequi cum atque temporibus ducimus laborum repudiandae vitae corporis amet, nesciunt alias labore, veritatis blanditiis est cumque doloremque nobis, culpa nemo?",
+      createdAt: new Date().toISOString().split("T")[0],
+      user: {
+        name: "Chaulin Matador de Porco",
+      },
+    },
+    {
+      content:
+        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse sequi cum atque temporibus ducimus laborum repudiandae vitae corporis amet, nesciunt alias labore, veritatis blanditiis est cumque doloremque nobis, culpa nemo?",
+      createdAt: new Date().toISOString().split("T")[0],
+      user: {
+        name: "Carlos Andrade",
+      },
+    },
+  ],
 };
 export const mockedPoster2: IMockedPoster = {
   user: mockedUser,
@@ -89,6 +115,32 @@ export const mockedPoster2: IMockedPoster = {
     },
     {
       url: "https://w7.pngwing.com/pngs/44/655/png-transparent-fiat-uno-fiat-punto-fiat-panda-fiat-automobiles-fiat-compact-car-sedan-car.png",
+    },
+  ],
+  comments: [
+    {
+      content:
+        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse sequi cum atque temporibus ducimus laborum repudiandae vitae corporis amet, nesciunt alias labore, veritatis blanditiis est cumque doloremque nobis, culpa nemo?",
+      createdAt: new Date("2022-05-01").toISOString().split("T")[0],
+      user: {
+        name: "Flavin du Pneu",
+      },
+    },
+    {
+      content:
+        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse sequi cum atque temporibus ducimus laborum repudiandae vitae corporis amet, nesciunt alias labore, veritatis blanditiis est cumque doloremque nobis, culpa nemo?",
+      createdAt: new Date("2023-03-29").toISOString().split("T")[0],
+      user: {
+        name: "Chaulin Matador de Porco",
+      },
+    },
+    {
+      content:
+        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse sequi cum atque temporibus ducimus laborum repudiandae vitae corporis amet, nesciunt alias labore, veritatis blanditiis est cumque doloremque nobis, culpa nemo?",
+      createdAt: new Date().toISOString().split("T")[0],
+      user: {
+        name: "Carlos Andrade",
+      },
     },
   ],
 };
