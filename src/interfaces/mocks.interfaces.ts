@@ -21,8 +21,17 @@ export interface IMockedPoster {
   createdAt: string;
   images: IMockerImage[];
   user: IMockedUser;
+  comments: IMockedComment[];
 }
 
 interface IMockerImage {
   url: string;
+}
+
+export interface IMockedComment {
+  content: string;
+  createdAt: string;
+  user: {
+    name: string;
+  };
 }

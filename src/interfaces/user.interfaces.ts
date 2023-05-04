@@ -1,4 +1,4 @@
-import { loginSchema, registerSchema, updateAdressSchema } from "@/schemas";
+import { commentSchema, loginSchema, registerSchema, updateAdressSchema } from "@/schemas";
 import updateUserSchema from "@/schemas/updateUser.schema";
 import { z } from "zod";
 
@@ -39,6 +39,7 @@ interface IUser extends Omit<IUserCreate, "password"> {
 }
 
 type IUserLogin = z.infer<typeof loginSchema>;
+type IUserComment = z.infer<typeof commentSchema>;
 
 export type {
   IRegister,
@@ -48,4 +49,5 @@ export type {
   TUserUpdate,
   TUpdateUserAddress,
   IResetPasswordRequest,
+  IUserComment,
 };

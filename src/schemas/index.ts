@@ -5,6 +5,7 @@ import forgotPasswordSchema from "./forgotPassword.schema";
 import resetPasswordSchema from "./resetPassword.schema";
 import updateAdressSchema from "./updateAddress.schema";
 import updateUserSchema from "./updateUser.schema";
+import commentSchema from "./comment.schema";
 import editPosterSchema from "./editPoster.schema";
 
 export {
@@ -15,5 +16,6 @@ export {
   resetPasswordSchema,
   updateUserSchema,
   updateAdressSchema,
+  commentSchema,
   editPosterSchema,
 };

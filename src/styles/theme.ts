@@ -323,10 +323,12 @@ const customTheme = extendTheme({
       5: "24px",
       6: "20px",
       7: "16px",
+      8: "14px",
     },
     body: {
       1: "16px",
       2: "14px",
+      3: "12px",
     },
     button: {
       lg: "16px",

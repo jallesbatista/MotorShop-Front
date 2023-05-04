@@ -1,4 +1,3 @@
-import { z } from "zod";
 import createPostSchema from "./createPoster.schema";
 
 const editPosterSchema = createPostSchema.transform((data) => {
