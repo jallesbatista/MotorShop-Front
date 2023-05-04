@@ -65,6 +65,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             path: "/",
           });
           setUser(null);
+          setIsAuthenticated(false);
           // router.push("/home");
         }
       }
@@ -82,16 +83,19 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       });
 
       api.defaults.headers["Authorization"] = `Bearer ${response.data.token}`;
-      toast({
-        position: "bottom-right",
-        title: "Logado com sucesso",
-        containerStyle: {
-          color: "white",
-        },
-        status: "success",
-        duration: 3000,
-        isClosable: true,
-      });
+      if (!toast.isActive("logged")) {
+        toast({
+          position: "bottom-right",
+          title: "Logado com sucesso",
+          containerStyle: {
+            color: "white",
+          },
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+          id: "logged",
+        });
+      }
       setIsAuthenticated(true);
       router.push("/");
     } catch (error: any) {
