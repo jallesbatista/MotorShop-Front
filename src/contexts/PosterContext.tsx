@@ -1,12 +1,16 @@
+import { IComment } from "@/interfaces/comment.interfaces";
 import { IPoster, TCreatePoster, TEditPoster } from "@/interfaces/poster.interfaces";
+import { IUserComment } from "@/interfaces/user.interfaces";
 import api from "@/services/api";
 import { useToast } from "@chakra-ui/react";
 import { createContext, useContext } from "react";
 
 interface IPosterProviderData {
   posterCreate: (data: TCreatePoster) => Promise<IPoster | undefined>;
-  posterEdit: (id: string, data: TEditPoster) => Promise<any>;
+  posterEdit: (id: string, data: TEditPoster) => Promise<IPoster | undefined>;
   posterDelete: (id: string) => Promise<true | undefined>;
+  commentGet: (id: string) => Promise<IComment[] | undefined>;
+  commentCreate: (id: string, data: IUserComment) => Promise<IComment | undefined>;
 }
 
 const PosterContext = createContext<IPosterProviderData>({} as IPosterProviderData);
@@ -14,7 +18,7 @@ const PosterContext = createContext<IPosterProviderData>({} as IPosterProviderDa
 export const PosterProvider = ({ children }: { children: React.ReactNode }) => {
   const toast = useToast();
 
-  const posterCreate = async (data: TCreatePoster) => {
+  const posterCreate = async (data: TCreatePoster): Promise<IPoster | undefined> => {
     data.fipe_price = Number(Number(data.fipe_price).toFixed(2));
     data.kilometers = parseInt(String(data.kilometers));
     data.price = Number(Number(data.price).toFixed(2));
@@ -37,7 +41,9 @@ export const PosterProvider = ({ children }: { children: React.ReactNode }) => {
       console.log(error);
       toast({
         status: "error",
-        description: "Ops... Ocorreu um erro, tente novamente mais tarde",
+        description:
+          error.response?.data.message ||
+          "Ops... Ocorreu algo de errado! Tente novamente mais tarde",
         duration: 3000,
         position: "top-right",
         containerStyle: {
@@ -48,7 +54,7 @@ export const PosterProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const posterEdit = async (id: string, data: TEditPoster) => {
+  const posterEdit = async (id: string, data: TEditPoster): Promise<IPoster | undefined> => {
     data.fipe_price = Number(Number(data.fipe_price).toFixed(2));
     data.kilometers = parseInt(String(data.kilometers));
     data.price = Number(Number(data.price).toFixed(2));
@@ -71,7 +77,8 @@ export const PosterProvider = ({ children }: { children: React.ReactNode }) => {
       toast({
         status: "error",
         description:
-          error.response?.data.message || "Ops... Ocorreu um erro, tente novamente mais tarde",
+          error.response?.data.message ||
+          "Ops... Ocorreu algo de errado! Tente novamente mais tarde",
         duration: 3000,
         position: "top-right",
         containerStyle: {
@@ -82,7 +89,7 @@ export const PosterProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const posterDelete = async (id: string) => {
+  const posterDelete = async (id: string): Promise<true | undefined> => {
     try {
       await api.delete(`/posters/${id}`);
       return true;
@@ -90,8 +97,45 @@ export const PosterProvider = ({ children }: { children: React.ReactNode }) => {
       console.log(error);
       toast({
         status: "error",
-        description:
-          error.response?.data.message || "Ops... Ocorreu um erro, tente novamente mais tarde",
+        description: "Ops... Ocorreu algo de errado! Tente novamente mais tarde",
+        duration: 3000,
+        position: "top-right",
+        containerStyle: {
+          color: "white",
+        },
+        isClosable: true,
+      });
+    }
+  };
+
+  const commentGet = async (id: string): Promise<IComment[] | undefined> => {
+    try {
+      const response = await api.get(`/posters/${id}/comments`);
+      return response.data;
+    } catch (error: any) {
+      console.log(error);
+      toast({
+        status: "error",
+        description: "Ops... Ocorreu um erro ao carregar os comentários.",
+        duration: 3000,
+        position: "top-right",
+        containerStyle: {
+          color: "white",
+        },
+        isClosable: true,
+      });
+    }
+  };
+
+  const commentCreate = async (id: string, data: IUserComment): Promise<IComment | undefined> => {
+    try {
+      const response = await api.post(`/posters/${id}/comments`, data);
+      return response.data;
+    } catch (error: any) {
+      console.log(error);
+      toast({
+        status: "error",
+        description: "Ops... Ocorreu um erro ao fazer o comentário.",
         duration: 3000,
         position: "top-right",
         containerStyle: {
@@ -108,6 +152,8 @@ export const PosterProvider = ({ children }: { children: React.ReactNode }) => {
           posterCreate,
           posterEdit,
           posterDelete,
+          commentGet,
+          commentCreate,
         }}
       >
         {children}

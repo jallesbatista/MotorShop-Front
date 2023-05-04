@@ -147,14 +147,14 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   try {
     const [posters, filters] = await Promise.all([
       // BUSCA ATUALIZADA DOS ANUNCIOS PUBLICADOS E FILTRO PARA OS MESMOS
-      // api.get(
-      //   `/posters${queryUrl ? queryUrl + "&perPage=12&published=1" : "?perPage=12&published=1"}`
-      // ),
-      // api.get(`/posters/filters${queryUrl ? queryUrl + "&published=1" : "?published=1"}`),
+      api.get(
+        `/posters${queryUrl ? queryUrl + "&perPage=12&published=1" : "?perPage=12&published=1"}`
+      ),
+      api.get(`/posters/filters${queryUrl ? queryUrl + "&published=1" : "?published=1"}`),
 
       // BUSCA GERAL DE TODOS OS ANUNCIO E FILTROS (DEIXAR SOMENTE PARA TESTES)
-      api.get(`/posters${queryUrl ? queryUrl + "&perPage=12" : "?perPage=12"}`),
-      api.get(`/posters/filters${queryUrl}`),
+      // api.get(`/posters${queryUrl ? queryUrl + "&perPage=12" : "?perPage=12"}`),
+      // api.get(`/posters/filters${queryUrl}`),
     ]);
     return {
       props: {

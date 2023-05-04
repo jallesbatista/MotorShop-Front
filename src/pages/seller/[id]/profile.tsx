@@ -170,16 +170,14 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const userId = cookies["ecommerce.user.id"];
   const token = cookies["ecommerce.token"];
 
-  if (!token) {
+  if (!token || userId !== ctx.params!.id) {
     return {
       redirect: {
         destination: `/seller/${ctx.params!.id}`,
         permanent: false,
       },
     };
-  }
-
-  if (userId == ctx.params!.id) {
+  } else {
     try {
       const response = await api.get(`/users/${ctx.params!.id}/posters`);
       return {
@@ -190,21 +188,11 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         },
       };
     } catch (error: any) {
-      // return {
-      //   notFound: true,
-      // };
-
+      console.log(error.cause);
       return {
-        props: { seller: mockedUserList[1], isThisSeller: true, posterList: mockedPosterList },
+        notFound: true,
       };
     }
-  } else {
-    return {
-      redirect: {
-        destination: `/seller/${ctx.params!.id}`,
-        permanent: false,
-      },
-    };
   }
 };
 

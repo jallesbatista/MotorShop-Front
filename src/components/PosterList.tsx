@@ -21,7 +21,7 @@ interface IPosterList {
   showPromoTag: boolean;
   showStatusTag: boolean;
   showSeller: boolean;
-  setPosters: React.Dispatch<React.SetStateAction<IPoster[]>>;
+  setPosters?: React.Dispatch<React.SetStateAction<IPoster[]>>;
 }
 
 const PosterList = ({
@@ -134,7 +134,7 @@ const PosterList = ({
 
       <PosterCreateEditModal
         poster={poster}
-        setPosters={setPosters}
+        setPosters={setPosters!}
         isOpen={isEditModalOpen}
         edit={isEditModalOpen}
         onClose={onEditModalClose}
