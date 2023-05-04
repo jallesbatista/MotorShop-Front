@@ -3,6 +3,7 @@ import PosterCard from "./PosterCard";
 import { IPoster } from "@/interfaces/poster.interfaces";
 import PosterCreateEditModal from "./PosterCreateEditModal";
 import { useState } from "react";
+import Link from "next/link";
 
 interface IPosterList {
   posterList: any[];
@@ -70,8 +71,18 @@ const PosterList = ({
             />
             {edit && (
               <Flex color={"grey.1"} gap={"16px"}>
-                <Button variant={"outline1"}>Editar</Button>
-                <Button variant={"outline1"}>Ver detalhes</Button>
+                <Button
+                  variant={"outline1"}
+                  onClick={() => {
+                    setPoster(poster);
+                    onEditModalOpen();
+                  }}
+                >
+                  Editar
+                </Button>
+                <Button as={Link} href={`/poster/${poster.id}`} variant={"outline1"}>
+                  Ver detalhes
+                </Button>
               </Flex>
             )}
           </Flex>

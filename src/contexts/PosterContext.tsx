@@ -6,6 +6,7 @@ import { createContext, useContext } from "react";
 interface IPosterProviderData {
   posterCreate: (data: TCreatePoster) => Promise<IPoster | undefined>;
   posterEdit: (id: string, data: TEditPoster) => Promise<any>;
+  posterDelete: (id: string) => Promise<true | undefined>;
 }
 
 const PosterContext = createContext<IPosterProviderData>({} as IPosterProviderData);
@@ -80,12 +81,33 @@ export const PosterProvider = ({ children }: { children: React.ReactNode }) => {
       });
     }
   };
+
+  const posterDelete = async (id: string) => {
+    try {
+      await api.delete(`/posters/${id}`);
+      return true;
+    } catch (error: any) {
+      console.log(error);
+      toast({
+        status: "error",
+        description:
+          error.response?.data.message || "Ops... Ocorreu um erro, tente novamente mais tarde",
+        duration: 3000,
+        position: "top-right",
+        containerStyle: {
+          color: "white",
+        },
+        isClosable: true,
+      });
+    }
+  };
   return (
     <>
       <PosterContext.Provider
         value={{
           posterCreate,
           posterEdit,
+          posterDelete,
         }}
       >
         {children}

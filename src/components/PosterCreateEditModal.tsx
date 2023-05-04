@@ -21,6 +21,8 @@ import {
   InputLeftAddon,
   HStack,
   useRadioGroup,
+  useDisclosure,
+  VStack,
 } from "@chakra-ui/react";
 import { useController, useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -28,9 +30,11 @@ import { FiTrash } from "react-icons/fi";
 import React, { useEffect, useState } from "react";
 import { brlCurrencyMask } from "@/functions/masks";
 import { IPoster, TCreatePoster } from "@/interfaces/poster.interfaces";
-import { createPostSchema, editPosterSchema } from "@/schemas";
+import { editPosterSchema } from "@/schemas";
 import { posterContext } from "@/contexts/PosterContext";
 import CustomRadioButton from "./CustomRadioButton";
+import DeleteModal from "./DeleteModal";
+import { any } from "zod";
 
 interface IPosterCreateEditModal {
   isOpen: boolean;
@@ -69,7 +73,13 @@ const PosterCreateEditModal = ({
   const [carArray, setCarArray] = useState<iCar[]>([]);
   const [carBrandModel, setCarBrandModel] = useState("");
 
-  const { posterCreate, posterEdit } = posterContext();
+  const { posterCreate, posterEdit, posterDelete } = posterContext();
+
+  const {
+    isOpen: isConfirmDeleteOpen,
+    onOpen: onConfirmDeleteOpen,
+    onClose: onConfirmDeleteClose,
+  } = useDisclosure();
 
   const {
     register,
@@ -97,7 +107,6 @@ const PosterCreateEditModal = ({
   const { field: radioField } = useController({
     control: control,
     name: "publish_option",
-    defaultValue: radioState,
   });
 
   const { getRootProps, getRadioProps } = useRadioGroup({
@@ -277,6 +286,17 @@ const PosterCreateEditModal = ({
     });
   };
 
+  const deleteFunction = async () => {
+    if (edit && poster) {
+      const deleted = await posterDelete(poster.id);
+      if (deleted) {
+        setPosters((old) => old.filter((el) => el.id !== poster.id));
+        onConfirmDeleteClose();
+        closeAndReset();
+      }
+    }
+  };
+
   const onSubmit = async (data: TCreatePoster) => {
     if (!edit) {
       const createdPoster = await posterCreate(data);
@@ -320,18 +340,18 @@ const PosterCreateEditModal = ({
           gap={"18px"}
         >
           <Flex w={"100%"} align={"center"} px={{ base: "16px", md: "24px" }} position={"relative"}>
-            <Heading fontWeight={"medium"} fontSize={"heading.7"}>
+            <Heading fontWeight={"semibold"} fontSize={"heading.7"}>
               {edit ? "Editar anúncio" : "Criar anúncio"}
             </Heading>
             <ModalCloseButton color={"grey.4"} top={"-5px"} right={{ base: "10px", md: "15px" }} />
           </Flex>
           <Flex direction={"column"} gap={"24px"} px={{ base: "24px", md: "30px" }}>
-            <Text fontWeight={"medium"} color={"black"} fontSize={"body.2"}>
+            <Text fontWeight={"semibold"} color={"black"} fontSize={"body.2"}>
               Informações do veículo
             </Text>
 
             <FormControl id="brand" isInvalid={!!errors.brand?.message} position={"relative"}>
-              <FormLabel fontSize={"body.2"} fontWeight={"medium"}>
+              <FormLabel fontSize={"body.2"} fontWeight={"semibold"}>
                 Marca
               </FormLabel>
               <Input
@@ -401,7 +421,7 @@ const PosterCreateEditModal = ({
               <FormErrorMessage>{errors.brand?.message}</FormErrorMessage>
             </FormControl>
             <FormControl id="model" isInvalid={!!errors.model?.message} position={"relative"}>
-              <FormLabel fontSize={"body.2"} fontWeight={"medium"}>
+              <FormLabel fontSize={"body.2"} fontWeight={"semibold"}>
                 Modelo
               </FormLabel>
               <Input
@@ -471,13 +491,13 @@ const PosterCreateEditModal = ({
             </FormControl>
             <Flex gap={{ base: "12px", md: "16px" }}>
               <FormControl id="year">
-                <FormLabel fontSize={"body.2"} fontWeight={"medium"}>
+                <FormLabel fontSize={"body.2"} fontWeight={"semibold"}>
                   Ano
                 </FormLabel>
                 <Input {...register("year")} readOnly type="text" placeholder="2018" />
               </FormControl>
               <FormControl id="fuel_type">
-                <FormLabel fontSize={"body.2"} fontWeight={"medium"}>
+                <FormLabel fontSize={"body.2"} fontWeight={"semibold"}>
                   Combustível
                 </FormLabel>
                 <Input
@@ -490,7 +510,7 @@ const PosterCreateEditModal = ({
             </Flex>
             <Flex gap={{ base: "12px", md: "16px" }}>
               <FormControl id="km" isInvalid={!!errors.kilometers?.message}>
-                <FormLabel fontSize={"body.2"} fontWeight={"medium"}>
+                <FormLabel fontSize={"body.2"} fontWeight={"semibold"}>
                   Quilometragem
                 </FormLabel>
                 <Input
@@ -504,7 +524,7 @@ const PosterCreateEditModal = ({
                 <FormErrorMessage>{errors.kilometers?.message}</FormErrorMessage>
               </FormControl>
               <FormControl id="color" isInvalid={!!errors.color?.message}>
-                <FormLabel fontSize={"body.2"} fontWeight={"medium"}>
+                <FormLabel fontSize={"body.2"} fontWeight={"semibold"}>
                   Cor
                 </FormLabel>
                 <Input {...register("color")} type="text" placeholder="Branco" />
@@ -513,7 +533,7 @@ const PosterCreateEditModal = ({
             </Flex>
             <Flex gap={{ base: "12px", md: "16px" }}>
               <FormControl id="fipe_price">
-                <FormLabel fontSize={"body.2"} fontWeight={"medium"}>
+                <FormLabel fontSize={"body.2"} fontWeight={"semibold"}>
                   Preço tabela FIPE
                 </FormLabel>
                 <InputGroup>
@@ -538,7 +558,7 @@ const PosterCreateEditModal = ({
                 </InputGroup>
               </FormControl>
               <FormControl id="price" isInvalid={!!errors.price?.message}>
-                <FormLabel fontSize={"body.2"} fontWeight={"medium"}>
+                <FormLabel fontSize={"body.2"} fontWeight={"semibold"}>
                   Preço
                 </FormLabel>
                 <InputGroup>
@@ -569,7 +589,7 @@ const PosterCreateEditModal = ({
             </Flex>
 
             <FormControl id="description" isInvalid={!!errors.description?.message}>
-              <FormLabel fontSize={"body.2"} fontWeight={"medium"}>
+              <FormLabel fontSize={"body.2"} fontWeight={"semibold"}>
                 Descrição
               </FormLabel>
               <Textarea
@@ -581,16 +601,27 @@ const PosterCreateEditModal = ({
             </FormControl>
 
             {edit && poster && (
-              <HStack w={"100%"} {...group}>
-                {radioOptions.map((value, index) => {
-                  const radio = { ...getRadioProps({ value }) };
-                  return (
-                    <CustomRadioButton key={value} {...radio}>
-                      {radioOptionsName[index]}
-                    </CustomRadioButton>
-                  );
-                })}
-              </HStack>
+              <Flex direction={"column"} gap={"16px"}>
+                <Text
+                  w={"100%"}
+                  textAlign={"left"}
+                  fontWeight={"semibold"}
+                  color={"black"}
+                  fontSize={"body.2"}
+                >
+                  Publicado
+                </Text>
+                <HStack w={"100%"} {...group}>
+                  {radioOptions.map((value, index) => {
+                    const radio = { ...getRadioProps({ value }) };
+                    return (
+                      <CustomRadioButton key={value} {...radio}>
+                        {radioOptionsName[index]}
+                      </CustomRadioButton>
+                    );
+                  })}
+                </HStack>
+              </Flex>
             )}
 
             {fields.map((field, index) => (
@@ -599,7 +630,7 @@ const PosterCreateEditModal = ({
                 key={field.id}
                 isInvalid={!!errors.images?.[index]?.url?.message}
               >
-                <FormLabel fontSize={"body.2"} fontWeight={"medium"}>
+                <FormLabel fontSize={"body.2"} fontWeight={"semibold"}>
                   {!index ? "Imagem da capa" : `${index}º Imagem da galeria`}
                 </FormLabel>
                 <InputGroup>
@@ -641,7 +672,7 @@ const PosterCreateEditModal = ({
             {edit ? (
               <Flex mt={{ base: "12px", md: "18px" }} gap={"10px"}>
                 <Button
-                  onClick={onClose}
+                  onClick={onConfirmDeleteOpen}
                   w={{ base: "50%", md: "60%" }}
                   size={"lg"}
                   variant={"negative"}
@@ -671,6 +702,16 @@ const PosterCreateEditModal = ({
           </Flex>
         </ModalContent>
       </Modal>
+
+      <DeleteModal
+        isOpen={isConfirmDeleteOpen}
+        onClose={onConfirmDeleteClose}
+        deleteFunction={deleteFunction}
+        headingText="Excluir anúncio"
+        title="Tem certeza que deseja excluir esse anúncio?"
+        description="Essa ação não pode ser desfeita. Isso excluirá permanentemente seu anúncio."
+        buttonText="Sim, excluir meu anúncio"
+      />
     </>
   );
 };

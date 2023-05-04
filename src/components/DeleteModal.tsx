@@ -9,15 +9,25 @@ import {
   Text,
 } from "@chakra-ui/react";
 
+interface IDeleteModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  deleteFunction: () => void;
+  headingText: string;
+  title: string;
+  description: string;
+  buttonText?: string;
+}
+
 const DeleteModal = ({
   isOpen,
   onClose,
   deleteFunction,
-}: {
-  isOpen: boolean;
-  onClose: () => void;
-  deleteFunction: () => void;
-}) => {
+  headingText,
+  title,
+  description,
+  buttonText,
+}: IDeleteModalProps) => {
   return (
     <>
       <Modal isOpen={isOpen} onClose={onClose}>
@@ -30,18 +40,21 @@ const DeleteModal = ({
           p={"18px 24px 42px 24px"}
         >
           <Heading mb={"58px"} fontSize={"heading.7"}>
-            Excluir conta
+            {/* Excluir conta */}
+            {headingText}
           </Heading>
 
           <ModalCloseButton color={"grey.4"} />
 
           <Flex direction={"column"} align={"flex-start"} gap={"18px"}>
             <Heading mb={"20px"} fontSize={"heading.7"}>
-              Tem certeza que deseja excluir sua conta?
+              {/* Tem certeza que deseja excluir sua conta? */}
+              {title}
             </Heading>
             <Text fontSize={"body.1"} color={"grey.2"}>
-              Essa ação não pode ser desfeita. Isso excluirá permanentemente sua conta e removerá
-              seus dados de nossos servidores.
+              {/* Essa ação não pode ser desfeita. Isso excluirá permanentemente sua conta e removerá
+              seus dados de nossos servidores. */}
+              {description}
             </Text>
 
             <Flex
@@ -65,7 +78,7 @@ const DeleteModal = ({
                 size={"lg"}
                 variant={"alert"}
               >
-                Sim, excluir minha conta
+                {buttonText ? buttonText : "Sim, confirmar exclusão"}
               </Button>
             </Flex>
           </Flex>
