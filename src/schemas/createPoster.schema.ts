@@ -10,23 +10,24 @@ const createPostSchema = z.object({
   fipe_price: z
     .string()
     .transform((fipe_price) => {
-      return fipe_price.toString().replace(".", "").replace(",", ".");
+      return fipe_price.toString().replace(/[\.]/g, "").replace(",", ".");
     })
     .or(z.number()),
   price: z
     .string()
     .nonempty("Preço é obrigatório")
     .transform((price) => {
-      return price.toString().replace(".", "").replace(",", ".");
+      return price.toString().replace(/[\.]/g, "").replace(",", ".");
     })
     .or(z.number()),
   description: z.string().nonempty("Descrição é obrigatória"),
-  is_published: z.boolean().optional(),
+  is_published: z.boolean().optional().default(false),
   images: z.array(
     z.object({
       url: z.string().nonempty("A imagem é obrigatória").url("Insira uma url válida"),
     })
   ),
+  publish_option: z.enum(["y", "n"]).optional(),
 });
 
 export default createPostSchema;

@@ -115,7 +115,7 @@ const PosterDetail: NextPage<Props> = ({ poster }) => {
             >
               <Image
                 h={"355px"}
-                src={poster?.images[0].url}
+                src={poster?.images[0]?.url}
                 w={"auto"}
                 role={"button"}
                 onClick={() => {
@@ -328,9 +328,9 @@ const PosterDetail: NextPage<Props> = ({ poster }) => {
               <Heading fontSize={"heading.6"} fontWeight={"bold"}>
                 Comentários
               </Heading>
-              {poster.comments.length > 0 ? (
+              {poster?.comments?.length > 0 ? (
                 <List display={"flex"} flexDirection={"column"} gap={"44px"}>
-                  {poster.comments.map((commentInfo, index) => (
+                  {poster?.comments?.map((commentInfo, index) => (
                     <ListItem key={index}>
                       <PosterComment
                         username={commentInfo.user.name}

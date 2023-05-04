@@ -33,11 +33,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           setUser(response.data);
           api.defaults.headers["Authorization"] = `Bearer ${token}`;
           setCookie(null, "ecommerce.user.id", response.data.id, {
-            maxAge: 60 * 30, // 30 minutos
+            maxAge: 60 * 60 * 12, // 12 horas
             path: "/",
           });
           setCookie(null, "ecommerce.user.seller", response.data.is_seller, {
-            maxAge: 60 * 30, // 30 minutos
+            maxAge: 60 * 60 * 12, // 12 horas
             path: "/",
           });
         } catch (error: any) {

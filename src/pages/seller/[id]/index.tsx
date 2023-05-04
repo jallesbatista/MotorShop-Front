@@ -3,10 +3,10 @@ import Header from "@/components/Header/Header";
 import PosterList from "@/components/PosterList";
 import { IPoster } from "@/interfaces/poster.interfaces";
 import { IUser } from "@/interfaces/user.interfaces";
-import { mockedPosterList, mockedUserList } from "@/mocks";
 import api from "@/services/api";
 import { Avatar, Box, Flex, Heading, Tag, Text } from "@chakra-ui/react";
 import { GetServerSideProps, NextPage } from "next";
+import { useState } from "react";
 
 interface Props {
   seller: IUser;
@@ -15,6 +15,7 @@ interface Props {
 }
 
 const SellerPage: NextPage<Props> = ({ seller, posterList }) => {
+  const [posters, setPosters] = useState<IPoster[]>(posterList || []);
   return (
     <>
       <Header />
@@ -87,6 +88,7 @@ const SellerPage: NextPage<Props> = ({ seller, posterList }) => {
             showPromoTag={false}
             showStatusTag={true}
             showSeller={false}
+            setPosters={setPosters}
           />
 
           <Flex
@@ -133,12 +135,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       },
     };
   } catch (error: any) {
-    // return {
-    //   notFound: true
-    // };
-
     return {
-      props: { seller: mockedUserList[1], posterList: mockedPosterList },
+      notFound: true,
     };
   }
 };
