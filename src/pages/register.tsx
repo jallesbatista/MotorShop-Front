@@ -28,6 +28,9 @@ import CustomRadioButton from "@/components/CustomRadioButton";
 import { userContext } from "@/contexts/UserContext";
 import { CEPMask, CPFMask, PhoneMask } from "@/functions/masks";
 import SucessModal from "@/components/SuccessModal";
+import { GetServerSideProps } from "next";
+import nookies from "nookies";
+import api from "@/services/api";
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -336,6 +339,29 @@ const Register = () => {
       <Footer />
     </>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const cookies = nookies.get(ctx);
+  const token = cookies["ecommerce.token"];
+  if (token) {
+    try {
+      await api.get("/users/profile", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return {
+        redirect: {
+          destination: "/",
+          permanent: false,
+        },
+      };
+    } catch (err: any) {}
+  }
+  return {
+    props: {},
+  };
 };
 
 export default Register;

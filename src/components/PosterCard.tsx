@@ -31,8 +31,7 @@ const PosterCard = ({
       <Card
         flexDirection={"column"}
         bgColor={"transparent"}
-        maxW="320px"
-        minWidth={"290px"}
+        w={"300px"}
         gap={"16px"}
         boxShadow={"none"}
         rounded={"4px"}
@@ -62,10 +61,11 @@ const PosterCard = ({
             >
               <Image
                 transition={".3s"}
-                src={poster?.images[0].url}
-                minW={"100%"}
-                w="auto"
-                objectFit="fill"
+                src={poster?.images[0]?.url}
+                w={"100%"}
+                maxW={"100%"}
+                maxH={"100%"}
+                objectFit={"contain"}
                 alt="vehicle image"
                 bg={"grey.7"}
               />

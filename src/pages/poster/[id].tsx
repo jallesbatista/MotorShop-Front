@@ -78,7 +78,7 @@ const PosterDetail: NextPage<Props> = ({ poster }) => {
             >
               <Image
                 h={"355px"}
-                src={poster?.images[0].url}
+                src={poster?.images[0]?.url}
                 w={"auto"}
                 role={"button"}
                 onClick={() => {

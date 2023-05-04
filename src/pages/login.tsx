@@ -20,10 +20,11 @@ import {
 } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import nookies from "nookies";
 import { GetServerSideProps } from "next";
+import api from "@/services/api";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -37,6 +38,10 @@ const Login = () => {
   } = useForm<IUserLogin>({
     resolver: zodResolver(loginSchema),
   });
+  const { setUser } = authContext();
+  useEffect(() => {
+    setUser(null);
+  }, []);
 
   const onSubmit = (data: IUserLogin) => {
     logIn(data);
@@ -141,14 +146,20 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const cookies = nookies.get(ctx);
   const token = cookies["ecommerce.token"];
   if (token) {
-    return {
-      redirect: {
-        destination: "/",
-        permanent: false,
-      },
-    };
+    try {
+      await api.get("/users/profile", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return {
+        redirect: {
+          destination: "/",
+          permanent: false,
+        },
+      };
+    } catch (err: any) {}
   }
-
   return {
     props: {},
   };

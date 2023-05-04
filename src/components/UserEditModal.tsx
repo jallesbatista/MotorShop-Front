@@ -63,7 +63,7 @@ const UserEditModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => vo
 
   return (
     <>
-      <Modal isOpen={isOpen} onClose={onClose} closeOnOverlayClick={false}>
+      <Modal isOpen={isOpen} onClose={onClose} closeOnOverlayClick>
         <ModalOverlay />
         <ModalContent
           maxW={"520px"}
@@ -197,6 +197,11 @@ const UserEditModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => vo
         isOpen={isConfirmDeleteOpen}
         onClose={onConfirmDeleteClose}
         deleteFunction={userDelete}
+        headingText="Excluir conta"
+        title="Tem certeza que deseja excluir sua conta?"
+        description="Essa ação não pode ser desfeita. Isso excluirá permanentemente sua conta e removerá
+              seus dados de nossos servidores."
+        buttonText="Sim, excluir minha conta"
       />
     </>
   );
