@@ -114,16 +114,19 @@ export const PosterProvider = ({ children }: { children: React.ReactNode }) => {
       return response.data;
     } catch (error: any) {
       console.log(error);
-      toast({
-        status: "error",
-        description: "Ops... Ocorreu um erro ao carregar os comentários.",
-        duration: 3000,
-        position: "top-right",
-        containerStyle: {
-          color: "white",
-        },
-        isClosable: true,
-      });
+      if (!toast.isActive("commentGet")) {
+        toast({
+          status: "error",
+          description: "Ops... Ocorreu um erro ao carregar os comentários.",
+          duration: 3000,
+          position: "top-right",
+          containerStyle: {
+            color: "white",
+          },
+          isClosable: true,
+          id: "commentGet",
+        });
+      }
     }
   };
 

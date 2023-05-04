@@ -125,7 +125,9 @@ const PosterList = ({
                 >
                   Editar
                 </Button>
-                <Button variant={"outline1"}>Ver detalhes</Button>
+                <Button as={Link} href={`/poster/${poster.id}`} variant={"outline1"}>
+                  Ver detalhes
+                </Button>
               </Flex>
             )}
           </Flex>
