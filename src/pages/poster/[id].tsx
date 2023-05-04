@@ -4,7 +4,10 @@ import Header from "@/components/Header/Header";
 import PosterComment from "@/components/PosterComment";
 import PosterImageModal from "@/components/PosterImageModal";
 import { authContext } from "@/contexts/AuthContext";
+import { posterContext } from "@/contexts/PosterContext";
+import { IComment } from "@/interfaces/comment.interfaces";
 import { IMockedPoster } from "@/interfaces/mocks.interfaces";
+import { IPoster } from "@/interfaces/poster.interfaces";
 import { IUserComment } from "@/interfaces/user.interfaces";
 import { mockedPosterList } from "@/mocks";
 import { commentSchema } from "@/schemas";
@@ -33,22 +36,38 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { GetServerSideProps, NextPage } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 interface Props {
-  poster: IMockedPoster;
+  poster: IPoster;
 }
 
 const PosterDetail: NextPage<Props> = ({ poster }) => {
   const { isOpen, onClose, onOpen } = useDisclosure();
   const [posterImage, setPosterImage] = useState<string>("");
   const [comment, setComment] = useState<string>("");
+  const [commentList, setCommentList] = useState<IComment[]>([]);
   const router = useRouter();
   const { user } = authContext();
+  const { commentGet, commentCreate } = posterContext();
+
+  useEffect(() => {
+    const findComments = async () => {
+      try {
+        const response = await commentGet(poster.id);
+        if (response) {
+          setCommentList(response);
+        }
+      } catch (error: any) {}
+    };
+    findComments();
+  }, []);
+
   const {
     handleSubmit,
     register,
+    reset,
     formState: { errors },
   } = useForm<IUserComment>({
     resolver: zodResolver(commentSchema),
@@ -59,9 +78,15 @@ const PosterDetail: NextPage<Props> = ({ poster }) => {
     document.getElementById("new-comment")?.focus();
   };
 
-  const onSubmit = (data: IUserComment) => {
+  const onSubmit = async (data: IUserComment) => {
     if (user) {
-      console.log(data);
+      const newComment = await commentCreate(poster.id, data);
+      if (newComment) {
+        setCommentList([newComment, ...commentList]);
+        reset({
+          content: "",
+        });
+      }
     }
   };
 
@@ -328,9 +353,9 @@ const PosterDetail: NextPage<Props> = ({ poster }) => {
               <Heading fontSize={"heading.6"} fontWeight={"bold"}>
                 Comentários
               </Heading>
-              {poster?.comments?.length > 0 ? (
+              {commentList?.length > 0 ? (
                 <List display={"flex"} flexDirection={"column"} gap={"44px"}>
-                  {poster?.comments?.map((commentInfo, index) => (
+                  {commentList?.map((commentInfo, index) => (
                     <ListItem key={index}>
                       <PosterComment
                         username={commentInfo.user.name}
@@ -357,7 +382,7 @@ const PosterDetail: NextPage<Props> = ({ poster }) => {
             >
               <Flex alignItems={"center"} gap={"8px"} flexWrap={"wrap"}>
                 <Avatar
-                  name={poster?.user.name}
+                  name={user?.name}
                   w={"32px"}
                   h={"32px"}
                   sx={{
@@ -373,7 +398,7 @@ const PosterDetail: NextPage<Props> = ({ poster }) => {
                   fontSize={"heading.8"}
                   as={"h3"}
                 >
-                  {poster?.user.name}
+                  {user?.name}
                 </Heading>
               </Flex>
               <Flex
@@ -382,11 +407,11 @@ const PosterDetail: NextPage<Props> = ({ poster }) => {
                 position={"relative"}
                 onSubmit={handleSubmit(onSubmit)}
               >
-                <FormControl id="comment" isInvalid={!!errors.comment?.message}>
+                <FormControl id="comment" isInvalid={!!errors.content?.message}>
                   <Textarea
                     id={"new-comment"}
                     value={comment}
-                    {...register("comment", {
+                    {...register("content", {
                       onChange(event: React.ChangeEvent<HTMLInputElement>) {
                         setComment(event.target.value);
                       },
@@ -397,12 +422,12 @@ const PosterDetail: NextPage<Props> = ({ poster }) => {
                     fontSize={"body.1"}
                     paddingRight={{ md: "110px" }}
                   />
-                  <FormErrorMessage>{errors.comment?.message}</FormErrorMessage>
+                  <FormErrorMessage>{errors.content?.message}</FormErrorMessage>
                 </FormControl>
                 <Button
                   position={{ md: "absolute" }}
                   size={"md"}
-                  bottom={{ md: errors.comment?.message ? "38" : "13" }}
+                  bottom={{ md: errors.content?.message ? "38" : "13" }}
                   right={{ md: "11" }}
                   w={"auto"}
                   type={"submit"}
@@ -468,24 +493,15 @@ const PosterDetail: NextPage<Props> = ({ poster }) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  // const { id } = ctx.query;
-
   try {
     const response = await api.get(`/posters/${ctx.params!.id}`);
     return {
       props: { poster: response.data },
     };
   } catch (error: any) {
-    // return {
-    //   redirect: {
-    //     destination: "/",
-    //     permanent: false,
-    //   },
-    // };
-    // console.log(error.response);
-
+    console.log(error.cause);
     return {
-      props: { poster: mockedPosterList[1] },
+      notFound: true,
     };
   }
 };

@@ -32,7 +32,8 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
       toast({
         status: "error",
         description:
-          error.response?.data.message || "Ops, ocorreu um erro. Tente novamente mais tarde",
+          error.response?.data.message ||
+          "Ops... Ocorreu algo de errado! Tente novamente mais tarde",
         duration: 3000,
         position: "bottom-right",
         containerStyle: {
@@ -62,7 +63,8 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
       toast({
         status: "error",
         description:
-          error.response?.data.message || "Ops, ocorreu um erro. Tente novamente mais tarde",
+          error.response?.data.message ||
+          "Ops... Ocorreu algo de errado! Tente novamente mais tarde",
         duration: 3000,
         position: "bottom-right",
         containerStyle: {
@@ -90,7 +92,9 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
       console.log(error);
       toast({
         position: "bottom-right",
-        title: "Ops... Ocorreu algo de errado! Tente novamente mais tarde",
+        title:
+          error.response?.data.message ||
+          "Ops... Ocorreu algo de errado! Tente novamente mais tarde",
         containerStyle: {
           color: "white",
         },
@@ -111,7 +115,8 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
       toast({
         status: "error",
         description:
-          error.response?.data.message || "Ops, ocorreu um erro. Tente novamente mais tarde",
+          error.response?.data.message ||
+          "Ops... Ocorreu algo de errado! Tente novamente mais tarde",
         duration: 3000,
         position: "bottom-right",
         containerStyle: {
