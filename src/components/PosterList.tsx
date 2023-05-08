@@ -142,7 +142,13 @@ const PosterList = ({
       ) : (
         <>
           <Flex w={"100%"} gap={"16px"} px={"25px"} pb={"10px"} justify={"center"}>
-            <Text as={"h3"} fontSize={"x-large"} fontWeight={"bold"} mt={"20px"}>
+            <Text
+              as={"h3"}
+              textAlign={"center"}
+              fontSize={"x-large"}
+              fontWeight={"bold"}
+              mt={"20px"}
+            >
               Nenhum anúncio encontrado...
             </Text>
           </Flex>
