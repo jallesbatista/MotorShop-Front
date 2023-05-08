@@ -16,7 +16,7 @@
 </div>
 
 ## 🪛 Funcionalidades da página
-  - Página Login;
+  - Página Login com a funcionalidade "Esqueci minha senha"
   - Página Cadastro com opções de se cadastrar como um comprador ou anunciante; 
   - Página Dashboard;
   - Intregração feita por api;
