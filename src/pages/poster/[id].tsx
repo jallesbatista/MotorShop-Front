@@ -207,13 +207,26 @@ const PosterDetail: NextPage<Props> = ({ poster }) => {
               </Text>
 
               <Box>
-                <Button
-                  _disabled={{ _hover: { bg: "grey.5" } }}
-                  variant={user && poster.is_published ? "brand1" : "disable"}
-                  onClick={handleBuy}
-                >
-                  Comprar
-                </Button>
+                {user ? (
+                  <Button
+                    _disabled={{ _hover: { bg: "grey.5" } }}
+                    variant={user && poster.is_published ? "brand1" : "disable"}
+                    as="a"
+                    target="_blank"
+                    maxW={"80px"}
+                    href={`https://api.whatsapp.com/send?phone=+55+${poster.user.phone}&text=Ol%C3%A1%2C%20venho%20por%20meio%20do%20seu%20portf%C3%B3lio%20na%20internet%2C%20gostaria%20de%20conhecer%20melhor%20seus%20servi%C3%A7os`}
+                  >
+                    Comprar
+                  </Button>
+                ) : (
+                  <Button
+                    _disabled={{ _hover: { bg: "grey.5" } }}
+                    variant={user && poster.is_published ? "brand1" : "disable"}
+                    onClick={handleBuy}
+                  >
+                    Comprar
+                  </Button>
+                )}
               </Box>
             </Flex>
             {/* DETAILS */}
@@ -312,6 +325,7 @@ const PosterDetail: NextPage<Props> = ({ poster }) => {
                 align={"center"}
                 justify={"center"}
                 gap={{ base: "28px", md: "32px" }}
+                maxW={"100%"}
               >
                 <Heading
                   textAlign={"center"}
@@ -327,6 +341,7 @@ const PosterDetail: NextPage<Props> = ({ poster }) => {
                   color={"grey.2"}
                   fontSize={"body.1"}
                   noOfLines={5}
+                  maxW={"100%"}
                 >
                   {poster?.user.description}
                 </Text>
