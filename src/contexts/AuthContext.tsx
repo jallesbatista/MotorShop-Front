@@ -15,15 +15,25 @@ interface IAuthProviderData {
 const AuthContext = createContext({} as IAuthProviderData);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useState<IUser | null>(null); // Colocar tipagem a partir dos dados retornados do usuário
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [user, setUser] = useState<IUser | null>(null);
   const toast = useToast();
   const router = useRouter();
 
   useEffect(() => {
     const getUserData = async () => {
       const { "ecommerce.token": token } = parseCookies();
-      if (token) {
+      if (!token) {
+        destroyCookie(null, "ecommerce.token", {
+          path: "/",
+        });
+        destroyCookie(null, "ecommerce.user.seller", {
+          path: "/",
+        });
+        destroyCookie(null, "ecommerce.user.id", {
+          path: "/",
+        });
+        setUser(null);
+      } else {
         try {
           const response = await api.get("/users/profile", {
             headers: {
@@ -65,13 +75,22 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             path: "/",
           });
           setUser(null);
-          setIsAuthenticated(false);
           // router.push("/home");
         }
       }
     };
     getUserData();
-  }, [, isAuthenticated]);
+
+    router.events.on("routeChangeComplete", async () => {
+      await getUserData();
+    });
+
+    return () => {
+      router.events.off("routeChangeComplete", async () => {
+        await getUserData();
+      });
+    };
+  }, [router.events]);
 
   const logIn = async (data: IUserLogin) => {
     try {
@@ -96,7 +115,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           id: "logged",
         });
       }
-      setIsAuthenticated(true);
       router.push("/");
     } catch (error: any) {
       console.log(error);
@@ -124,7 +142,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       path: "/",
     });
     setUser(null);
-    setIsAuthenticated(false);
     toast({
       position: "bottom-right",
       title: "Deslogado com sucesso",
