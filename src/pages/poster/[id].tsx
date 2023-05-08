@@ -6,10 +6,8 @@ import PosterImageModal from "@/components/PosterImageModal";
 import { authContext } from "@/contexts/AuthContext";
 import { posterContext } from "@/contexts/PosterContext";
 import { IComment } from "@/interfaces/comment.interfaces";
-import { IMockedPoster } from "@/interfaces/mocks.interfaces";
 import { IPoster } from "@/interfaces/poster.interfaces";
 import { IUserComment } from "@/interfaces/user.interfaces";
-import { mockedPosterList } from "@/mocks";
 import { commentSchema } from "@/schemas";
 import api from "@/services/api";
 import {
@@ -96,8 +94,9 @@ const PosterDetail: NextPage<Props> = ({ poster }) => {
     } else if (!user) {
       return router.push("/login");
     }
-    // colocar no retorno a função de compra
-    return null;
+    return window.open(
+      `https://wa.me/55${poster.user.phone}/?text=Ol%C3%A1+${poster.user.name}%21+Vi+seu+an%C3%BAncio+do+${poster.model}+na+MotorsShop%2C+vamos+negociar%3F`
+    );
   };
 
   const handleComment = () => {
@@ -207,26 +206,13 @@ const PosterDetail: NextPage<Props> = ({ poster }) => {
               </Text>
 
               <Box>
-                {user ? (
-                  <Button
-                    _disabled={{ _hover: { bg: "grey.5" } }}
-                    variant={user && poster.is_published ? "brand1" : "disable"}
-                    as="a"
-                    target="_blank"
-                    maxW={"80px"}
-                    href={`https://api.whatsapp.com/send?phone=+55+${poster.user.phone}&text=Ol%C3%A1%2C%20venho%20por%20meio%20do%20seu%20portf%C3%B3lio%20na%20internet%2C%20gostaria%20de%20conhecer%20melhor%20seus%20servi%C3%A7os`}
-                  >
-                    Comprar
-                  </Button>
-                ) : (
-                  <Button
-                    _disabled={{ _hover: { bg: "grey.5" } }}
-                    variant={user && poster.is_published ? "brand1" : "disable"}
-                    onClick={handleBuy}
-                  >
-                    Comprar
-                  </Button>
-                )}
+                <Button
+                  _disabled={{ _hover: { bg: "grey.5" } }}
+                  variant={user && poster.is_published ? "brand1" : "disable"}
+                  onClick={handleBuy}
+                >
+                  Comprar
+                </Button>
               </Box>
             </Flex>
             {/* DETAILS */}

@@ -35,6 +35,7 @@ const TextFilter = ({ filterList, children, query, filterName }: IFilterProps) =
             filterList.map((filter, index) => (
               <Heading
                 as={Link}
+                scroll={false}
                 href={`/${redirect()}&${String(filterName).toLowerCase()}=${filter}`}
                 key={index}
                 color={"grey.3"}
