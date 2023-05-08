@@ -11,8 +11,8 @@ import {
 } from "@chakra-ui/react";
 import InputFilter from "./InputFilter";
 import { IPosterFilters, Iquery } from "@/interfaces/poster.interfaces";
-import Link from "next/link";
 import { useRouter } from "next/router";
+import { useState } from "react";
 
 interface IFilterProps {
   filters: IPosterFilters;
@@ -20,8 +20,23 @@ interface IFilterProps {
 }
 
 const Filter = ({ filters, query }: IFilterProps) => {
+  const [priceMIN, setPriceMIN] = useState<string>(query?.priceMIN || "");
+  const [priceMAX, setPriceMAX] = useState<string>(query?.priceMAX || "");
+  const [kmMIN, setKmMIN] = useState<string>(query?.kmMIN || "");
+  const [kmMAX, setKmMAX] = useState<string>(query?.kmMAX || "");
+
   const { isOpen, onOpen, onClose } = useDisclosure();
   const router = useRouter();
+
+  const cleanFilters = () => {
+    setPriceMIN("");
+    setPriceMAX("");
+    setKmMIN("");
+    setKmMAX("");
+    router.push("/", "", {
+      scroll: false,
+    });
+  };
 
   return (
     <>
@@ -46,15 +61,37 @@ const Filter = ({ filters, query }: IFilterProps) => {
           <TextFilter filterName="fuel" filterList={filters?.fuel_types} query={query}>
             Combustível
           </TextFilter>
-          <InputFilter filterName="km" query={query}>
+          <InputFilter
+            filterName="km"
+            query={query}
+            kmMAX={kmMAX}
+            kmMIN={kmMIN}
+            priceMAX={priceMAX}
+            priceMIN={priceMIN}
+            setKmMAX={setKmMAX}
+            setKmMIN={setKmMIN}
+            setPriceMAX={setPriceMAX}
+            setPriceMIN={setPriceMIN}
+          >
             Km
           </InputFilter>
-          <InputFilter filterName="price" query={query}>
+          <InputFilter
+            filterName="price"
+            query={query}
+            kmMAX={kmMAX}
+            kmMIN={kmMIN}
+            priceMAX={priceMAX}
+            priceMIN={priceMIN}
+            setKmMAX={setKmMAX}
+            setKmMIN={setKmMIN}
+            setPriceMAX={setPriceMAX}
+            setPriceMIN={setPriceMIN}
+          >
             Preço
           </InputFilter>
         </Flex>
 
-        <Button bottom={0} as={Link} href={"/"} variant={"brand1"}>
+        <Button bottom={0} onClick={cleanFilters} variant={"brand1"}>
           Limpar filtros
         </Button>
       </Flex>
@@ -114,10 +151,32 @@ const Filter = ({ filters, query }: IFilterProps) => {
               <TextFilter filterName="fuel" filterList={filters?.fuel_types} query={query}>
                 Combustível
               </TextFilter>
-              <InputFilter filterName="km" query={query}>
+              <InputFilter
+                filterName="km"
+                query={query}
+                kmMAX={kmMAX}
+                kmMIN={kmMIN}
+                priceMAX={priceMAX}
+                priceMIN={priceMIN}
+                setKmMAX={setKmMAX}
+                setKmMIN={setKmMIN}
+                setPriceMAX={setPriceMAX}
+                setPriceMIN={setPriceMIN}
+              >
                 Km
               </InputFilter>
-              <InputFilter filterName="price" query={query}>
+              <InputFilter
+                filterName="price"
+                query={query}
+                kmMAX={kmMAX}
+                kmMIN={kmMIN}
+                priceMAX={priceMAX}
+                priceMIN={priceMIN}
+                setKmMAX={setKmMAX}
+                setKmMIN={setKmMIN}
+                setPriceMAX={setPriceMAX}
+                setPriceMIN={setPriceMIN}
+              >
                 Preço
               </InputFilter>
             </Flex>
@@ -125,7 +184,7 @@ const Filter = ({ filters, query }: IFilterProps) => {
             <Button
               onClick={() => {
                 onClose();
-                router.push("/");
+                cleanFilters();
               }}
               bottom={0}
               variant={"brand1"}

@@ -1,20 +1,34 @@
 import { Iquery } from "@/interfaces/poster.interfaces";
 import { Flex, Heading, Input } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import { useState } from "react";
 
 interface IInputFilterProps {
   children: React.ReactNode;
   query?: Iquery;
   filterName: "km" | "price";
+  priceMIN: string;
+  setPriceMIN: React.Dispatch<React.SetStateAction<string>>;
+  priceMAX: string;
+  setPriceMAX: React.Dispatch<React.SetStateAction<string>>;
+  kmMIN: string;
+  setKmMIN: React.Dispatch<React.SetStateAction<string>>;
+  kmMAX: string;
+  setKmMAX: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const InputFilter = ({ children, query, filterName }: IInputFilterProps) => {
-  const [priceMIN, setPriceMIN] = useState<string>(query?.priceMIN || "");
-  const [priceMAX, setPriceMAX] = useState<string>(query?.priceMAX || "");
-  const [kmMIN, setKmMIN] = useState<string>(query?.kmMIN || "");
-  const [kmMAX, setKmMAX] = useState<string>(query?.kmMAX || "");
-
+const InputFilter = ({
+  children,
+  query,
+  filterName,
+  kmMIN,
+  setKmMIN,
+  kmMAX,
+  setKmMAX,
+  priceMIN,
+  setPriceMIN,
+  priceMAX,
+  setPriceMAX,
+}: IInputFilterProps) => {
   const router = useRouter();
 
   const redirect = () => {
@@ -35,6 +49,50 @@ const InputFilter = ({ children, query, filterName }: IInputFilterProps) => {
     }
 
     return redirectLink;
+  };
+
+  const KmMinPriceMinSearch = () => {
+    if (String(filterName).toLowerCase() == "km") {
+      router.push(
+        `/${redirect()}${kmMIN ? `&kmMIN=${kmMIN}` : ""}${kmMAX ? `&kmMAX=${kmMAX}` : ""}`,
+        "",
+        {
+          scroll: false,
+        }
+      );
+    } else {
+      router.push(
+        `/${redirect()}${priceMIN ? `&priceMIN=${priceMIN}` : ""}${
+          priceMAX ? `&priceMAX=${priceMAX}` : ""
+        }`,
+        "",
+        {
+          scroll: false,
+        }
+      );
+    }
+  };
+
+  const KmMaxPriceMaxSearch = () => {
+    if (String(filterName).toLowerCase() == "km") {
+      router.push(
+        `/${redirect()}${kmMIN ? `&kmMIN=${kmMIN}` : ""}${kmMAX ? `&kmMAX=${kmMAX}` : ""}`,
+        "",
+        {
+          scroll: false,
+        }
+      );
+    } else {
+      router.push(
+        `/${redirect()}${priceMIN ? `&priceMIN=${priceMIN}` : ""}${
+          priceMAX ? `&priceMAX=${priceMAX}` : ""
+        }`,
+        "",
+        {
+          scroll: false,
+        }
+      );
+    }
   };
 
   return (
@@ -64,19 +122,7 @@ const InputFilter = ({ children, query, filterName }: IInputFilterProps) => {
               }
               return e;
             }}
-            onBlur={(e: React.ChangeEvent<HTMLInputElement>) => {
-              if (String(filterName).toLowerCase() == "km") {
-                router.push(
-                  `/${redirect()}${kmMIN ? `&kmMIN=${kmMIN}` : ""}${kmMAX ? `&kmMAX=${kmMAX}` : ""}`
-                );
-              } else {
-                router.push(
-                  `/${redirect()}${priceMIN ? `&priceMIN=${priceMIN}` : ""}${
-                    priceMAX ? `&priceMAX=${priceMAX}` : ""
-                  }`
-                );
-              }
-            }}
+            onBlur={KmMinPriceMinSearch}
           />
           <Input
             type="text"
@@ -97,19 +143,7 @@ const InputFilter = ({ children, query, filterName }: IInputFilterProps) => {
               }
               return e;
             }}
-            onBlur={(e: React.ChangeEvent<HTMLInputElement>) => {
-              if (String(filterName).toLowerCase() == "km") {
-                router.push(
-                  `/${redirect()}${kmMIN ? `&kmMIN=${kmMIN}` : ""}${kmMAX ? `&kmMAX=${kmMAX}` : ""}`
-                );
-              } else {
-                router.push(
-                  `/${redirect()}${priceMIN ? `&priceMIN=${priceMIN}` : ""}${
-                    priceMAX ? `&priceMAX=${priceMAX}` : ""
-                  }`
-                );
-              }
-            }}
+            onBlur={KmMaxPriceMaxSearch}
           />
         </Flex>
       </Flex>

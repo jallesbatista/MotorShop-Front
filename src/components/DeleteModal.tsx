@@ -40,7 +40,6 @@ const DeleteModal = ({
           p={"18px 24px 42px 24px"}
         >
           <Heading mb={"58px"} fontSize={"heading.7"}>
-            {/* Excluir conta */}
             {headingText}
           </Heading>
 
@@ -48,12 +47,9 @@ const DeleteModal = ({
 
           <Flex direction={"column"} align={"flex-start"} gap={"18px"}>
             <Heading mb={"20px"} fontSize={"heading.7"}>
-              {/* Tem certeza que deseja excluir sua conta? */}
               {title}
             </Heading>
             <Text fontSize={"body.1"} color={"grey.2"}>
-              {/* Essa ação não pode ser desfeita. Isso excluirá permanentemente sua conta e removerá
-              seus dados de nossos servidores. */}
               {description}
             </Text>
 

@@ -6,10 +6,8 @@ import PosterImageModal from "@/components/PosterImageModal";
 import { authContext } from "@/contexts/AuthContext";
 import { posterContext } from "@/contexts/PosterContext";
 import { IComment } from "@/interfaces/comment.interfaces";
-import { IMockedPoster } from "@/interfaces/mocks.interfaces";
 import { IPoster } from "@/interfaces/poster.interfaces";
 import { IUserComment } from "@/interfaces/user.interfaces";
-import { mockedPosterList } from "@/mocks";
 import { commentSchema } from "@/schemas";
 import api from "@/services/api";
 import {
@@ -96,8 +94,9 @@ const PosterDetail: NextPage<Props> = ({ poster }) => {
     } else if (!user) {
       return router.push("/login");
     }
-    // colocar no retorno a função de compra
-    return null;
+    return window.open(
+      `https://wa.me/55${poster.user.phone}/?text=Ol%C3%A1+${poster.user.name}%21+Vi+seu+an%C3%BAncio+do+${poster.model}+na+MotorsShop%2C+vamos+negociar%3F`
+    );
   };
 
   const handleComment = () => {
@@ -312,6 +311,7 @@ const PosterDetail: NextPage<Props> = ({ poster }) => {
                 align={"center"}
                 justify={"center"}
                 gap={{ base: "28px", md: "32px" }}
+                maxW={"100%"}
               >
                 <Heading
                   textAlign={"center"}
@@ -327,6 +327,7 @@ const PosterDetail: NextPage<Props> = ({ poster }) => {
                   color={"grey.2"}
                   fontSize={"body.1"}
                   noOfLines={5}
+                  maxW={"100%"}
                 >
                   {poster?.user.description}
                 </Text>
