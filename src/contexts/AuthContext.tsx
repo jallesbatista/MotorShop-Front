@@ -40,8 +40,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
               Authorization: `Bearer ${token}`,
             },
           });
-          setUser(response.data);
           api.defaults.headers["Authorization"] = `Bearer ${token}`;
+          setUser(response.data);
           setCookie(null, "ecommerce.user.id", response.data.id, {
             maxAge: 60 * 60 * 12, // 12 horas
             path: "/",

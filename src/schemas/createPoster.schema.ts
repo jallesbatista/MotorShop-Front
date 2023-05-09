@@ -21,7 +21,7 @@ const createPostSchema = z.object({
     })
     .or(z.number()),
   description: z.string().nonempty("Descrição é obrigatória"),
-  is_published: z.boolean().optional().default(false),
+  is_published: z.boolean().optional(),
   images: z.array(
     z.object({
       url: z.string().nonempty("A imagem é obrigatória").url("Insira uma url válida"),
