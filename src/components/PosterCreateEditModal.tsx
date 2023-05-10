@@ -22,7 +22,6 @@ import {
   HStack,
   useRadioGroup,
   useDisclosure,
-  VStack,
 } from "@chakra-ui/react";
 import { useController, useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -34,7 +33,6 @@ import { editPosterSchema } from "@/schemas";
 import { posterContext } from "@/contexts/PosterContext";
 import CustomRadioButton from "./CustomRadioButton";
 import DeleteModal from "./DeleteModal";
-import { any } from "zod";
 
 interface IPosterCreateEditModal {
   isOpen: boolean;
@@ -119,6 +117,26 @@ const PosterCreateEditModal = ({
   });
 
   const group = getRootProps();
+
+  useEffect(() => {
+    if (edit && poster) {
+      reset({
+        color: poster.color,
+        kilometers: poster.kilometers,
+        price: poster.price
+          .toLocaleString("pt-BR", {
+            style: "currency",
+            currency: "BRL",
+            maximumFractionDigits: 2,
+          })
+          .split(/\s/g)[1],
+        description: poster.description,
+        images: poster.images,
+      });
+      setBrandSearch(poster.brand);
+      setRadioState(poster.is_published ? "y" : "n");
+    }
+  }, [edit]);
 
   useEffect(() => {
     const getAllCars = async () => {
@@ -217,6 +235,7 @@ const PosterCreateEditModal = ({
               maximumFractionDigits: 2,
             })
             .split(/\s/g)[1],
+          is_published: poster?.is_published,
         });
       } else if (modelSearch && !modelFilterArray.length && !modelArray.includes(modelSearch)) {
         setModelSearch("");
@@ -230,26 +249,6 @@ const PosterCreateEditModal = ({
 
     getCarData();
   }, [modelSearch]);
-
-  useEffect(() => {
-    if (edit && poster) {
-      setBrandSearch(poster.brand);
-      reset({
-        color: poster.color,
-        kilometers: poster.kilometers,
-        price: poster.price
-          .toLocaleString("pt-BR", {
-            style: "currency",
-            currency: "BRL",
-            maximumFractionDigits: 2,
-          })
-          .split(/\s/g)[1],
-        description: poster.description,
-        images: poster.images,
-      });
-      setRadioState(poster.is_published ? "y" : "n");
-    }
-  }, [edit]);
 
   const handleBrandSearch = (value: string) => {
     setBrandSearch(value);
