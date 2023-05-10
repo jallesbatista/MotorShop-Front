@@ -10,7 +10,7 @@ import {
   Tag,
   Text,
 } from "@chakra-ui/react";
-import { IPoster } from "@/interfaces/poster.interfaces";
+import { IPosterGet } from "@/interfaces/poster.interfaces";
 import Link from "next/link";
 
 const PosterCard = ({
@@ -20,7 +20,7 @@ const PosterCard = ({
   showStatusTag,
   showSeller,
 }: {
-  poster: IPoster;
+  poster: IPosterGet;
   index: number;
   showPromoTag: boolean;
   showStatusTag: boolean;

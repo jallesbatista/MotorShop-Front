@@ -1,6 +1,6 @@
 import { Button, Flex, Grid, Text, useDisclosure } from "@chakra-ui/react";
 import PosterCard from "./PosterCard";
-import { IPoster } from "@/interfaces/poster.interfaces";
+import { IPosterGet } from "@/interfaces/poster.interfaces";
 import PosterCreateEditModal from "./PosterCreateEditModal";
 import { useState } from "react";
 import Link from "next/link";
@@ -21,7 +21,7 @@ interface IPosterList {
   showPromoTag: boolean;
   showStatusTag: boolean;
   showSeller: boolean;
-  setPosters?: React.Dispatch<React.SetStateAction<IPoster[]>>;
+  setPosters?: React.Dispatch<React.SetStateAction<IPosterGet[]>>;
 }
 
 const PosterList = ({
@@ -46,7 +46,7 @@ const PosterList = ({
     onOpen: onEditModalOpen,
   } = useDisclosure();
 
-  const [poster, setPoster] = useState<IPoster | null>(null);
+  const [poster, setPoster] = useState<IPosterGet | null>(null);
 
   return (
     <>

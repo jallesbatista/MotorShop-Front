@@ -28,7 +28,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FiTrash } from "react-icons/fi";
 import React, { useEffect, useState } from "react";
 import { brlCurrencyMask } from "@/functions/masks";
-import { IPoster, TCreatePoster } from "@/interfaces/poster.interfaces";
+import { IPosterGet, TCreatePoster } from "@/interfaces/poster.interfaces";
 import { editPosterSchema } from "@/schemas";
 import { posterContext } from "@/contexts/PosterContext";
 import CustomRadioButton from "./CustomRadioButton";
@@ -38,8 +38,8 @@ interface IPosterCreateEditModal {
   isOpen: boolean;
   onClose: () => void;
   onSucessModalOpen?: () => void;
-  setPosters: React.Dispatch<React.SetStateAction<IPoster[]>>;
-  poster?: IPoster | null;
+  setPosters: React.Dispatch<React.SetStateAction<IPosterGet[]>>;
+  poster?: IPosterGet | null;
   edit?: boolean;
 }
 
@@ -120,6 +120,19 @@ const PosterCreateEditModal = ({
 
   useEffect(() => {
     if (edit && poster) {
+      const getImages = async () => {
+        try {
+          const images = await Promise.all(
+            poster.images.map((el) => {
+              return fetch(el.url);
+            })
+          ).then((values) => values.map((val) => val.blob()));
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      getImages();
+
       reset({
         color: poster.color,
         kilometers: poster.kilometers,
@@ -131,7 +144,7 @@ const PosterCreateEditModal = ({
           })
           .split(/\s/g)[1],
         description: poster.description,
-        images: poster.images,
+        // images: poster.images,
       });
       setBrandSearch(poster.brand);
       setRadioState(poster.is_published ? "y" : "n");
@@ -300,10 +313,10 @@ const PosterCreateEditModal = ({
     if (!edit) {
       console.log(data);
       const createdPoster = await posterCreate(data);
-      // if (createdPoster) {
-      //   setPosters((old) => [createdPoster, ...old]);
-      //   onSucessModalOpen!();
-      // }
+      if (createdPoster) {
+        setPosters((old) => [createdPoster, ...old]);
+        onSucessModalOpen!();
+      }
     } else {
       if (poster) {
         const updatedPoster = await posterEdit(poster.id, data);
