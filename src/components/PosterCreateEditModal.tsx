@@ -88,7 +88,7 @@ const PosterCreateEditModal = ({
   } = useForm<TCreatePoster>({
     resolver: zodResolver(editPosterSchema),
     defaultValues: {
-      images: [{ url: "" }, { url: "" }, { url: "" }],
+      images: [{ image: null }, { image: null }, { image: null }],
     },
   });
 
@@ -281,7 +281,7 @@ const PosterCreateEditModal = ({
       model: "",
       year: "",
       price: "",
-      images: [{ url: "" }, { url: "" }, { url: "" }],
+      images: [{ image: null }, { image: null }, { image: null }],
     });
   };
 
@@ -298,11 +298,12 @@ const PosterCreateEditModal = ({
 
   const onSubmit = async (data: TCreatePoster) => {
     if (!edit) {
+      console.log(data);
       const createdPoster = await posterCreate(data);
-      if (createdPoster) {
-        setPosters((old) => [createdPoster, ...old]);
-        onSucessModalOpen!();
-      }
+      // if (createdPoster) {
+      //   setPosters((old) => [createdPoster, ...old]);
+      //   onSucessModalOpen!();
+      // }
     } else {
       if (poster) {
         const updatedPoster = await posterEdit(poster.id, data);
@@ -318,7 +319,7 @@ const PosterCreateEditModal = ({
         }
       }
     }
-    closeAndReset();
+    // closeAndReset();
   };
 
   return (
@@ -627,16 +628,17 @@ const PosterCreateEditModal = ({
               <FormControl
                 id={`img${index}`}
                 key={field.id}
-                isInvalid={!!errors.images?.[index]?.url?.message}
+                isInvalid={!!errors.images?.[index]?.image?.message}
               >
                 <FormLabel fontSize={"body.2"} fontWeight={"semibold"}>
                   {!index ? "Imagem da capa" : `${index}º Imagem da galeria`}
                 </FormLabel>
                 <InputGroup>
                   <Input
-                    type="url"
-                    {...register(`images.${index}.url`)}
-                    placeholder="https://imagem.com"
+                    type="file"
+                    accept="image/*"
+                    {...register(`images.${index}.image`)}
+                    variant={"file"}
                   />
                   <InputRightElement>
                     <IconButton
@@ -651,13 +653,15 @@ const PosterCreateEditModal = ({
                     />
                   </InputRightElement>
                 </InputGroup>
-                <FormErrorMessage>{errors.images?.[index]?.url?.message}</FormErrorMessage>
+                <FormErrorMessage>
+                  {String(errors.images?.[index]?.image?.message)}
+                </FormErrorMessage>
               </FormControl>
             ))}
 
             <Box>
               <Button
-                onClick={() => append({ url: "" })}
+                onClick={() => append({ image: null })}
                 w={"100%"}
                 maxW={"max-content"}
                 variant={"brandOpacity"}

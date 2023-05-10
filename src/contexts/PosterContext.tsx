@@ -18,40 +18,56 @@ const PosterContext = createContext<IPosterProviderData>({} as IPosterProviderDa
 export const PosterProvider = ({ children }: { children: React.ReactNode }) => {
   const toast = useToast();
 
-  const posterCreate = async (data: TCreatePoster): Promise<IPoster | undefined> => {
+  const posterCreate = async (data: TCreatePoster): Promise<any> => {
     data.fipe_price = Number(Number(data.fipe_price).toFixed(2));
     data.kilometers = parseInt(String(data.kilometers));
     data.price = Number(Number(data.price).toFixed(2));
 
-    try {
-      const response = await api.post("/posters", data);
+    const formData = new FormData();
 
-      toast({
-        status: "warning",
-        description: "Para ficar visível é necessário publicar :D",
-        duration: 3000,
-        position: "bottom-right",
-        containerStyle: {
-          color: "white",
-        },
-        isClosable: true,
-      });
-      return response.data;
-    } catch (error: any) {
-      console.log(error);
-      toast({
-        status: "error",
-        description:
-          error.response?.data.message ||
-          "Ops... Ocorreu algo de errado! Tente novamente mais tarde",
-        duration: 3000,
-        position: "top-right",
-        containerStyle: {
-          color: "white",
-        },
-        isClosable: true,
-      });
+    const imageArray = data.images;
+
+    imageArray.forEach((image) => {
+      console.log(image);
+      formData.append("image", image.image!);
+    });
+    // formData.append("image", imageArray[0].image!, imageArray[0].image!.name);
+    // console.log()
+    for (var pair of formData.entries()) {
+      console.log(pair[0] + ", " + pair[1]);
     }
+
+    // try {
+    //   const response = await api.post("/posters", data, {
+    //     headers: { "Content-Type": "multipart/form-data" },
+    //   });
+
+    //   toast({
+    //     status: "warning",
+    //     description: "Para ficar visível é necessário publicar :D",
+    //     duration: 3000,
+    //     position: "bottom-right",
+    //     containerStyle: {
+    //       color: "white",
+    //     },
+    //     isClosable: true,
+    //   });
+    //   return response.data;
+    // } catch (error: any) {
+    //   console.log(error);
+    //   toast({
+    //     status: "error",
+    //     description:
+    //       error.response?.data.message ||
+    //       "Ops... Ocorreu algo de errado! Tente novamente mais tarde",
+    //     duration: 3000,
+    //     position: "top-right",
+    //     containerStyle: {
+    //       color: "white",
+    //     },
+    //     isClosable: true,
+    //   });
+    // }
   };
 
   const posterEdit = async (id: string, data: TEditPoster): Promise<IPoster | undefined> => {
