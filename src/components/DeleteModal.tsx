@@ -37,7 +37,7 @@ const DeleteModal = ({
           color={"grey.1"}
           w={"90%"}
           maxW={"520px"}
-          p={"18px 24px 42px 24px"}
+          p={"18px 24px 32px 24px"}
         >
           <Heading mb={"58px"} fontSize={"heading.7"}>
             {headingText}
