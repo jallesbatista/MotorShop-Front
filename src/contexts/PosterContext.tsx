@@ -11,6 +11,8 @@ interface IPosterProviderData {
   posterDelete: (id: string) => Promise<true | undefined>;
   commentGet: (id: string) => Promise<IComment[] | undefined>;
   commentCreate: (id: string, data: IUserComment) => Promise<IComment | undefined>;
+  commentEdit: (id: string, data: IUserComment) => Promise<IComment | undefined>;
+  commentDelete: (id: string) => Promise<true | undefined>;
 }
 
 const PosterContext = createContext<IPosterProviderData>({} as IPosterProviderData);
@@ -148,6 +150,44 @@ export const PosterProvider = ({ children }: { children: React.ReactNode }) => {
       });
     }
   };
+
+  const commentEdit = async (id: string, data: IUserComment): Promise<IComment | undefined> => {
+    try {
+      const response = await api.patch(`/comments/${id}`, data);
+      return response.data;
+    } catch (error: any) {
+      console.log(error);
+      toast({
+        status: "error",
+        description: "Ops... Ocorreu um erro ao fazer o comentário.",
+        duration: 3000,
+        position: "top-right",
+        containerStyle: {
+          color: "white",
+        },
+        isClosable: true,
+      });
+    }
+  };
+
+  const commentDelete = async (id: string): Promise<true | undefined> => {
+    try {
+      await api.delete(`/comments/${id}`);
+      return true;
+    } catch (error: any) {
+      console.log(error);
+      toast({
+        status: "error",
+        description: "Ops... Ocorreu algo de errado! Tente novamente mais tarde",
+        duration: 3000,
+        position: "top-right",
+        containerStyle: {
+          color: "white",
+        },
+        isClosable: true,
+      });
+    }
+  };
   return (
     <>
       <PosterContext.Provider
@@ -157,6 +197,8 @@ export const PosterProvider = ({ children }: { children: React.ReactNode }) => {
           posterDelete,
           commentGet,
           commentCreate,
+          commentEdit,
+          commentDelete,
         }}
       >
         {children}
