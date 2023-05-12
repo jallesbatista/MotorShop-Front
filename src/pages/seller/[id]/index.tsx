@@ -1,7 +1,7 @@
 import Footer from "@/components/Footer";
 import Header from "@/components/Header/Header";
 import PosterList from "@/components/PosterList";
-import { IPoster } from "@/interfaces/poster.interfaces";
+import { IPosterGet } from "@/interfaces/poster.interfaces";
 import { IUser } from "@/interfaces/user.interfaces";
 import api from "@/services/api";
 import { Avatar, Box, Flex, Heading, Tag, Text } from "@chakra-ui/react";
@@ -10,12 +10,12 @@ import { useState } from "react";
 
 interface Props {
   seller: IUser;
-  posterList: IPoster[];
+  posterList: IPosterGet[];
   count: number;
 }
 
 const SellerPage: NextPage<Props> = ({ seller, posterList }) => {
-  const [posters, setPosters] = useState<IPoster[]>(posterList || []);
+  const [posters, setPosters] = useState<IPosterGet[]>(posterList || []);
   return (
     <>
       <Header />
