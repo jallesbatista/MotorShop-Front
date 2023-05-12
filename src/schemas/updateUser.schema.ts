@@ -3,7 +3,7 @@ import { addressCreateSchema } from "./register.schema";
 
 const updateUserSchema = z
   .object({
-    name: z.string().nonempty("Nome obrigatorio").max(60, "Máximo 60 caracteres"),
+    name: z.string().nonempty("Nome obrigatorio").max(60, "Máximo de 60 caracteres"),
     email: z.string().nonempty("Email obrigatório").email("Deve ser um email válido"),
     cpf: z
       .string()
@@ -40,8 +40,6 @@ const updateUserSchema = z
       .string()
       .nonempty("Descrição obrigatória")
       .min(20, "Deve ter no mínimo 20 caracteres"),
-    //   password: z.string().nonempty("Senha obrigatória").min(6, "Mínimo de 6 caracteres"),
-    //   confirmPassword: z.string().nonempty("Confirmação de senha obrigatória"),
     address: addressCreateSchema.partial(),
   })
   .partial();
