@@ -2,8 +2,7 @@ import Filter from "@/components/Filter/Filter";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header/Header";
 import PosterList from "@/components/PosterList";
-import { IPoster, IPosterFilters } from "@/interfaces/poster.interfaces";
-import { mockedPosterList } from "@/mocks";
+import { IPosterGet, IPosterFilters } from "@/interfaces/poster.interfaces";
 import api from "@/services/api";
 import { Box, Container, Flex, Heading, Text } from "@chakra-ui/react";
 import { GetServerSideProps, NextPage } from "next";
@@ -11,7 +10,7 @@ import React, { useState } from "react";
 import bgImage from "../assets/bgHome.png";
 
 interface Props {
-  posterList: IPoster[];
+  posterList: IPosterGet[];
   error: string;
   filters: IPosterFilters;
   query?: {

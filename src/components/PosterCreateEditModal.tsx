@@ -22,24 +22,26 @@ import {
   HStack,
   useRadioGroup,
   useDisclosure,
+  Image,
 } from "@chakra-ui/react";
 import { useController, useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FiTrash } from "react-icons/fi";
 import React, { useEffect, useState } from "react";
 import { brlCurrencyMask } from "@/functions/masks";
-import { IPoster, TCreatePoster } from "@/interfaces/poster.interfaces";
+import { IPosterGet, TCreatePoster } from "@/interfaces/poster.interfaces";
 import { editPosterSchema } from "@/schemas";
 import { posterContext } from "@/contexts/PosterContext";
 import CustomRadioButton from "./CustomRadioButton";
 import DeleteModal from "./DeleteModal";
+import crypto from "crypto";
 
 interface IPosterCreateEditModal {
   isOpen: boolean;
   onClose: () => void;
   onSucessModalOpen?: () => void;
-  setPosters: React.Dispatch<React.SetStateAction<IPoster[]>>;
-  poster?: IPoster | null;
+  setPosters: React.Dispatch<React.SetStateAction<IPosterGet[]>>;
+  poster?: IPosterGet | null;
   edit?: boolean;
 }
 
@@ -50,6 +52,11 @@ interface iCar {
   year: string;
   fuel: number;
   value: number;
+}
+
+interface IPrevImages {
+  id: number;
+  image: File;
 }
 
 const PosterCreateEditModal = ({
@@ -71,6 +78,8 @@ const PosterCreateEditModal = ({
   const [carArray, setCarArray] = useState<iCar[]>([]);
   const [carBrandModel, setCarBrandModel] = useState("");
 
+  const [editPrevImages, setEditPrevImages] = useState<IPrevImages[]>([]);
+
   const { posterCreate, posterEdit, posterDelete } = posterContext();
 
   const {
@@ -88,7 +97,7 @@ const PosterCreateEditModal = ({
   } = useForm<TCreatePoster>({
     resolver: zodResolver(editPosterSchema),
     defaultValues: {
-      images: [{ url: "" }, { url: "" }, { url: "" }],
+      images: edit ? [] : [{ image: null }, { image: null }, { image: null }],
     },
   });
 
@@ -120,6 +129,38 @@ const PosterCreateEditModal = ({
 
   useEffect(() => {
     if (edit && poster) {
+      const getImages = async () => {
+        const images = await Promise.all(
+          poster.images.map((el) => {
+            return fetch(el.url);
+          })
+        ).then((values) => {
+          return values;
+        });
+
+        const imageBlobs = await Promise.all(
+          images.map((el) => {
+            const imageBlob = el.blob().then((value) => value);
+            return imageBlob;
+          })
+        );
+
+        const filesArray = imageBlobs.map((el, index) => {
+          const file = new File([el], `image${index}.jpg`, {
+            type: el.type,
+          });
+
+          return {
+            id: index,
+            image: file,
+          };
+        });
+
+        setEditPrevImages(filesArray);
+      };
+
+      getImages();
+
       reset({
         color: poster.color,
         kilometers: poster.kilometers,
@@ -131,10 +172,11 @@ const PosterCreateEditModal = ({
           })
           .split(/\s/g)[1],
         description: poster.description,
-        images: poster.images,
+        images: [],
       });
       setBrandSearch(poster.brand);
       setRadioState(poster.is_published ? "y" : "n");
+      getImages();
     }
   }, [edit]);
 
@@ -149,6 +191,7 @@ const PosterCreateEditModal = ({
         console.log(error.data.message);
       }
     };
+
     getAllCars();
   }, []);
 
@@ -194,6 +237,9 @@ const PosterCreateEditModal = ({
           }
 
           if (edit && poster) {
+            reset({
+              images: [],
+            });
             setModelSearch(poster.model);
           }
         } catch (error: any) {
@@ -281,7 +327,7 @@ const PosterCreateEditModal = ({
       model: "",
       year: "",
       price: "",
-      images: [{ url: "" }, { url: "" }, { url: "" }],
+      images: edit ? [] : [{ image: null }, { image: null }, { image: null }],
     });
   };
 
@@ -305,6 +351,12 @@ const PosterCreateEditModal = ({
       }
     } else {
       if (poster) {
+        if (data.images) {
+          data.images = [...editPrevImages!, ...data.images];
+        } else {
+          data.images = editPrevImages;
+        }
+
         const updatedPoster = await posterEdit(poster.id, data);
         if (updatedPoster) {
           setPosters((old) =>
@@ -320,7 +372,6 @@ const PosterCreateEditModal = ({
     }
     closeAndReset();
   };
-
   return (
     <>
       <Modal isOpen={isOpen} onClose={closeAndReset} closeOnOverlayClick>
@@ -622,21 +673,110 @@ const PosterCreateEditModal = ({
                 </HStack>
               </Flex>
             )}
+            {edit && (
+              <>
+                <Flex direction={"column"} gap={"16px"}>
+                  <Text
+                    w={"100%"}
+                    textAlign={"left"}
+                    fontWeight={"semibold"}
+                    color={"black"}
+                    fontSize={"body.2"}
+                  >
+                    Imagens da galeria
+                  </Text>
+
+                  <Flex
+                    w={"100%"}
+                    wrap={"wrap"}
+                    gap={"12px"}
+                    justify={"space-between"}
+                    p={"12px"}
+                    rounded={"4px"}
+                    bg={"grey.8"}
+                  >
+                    {FileReader &&
+                      editPrevImages?.length > 0 &&
+                      editPrevImages.map((prevImage, index) => {
+                        const imgObj = {
+                          src: "" as string | ArrayBuffer,
+                        };
+                        const reader = new FileReader();
+                        reader.onload = () => {
+                          const display = document.getElementById(
+                            `display-${prevImage.id}`
+                          )! as HTMLImageElement;
+                          display.src = String(reader.result!);
+                        };
+                        reader.readAsDataURL(prevImage.image!);
+
+                        return (
+                          <Flex
+                            key={index}
+                            align={"center"}
+                            w={"45%"}
+                            h={"80px"}
+                            position={"relative"}
+                          >
+                            <Image
+                              id={`display-${prevImage.id}`}
+                              bg={"white"}
+                              w={"100%"}
+                              maxW={"100%"}
+                              maxH={"100%"}
+                              objectFit={{ base: "contain", md: "contain" }}
+                            />
+                            <IconButton
+                              position={"absolute"}
+                              bottom={"-4px"}
+                              right={"0px"}
+                              h={"24px"}
+                              w={"24px"}
+                              minW={"0px"}
+                              bg="alert.3"
+                              color="alert.1"
+                              _hover={{ bg: "alert.2" }}
+                              aria-label="trash"
+                              fontSize={"heading.6"}
+                              onClick={() => {
+                                setEditPrevImages(
+                                  editPrevImages.filter((el) => el.id != prevImage.id)
+                                );
+                              }}
+                              isDisabled={editPrevImages.length + fields.length < 4}
+                              icon={<FiTrash />}
+                            />
+                          </Flex>
+                        );
+                      })}
+                  </Flex>
+                </Flex>
+              </>
+            )}
 
             {fields.map((field, index) => (
               <FormControl
                 id={`img${index}`}
                 key={field.id}
-                isInvalid={!!errors.images?.[index]?.url?.message}
+                isInvalid={!!errors.images?.[index]?.image?.message}
               >
-                <FormLabel fontSize={"body.2"} fontWeight={"semibold"}>
-                  {!index ? "Imagem da capa" : `${index}º Imagem da galeria`}
-                </FormLabel>
+                {!edit ? (
+                  <FormLabel fontSize={"body.2"} fontWeight={"semibold"}>
+                    {!index ? "Imagem da capa" : `${index + 1}º Imagem da galeria`}
+                  </FormLabel>
+                ) : (
+                  <FormLabel fontSize={"body.2"} fontWeight={"semibold"}>
+                    {editPrevImages.length > 0 || index > 0
+                      ? `${editPrevImages.length + index + 1}º Imagem da galeria`
+                      : `Imagem da capa`}
+                  </FormLabel>
+                )}
                 <InputGroup>
                   <Input
-                    type="url"
-                    {...register(`images.${index}.url`)}
-                    placeholder="https://imagem.com"
+                    type="file"
+                    accept="image/*"
+                    {...register(`images.${index}.image`)}
+                    variant={"file"}
                   />
                   <InputRightElement>
                     <IconButton
@@ -646,22 +786,24 @@ const PosterCreateEditModal = ({
                       aria-label="trash"
                       fontSize={"heading.5"}
                       onClick={() => remove(index)}
-                      isDisabled={fields.length < 4}
+                      isDisabled={editPrevImages.length + fields.length < 4}
                       icon={<FiTrash />}
                     />
                   </InputRightElement>
                 </InputGroup>
-                <FormErrorMessage>{errors.images?.[index]?.url?.message}</FormErrorMessage>
+                <FormErrorMessage>
+                  {String(errors.images?.[index]?.image?.message)}
+                </FormErrorMessage>
               </FormControl>
             ))}
 
             <Box>
               <Button
-                onClick={() => append({ url: "" })}
+                onClick={() => append({ image: null })}
                 w={"100%"}
                 maxW={"max-content"}
                 variant={"brandOpacity"}
-                isDisabled={fields.length >= 6}
+                isDisabled={editPrevImages.length + fields.length >= 6}
               >
                 <Text maxW={"100%"} overflow={"hidden"} textOverflow={"ellipsis"}>
                   Adicionar campo para imagem da galeria

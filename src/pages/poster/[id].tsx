@@ -6,7 +6,6 @@ import PosterImageModal from "@/components/PosterImageModal";
 import { authContext } from "@/contexts/AuthContext";
 import { posterContext } from "@/contexts/PosterContext";
 import { IComment } from "@/interfaces/comment.interfaces";
-import { IPoster } from "@/interfaces/poster.interfaces";
 import { IUserComment } from "@/interfaces/user.interfaces";
 import { commentSchema } from "@/schemas";
 import api from "@/services/api";
@@ -36,9 +35,10 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { IPosterGet } from "@/interfaces/poster.interfaces";
 
 interface Props {
-  poster: IPoster;
+  poster: IPosterGet;
 }
 
 const PosterDetail: NextPage<Props> = ({ poster }) => {
@@ -81,6 +81,7 @@ const PosterDetail: NextPage<Props> = ({ poster }) => {
       const newComment = await commentCreate(poster.id, data);
       if (newComment) {
         setCommentList([newComment, ...commentList]);
+        setComment("");
         reset({
           content: "",
         });

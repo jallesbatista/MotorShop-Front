@@ -3,7 +3,7 @@ import { z } from "zod";
 const MAX_FILE_SIZE = 200000;
 const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
 
-const createPostSchema = z.object({
+const getPostSchema = z.object({
   brand: z.string().nonempty("Marca é obrigatória"),
   model: z.string().nonempty("Modelo é obrigatório"),
   year: z.string().nonempty("Ano é obrigatório"),
@@ -25,32 +25,12 @@ const createPostSchema = z.object({
     .or(z.number()),
   description: z.string().nonempty("Descrição é obrigatória"),
   is_published: z.boolean().optional().default(false),
-  // images: z.array(
-  //   z.object({
-  //     image: z
-  //       .custom<FileList>()
-  //       .transform((list) => list.item(0))
-  //       .refine((file) => !!file, "Imagem obrigatória")
-  //       .refine((file) => file?.size! >= 20 * 1024 * 1024, "A imagem deve ter no máximo 20mb"),
-  //   })
-  // ),
-
-  images: z
-    .array(
-      z.object({
-        image: z
-          .custom<FileList>()
-          .refine((files) => files?.length == 1, "Imagem é obrigatória")
-          .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, `O tamanho máximo de imagem é 2MB.`)
-          .refine(
-            (files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
-            ".jpg, .jpeg, .png and .webp files are accepted."
-          )
-          .transform((list) => list.item(0)),
-      })
-    )
-    .optional(),
+  images: z.array(
+    z.object({
+      url: z.string().nonempty("A imagem é obrigatória").url("Insira uma url válida"),
+    })
+  ),
   publish_option: z.enum(["y", "n"]).optional(),
 });
 
-export default createPostSchema;
+export default getPostSchema;

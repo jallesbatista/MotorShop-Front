@@ -1,13 +1,13 @@
 import { IComment } from "@/interfaces/comment.interfaces";
-import { IPoster, TCreatePoster, TEditPoster } from "@/interfaces/poster.interfaces";
+import { TCreatePoster, TEditPoster, IPosterGet } from "@/interfaces/poster.interfaces";
 import { IUserComment } from "@/interfaces/user.interfaces";
 import api from "@/services/api";
 import { useToast } from "@chakra-ui/react";
 import { createContext, useContext } from "react";
 
 interface IPosterProviderData {
-  posterCreate: (data: TCreatePoster) => Promise<IPoster | undefined>;
-  posterEdit: (id: string, data: TEditPoster) => Promise<IPoster | undefined>;
+  posterCreate: (data: TCreatePoster) => Promise<IPosterGet | undefined>;
+  posterEdit: (id: string, data: TEditPoster) => Promise<IPosterGet | undefined>;
   posterDelete: (id: string) => Promise<true | undefined>;
   commentGet: (id: string) => Promise<IComment[] | undefined>;
   commentCreate: (id: string, data: IUserComment) => Promise<IComment | undefined>;
@@ -20,13 +20,28 @@ const PosterContext = createContext<IPosterProviderData>({} as IPosterProviderDa
 export const PosterProvider = ({ children }: { children: React.ReactNode }) => {
   const toast = useToast();
 
-  const posterCreate = async (data: TCreatePoster): Promise<IPoster | undefined> => {
+  const posterCreate = async (data: TCreatePoster): Promise<any> => {
     data.fipe_price = Number(Number(data.fipe_price).toFixed(2));
     data.kilometers = parseInt(String(data.kilometers));
     data.price = Number(Number(data.price).toFixed(2));
 
+    const formData = new FormData();
+    const { images, ...rest } = data;
+
+    const imageArray = images;
+
+    if (imageArray) {
+      imageArray.forEach((image) => {
+        formData.append("image", image.image!);
+      });
+    }
+
+    formData.append("posterData", JSON.stringify(rest));
+
     try {
-      const response = await api.post("/posters", data);
+      const response = await api.post("/posters", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
 
       toast({
         status: "warning",
@@ -56,13 +71,26 @@ export const PosterProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const posterEdit = async (id: string, data: TEditPoster): Promise<IPoster | undefined> => {
+  const posterEdit = async (id: string, data: TEditPoster): Promise<IPosterGet | undefined> => {
     data.fipe_price = Number(Number(data.fipe_price).toFixed(2));
     data.kilometers = parseInt(String(data.kilometers));
     data.price = Number(Number(data.price).toFixed(2));
 
+    const formData = new FormData();
+    const { images, ...rest } = data;
+
+    const imageArray = images;
+
+    if (imageArray) {
+      imageArray.forEach((image) => {
+        formData.append("image", image.image!);
+      });
+    }
+
+    formData.append("posterData", JSON.stringify(rest));
+
     try {
-      const response = await api.patch(`/posters/${id}`, data);
+      const response = await api.patch(`/posters/${id}`, formData);
       toast({
         status: "success",
         title: "Anúncio atualizado com sucesso",

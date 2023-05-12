@@ -73,6 +73,75 @@ const inputTheme = defineMultiStyleConfig({
         },
       },
     },
+    file: {
+      field: {
+        height: "48px",
+        bg: "transparent",
+        border: "2px solid",
+        borderColor: "grey.8",
+        borderRadius: "4px",
+        fontSize: "input.md",
+        color: "grey.1",
+        cursor: "pointer",
+        paddingLeft: "0",
+        _placeholder: {
+          color: "grey.3",
+        },
+        "::-webkit-file-upload-button": {
+          transition: ".3s",
+          appearance: "none",
+          border: "none",
+          color: "brand.1",
+          bg: "white",
+          h: "100%",
+          borderRight: "2px solid",
+          borderColor: "brand.1",
+          fontWeight: "semibold",
+          cursor: "pointer",
+          rounded: "0px 4px 4px 0px",
+          marginRight: "12px",
+        },
+        _hover: {
+          bg: "grey.8",
+          borderColor: "transparent",
+          "::-webkit-file-upload-button": {
+            color: "white",
+            bg: "brand.3",
+            borderColor: "transparent",
+          },
+        },
+        _focus: {
+          bg: "grey.9",
+          "::-webkit-file-upload-button": {
+            color: "white",
+            bg: "brand.3",
+            borderColor: "transparent",
+          },
+        },
+        _invalid: {
+          border: "2px solid",
+          borderColor: "red",
+          "::-webkit-file-upload-button": {
+            borderColor: "red",
+            color: "red",
+          },
+          _hover: {
+            "::-webkit-file-upload-button": {
+              borderColor: "transparent",
+              color: "white",
+              colorScheme: "red",
+            },
+          },
+          _focus: {
+            "::-webkit-file-upload-button": {
+              borderColor: "transparent",
+              color: "white",
+              colorScheme: "red",
+            },
+          },
+        },
+      },
+    },
   },
 });
 

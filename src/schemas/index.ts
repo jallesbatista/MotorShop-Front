@@ -7,6 +7,7 @@ import updateAdressSchema from "./updateAddress.schema";
 import updateUserSchema from "./updateUser.schema";
 import commentSchema from "./comment.schema";
 import editPosterSchema from "./editPoster.schema";
+import getPostSchema from "./getPoster.schema";
 
 export {
   registerSchema,
@@ -18,4 +19,5 @@ export {
   updateAdressSchema,
   commentSchema,
   editPosterSchema,
+  getPostSchema,
 };
