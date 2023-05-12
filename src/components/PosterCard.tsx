@@ -69,25 +69,27 @@ const PosterCard = ({
                 alt="vehicle image"
                 bg={"grey.7"}
               />
-              {poster.price < poster.fipe_price && showPromoTag && (
-                <Flex
-                  color={"white"}
-                  bgColor={"green.500"}
-                  position={"absolute"}
-                  w={"16px"}
-                  h={"27px"}
-                  textAlign={"center"}
-                  fontWeight={"medium"}
-                  rounded={"2px 0px 2px 2px"}
-                  fontSize={"body.2 "}
-                  top={0}
-                  right={0}
-                  alignItems={"center"}
-                  justifyContent={"center"}
-                >
-                  $
-                </Flex>
-              )}
+              {Number(poster.price) <=
+                Number(poster.fipe_price) - Number(poster.fipe_price) * 0.05 &&
+                showPromoTag && (
+                  <Flex
+                    color={"white"}
+                    bgColor={"green.500"}
+                    position={"absolute"}
+                    w={"16px"}
+                    h={"27px"}
+                    textAlign={"center"}
+                    fontWeight={"medium"}
+                    rounded={"2px 0px 2px 2px"}
+                    fontSize={"body.2 "}
+                    top={0}
+                    right={0}
+                    alignItems={"center"}
+                    justifyContent={"center"}
+                  >
+                    $
+                  </Flex>
+                )}
 
               {showStatusTag && (
                 <Flex

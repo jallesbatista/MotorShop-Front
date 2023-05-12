@@ -11,6 +11,8 @@ interface IPosterProviderData {
   posterDelete: (id: string) => Promise<true | undefined>;
   commentGet: (id: string) => Promise<IComment[] | undefined>;
   commentCreate: (id: string, data: IUserComment) => Promise<IComment | undefined>;
+  commentEdit: (id: string, data: IUserComment) => Promise<IComment | undefined>;
+  commentDelete: (id: string) => Promise<true | undefined>;
 }
 
 const PosterContext = createContext<IPosterProviderData>({} as IPosterProviderData);
@@ -28,11 +30,10 @@ export const PosterProvider = ({ children }: { children: React.ReactNode }) => {
 
     const imageArray = images;
 
-    imageArray.forEach((image) => {
-      formData.append("image", image.image!);
-    });
-    for (var pair of formData.entries()) {
-      console.log(pair[0] + ", " + pair[1]);
+    if (imageArray) {
+      imageArray.forEach((image) => {
+        formData.append("image", image.image!);
+      });
     }
 
     formData.append("posterData", JSON.stringify(rest));
@@ -75,8 +76,21 @@ export const PosterProvider = ({ children }: { children: React.ReactNode }) => {
     data.kilometers = parseInt(String(data.kilometers));
     data.price = Number(Number(data.price).toFixed(2));
 
+    const formData = new FormData();
+    const { images, ...rest } = data;
+
+    const imageArray = images;
+
+    if (imageArray) {
+      imageArray.forEach((image) => {
+        formData.append("image", image.image!);
+      });
+    }
+
+    formData.append("posterData", JSON.stringify(rest));
+
     try {
-      const response = await api.patch(`/posters/${id}`, data);
+      const response = await api.patch(`/posters/${id}`, formData);
       toast({
         status: "success",
         title: "Anúncio atualizado com sucesso",
@@ -164,6 +178,44 @@ export const PosterProvider = ({ children }: { children: React.ReactNode }) => {
       });
     }
   };
+
+  const commentEdit = async (id: string, data: IUserComment): Promise<IComment | undefined> => {
+    try {
+      const response = await api.patch(`/comments/${id}`, data);
+      return response.data;
+    } catch (error: any) {
+      console.log(error);
+      toast({
+        status: "error",
+        description: "Ops... Ocorreu um erro ao fazer o comentário.",
+        duration: 3000,
+        position: "top-right",
+        containerStyle: {
+          color: "white",
+        },
+        isClosable: true,
+      });
+    }
+  };
+
+  const commentDelete = async (id: string): Promise<true | undefined> => {
+    try {
+      await api.delete(`/comments/${id}`);
+      return true;
+    } catch (error: any) {
+      console.log(error);
+      toast({
+        status: "error",
+        description: "Ops... Ocorreu algo de errado! Tente novamente mais tarde",
+        duration: 3000,
+        position: "top-right",
+        containerStyle: {
+          color: "white",
+        },
+        isClosable: true,
+      });
+    }
+  };
   return (
     <>
       <PosterContext.Provider
@@ -173,6 +225,8 @@ export const PosterProvider = ({ children }: { children: React.ReactNode }) => {
           posterDelete,
           commentGet,
           commentCreate,
+          commentEdit,
+          commentDelete,
         }}
       >
         {children}

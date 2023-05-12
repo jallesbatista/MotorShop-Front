@@ -6,7 +6,6 @@ import PosterImageModal from "@/components/PosterImageModal";
 import { authContext } from "@/contexts/AuthContext";
 import { posterContext } from "@/contexts/PosterContext";
 import { IComment } from "@/interfaces/comment.interfaces";
-import { IPoster } from "@/interfaces/poster.interfaces";
 import { IUserComment } from "@/interfaces/user.interfaces";
 import { commentSchema } from "@/schemas";
 import api from "@/services/api";
@@ -36,9 +35,10 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { IPosterGet } from "@/interfaces/poster.interfaces";
 
 interface Props {
-  poster: IPoster;
+  poster: IPosterGet;
 }
 
 const PosterDetail: NextPage<Props> = ({ poster }) => {
@@ -81,6 +81,7 @@ const PosterDetail: NextPage<Props> = ({ poster }) => {
       const newComment = await commentCreate(poster.id, data);
       if (newComment) {
         setCommentList([newComment, ...commentList]);
+        setComment("");
         reset({
           content: "",
         });
@@ -113,7 +114,7 @@ const PosterDetail: NextPage<Props> = ({ poster }) => {
         pb={{ base: "45px", md: "73px" }}
         w={"100%"}
         bgGradient={{
-          base: "linear(to-b, brand.1 0%, brand.1 23%, grey.8 23%, grey.8 100%)",
+          base: "linear(to-b, brand.1 0%, brand.1 516px, grey.8 516px, grey.8 100%)",
           md: "linear(to-b, brand.1 0px, brand.1 600px, grey.8 600px, grey.8 100%)",
         }}
       >
@@ -126,7 +127,7 @@ const PosterDetail: NextPage<Props> = ({ poster }) => {
           maxW={"1300px"}
           w={"90%"}
           color={"grey.1"}
-          // minH={"100vh"}
+          minH={"100vh"}
         >
           <Flex w={{ base: "100%", md: "62%" }} direction={{ base: "column" }} gap={"18px"}>
             {/* IMAGEM DO POSTER  */}
@@ -358,11 +359,7 @@ const PosterDetail: NextPage<Props> = ({ poster }) => {
                 <List display={"flex"} flexDirection={"column"} gap={"44px"}>
                   {commentList?.map((commentInfo, index) => (
                     <ListItem key={index}>
-                      <PosterComment
-                        username={commentInfo.user.name}
-                        content={commentInfo.content}
-                        createdAt={commentInfo.createdAt}
-                      />
+                      <PosterComment setCommentList={setCommentList} commentInfo={commentInfo} />
                     </ListItem>
                   ))}
                 </List>
