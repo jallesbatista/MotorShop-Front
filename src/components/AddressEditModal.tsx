@@ -139,7 +139,15 @@ const AddressEditModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
                 <Input
                   maxLength={6}
                   type="text"
-                  {...register("address.number")}
+                  {...register("address.number", {
+                    onChange(e: React.ChangeEvent<HTMLInputElement>) {
+                      let value = e.target.value;
+                      value = value.replace(/\D/g, "");
+                      value = value.toUpperCase();
+                      e.target.value = value;
+                      return e;
+                    },
+                  })}
                   placeholder="Digitar número"
                 />
                 <FormErrorMessage>{errors.address?.number?.message}</FormErrorMessage>
