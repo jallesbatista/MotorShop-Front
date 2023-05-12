@@ -6,7 +6,7 @@ export const addressCreateSchema = z.object({
     .nonempty("Código postal obrigatório")
     .length(9, "Deve conter 8 caracteres")
     .transform((cep) => cep.replace(/\D/g, "")),
-  state: z.string().nonempty("Estado obrigatório").min(2),
+  state: z.string().nonempty("Estado obrigatório").min(2, "Deve conter 2 caracteres"),
   city: z.string().nonempty("Cidade obrigatória").max(50),
   street: z.string().nonempty("Rua obrigatória").max(127),
   number: z
