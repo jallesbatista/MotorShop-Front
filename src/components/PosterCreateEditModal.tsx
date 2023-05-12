@@ -34,7 +34,6 @@ import { editPosterSchema } from "@/schemas";
 import { posterContext } from "@/contexts/PosterContext";
 import CustomRadioButton from "./CustomRadioButton";
 import DeleteModal from "./DeleteModal";
-import crypto from "crypto";
 
 interface IPosterCreateEditModal {
   isOpen: boolean;

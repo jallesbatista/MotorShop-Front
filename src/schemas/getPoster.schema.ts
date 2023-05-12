@@ -1,8 +1,5 @@
 import { z } from "zod";
 
-const MAX_FILE_SIZE = 200000;
-const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
-
 const getPostSchema = z.object({
   brand: z.string().nonempty("Marca é obrigatória"),
   model: z.string().nonempty("Modelo é obrigatório"),
