@@ -6,24 +6,24 @@ export const addressCreateSchema = z.object({
     .nonempty("Código postal obrigatório")
     .length(9, "Deve conter 8 caracteres")
     .transform((cep) => cep.replace(/\D/g, "")),
-  state: z.string().nonempty("Estado obrigatório").min(2),
-  city: z.string().nonempty("Cidade obrigatória").max(50),
-  street: z.string().nonempty("Rua obrigatória").max(127),
+  state: z.string().nonempty("Estado obrigatório").min(2, "Deve conter 2 caracteres"),
+  city: z.string().nonempty("Cidade obrigatória").max(50, "Máximo de 50 caracteres"),
+  street: z.string().nonempty("Rua obrigatória").max(127, "Máximo de 127 caracteres"),
   number: z
     .string()
-    .max(6, "Deve conter ao máximo 6 dígitos")
+    .max(6, "Máximo de 6 dígitos")
     .nullish()
     .transform((value) => (value ? value : null)),
   complement: z
     .string()
-    .max(127)
+    .max(127, "Máximo de 127 caracteres")
     .nullish()
     .transform((value) => (value ? value : null)),
 });
 
 const registerSchema = z
   .object({
-    name: z.string().nonempty("Nome obrigatorio").max(60, "Máximo 60 caracteres"),
+    name: z.string().nonempty("Nome obrigatorio").max(60, "Máximo de 60 caracteres"),
     email: z.string().nonempty("Email obrigatório").email("Deve ser um email válido"),
     cpf: z
       .string()
