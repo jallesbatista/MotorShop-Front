@@ -31,8 +31,12 @@ export const PosterProvider = ({ children }: { children: React.ReactNode }) => {
     const imageArray = images;
 
     if (imageArray) {
-      imageArray.forEach((image) => {
-        formData.append("image", image.image!);
+      imageArray.forEach((image, index) => {
+        formData.append(
+          "image",
+          image.image!,
+          `image${index}.${image.image?.type.split("/")[image.image?.type.split("/").length - 1]}`
+        );
       });
     }
 
@@ -82,8 +86,12 @@ export const PosterProvider = ({ children }: { children: React.ReactNode }) => {
     const imageArray = images;
 
     if (imageArray) {
-      imageArray.forEach((image) => {
-        formData.append("image", image.image!);
+      imageArray.forEach((image, index) => {
+        formData.append(
+          "image",
+          image.image!,
+          `image${index}.${image.image?.type.split("/")[image.image?.type.split("/").length - 1]}`
+        );
       });
     }
 

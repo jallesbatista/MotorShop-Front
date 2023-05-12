@@ -25,16 +25,6 @@ const createPostSchema = z.object({
     .or(z.number()),
   description: z.string().nonempty("Descrição é obrigatória"),
   is_published: z.boolean().optional().default(false),
-  // images: z.array(
-  //   z.object({
-  //     image: z
-  //       .custom<FileList>()
-  //       .transform((list) => list.item(0))
-  //       .refine((file) => !!file, "Imagem obrigatória")
-  //       .refine((file) => file?.size! >= 20 * 1024 * 1024, "A imagem deve ter no máximo 20mb"),
-  //   })
-  // ),
-
   images: z
     .array(
       z.object({
