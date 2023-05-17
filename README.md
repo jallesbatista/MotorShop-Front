@@ -1,8 +1,15 @@
 <h1 align="center">
-   Motors Shop
+   Motors Shop Front-end
 </h1>
 
-<h4 align="justify">Uma aplicação onde podemos ser um comprador ou um anunciante de carros.
+<h4 align="justify">Um e-commerce de automóveis onde podemos ser um comprador ou um anunciante.</h4>
+
+## Tabela de conteúdos
+
+- [Linguagens e tecnologias utilizadas](#💻-linguagens-e-tecnologias-utilizadas)
+- [Funcionalidades](#🛠-funcionalidades)
+- [Instalação - Rodar localmente](#⚙️-instalação---rodar-localmente)
+- [Time de Desenvolvimento](#time-de-desenvolvimento)
 
 ## 💻 Linguagens e tecnologias utilizadas
 
@@ -13,58 +20,84 @@
 <a href="https://zod.dev/" target="_blank"> <img src="https://zod.dev/logo.svg" alt="zod" style="width: 40px; max-width:100%; height: 40px;"/></a>
 <a href="https://git-scm.com/" target="_blank"> <img src="https://www.vectorlogo.zone/logos/git-scm/git-scm-icon.svg" alt="git" style="width: 40px; max-width:100%; height: 40px;"/></a>
 
-## 🛠 Funcionalidades da página
+#### URL base do deploy da aplicação: https://motorshoponline.netlify.app/
 
-- Página Login;
-- Página Cadastro com opções de se cadastrar como um comprador ou anunciante;
-- Página Dashboard;
-- Intregração feita por api;
-- Rotas com permissões de recurso;
+---
 
-- Usuário pode filtrar carros por:
+## 🛠 Funcionalidades
+
+[Voltar para o topo](#tabela-de-conteúdos)
+
+### **Página Login**.
+
+- Login do usuário.
+
+### **Páginas de recuperação de senha:**
+
+- Envio por email do link de recuperação.
+- Troca de senha a partir da validação do token contido no link.
+
+### **Página Home:**
+
+- Paginação de anúncios publicados.
+- Anúncios com preço 5% abaixo da tabela Fipe terão identificador de boa compra: **$**
+- Filtro de veículos por:
   - Modelo
   - Marca
   - Ano
-  - KM
   - Cor
+  - Tipo de combustível
+  - Quilometragem
   - Preço
-  - Combustível
 
-<br>
+### **Página do anunciante pública:**
 
-- Se o usuário for um comprador:
-  - Poderá comprar clicar em um anúncio e visualizar imagens do carro, seus detalhes e sua descrição, bem como os comentários.
-  - Se o anúncio for ativo, ele poderá começar o processo de compra do carro.
-  - Conseguirá acessar um anúncio específico por um link compartilhado.
-  - Acessar páginas dos anunciantes
+- Paginação do seus anúncios.
+- Identificador de anúncios publicados e não publicados.
 
-<br>
+### **Página do anunciante privada:**
 
-- Se o usuário for um anunciante, além das funcionalidades do comprador também poderá:
-  - Possui uma página de perfil privada em que poderá manipular seus anúncios.
-  - Terá a opção de editar seus anúncios.
-  - Criar novos anúncios.
-  - Deletar um anúncio.
+- Rota com permissão de acesso somente ao anunciante dono da página.
+- Paginação do seus anúncios.
+- Criação e edição de anúncios com integração de busca e filtragem de marcas e modelos feita por api.
+
+### **Página de detalhamento do anúncio:**
+
+- Galeria de fotos.
+- Identificador de anúncio inativo.
+- Compra com redirecionamento para whatsapp do anunciante (somente para anúncios ativos e usuários logados).
+- Descrição do anúncio.
+- Listagem de comentários do anúncio.
+- Criação de comentários (somente para usuários logados).
+- Edição e exclusão de comentários (somente para usuários logados e nos próprios comentários).
+
+---
 
 ## ⚙️ Instalação - Rodar Localmente
 
-    - Repositorio
-    $ git clone https://github.com/E-Commerce-M6/front_end
+[Voltar para o topo](#tabela-de-conteúdos)
+
+    - Repositório
+    $ git clone git@github.com:E-Commerce-M6/front_end.git
 
     - Entre na pasta do arquivo que clonou
     $ code .
 
-    - Dependencias
+    - Dependências
     $ yarn
     ou
     $ npm i
 
-    - Rodar aplicativo
+    - Rodar aplicação
     $ yarn dev
     ou
     $ npm run dev
 
+---
+
 ## Time de Desenvolvimento
+
+[Voltar para o topo](#tabela-de-conteúdos)
 
 <br>
 
