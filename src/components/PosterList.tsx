@@ -3,6 +3,7 @@ import PosterCard from "./PosterCard";
 import { IPosterGet } from "@/interfaces/poster.interfaces";
 import PosterCreateEditModal from "./PosterCreateEditModal";
 import { useState } from "react";
+import { Spinner } from "@chakra-ui/react";
 import Link from "next/link";
 
 interface IPosterList {
@@ -22,6 +23,7 @@ interface IPosterList {
   showStatusTag: boolean;
   showSeller: boolean;
   setPosters?: React.Dispatch<React.SetStateAction<IPosterGet[]>>;
+  isLoading?: boolean;
 }
 
 const PosterList = ({
@@ -35,6 +37,7 @@ const PosterList = ({
   showStatusTag,
   showSeller,
   setPosters,
+  isLoading,
 }: IPosterList) => {
   if (!posterList) {
     return null;
@@ -50,7 +53,7 @@ const PosterList = ({
 
   return (
     <>
-      {posterList.length ? (
+      {posterList.length > 0 && !isLoading ? (
         <>
           <Flex
             wrap={"nowrap"}
@@ -141,16 +144,37 @@ const PosterList = ({
         </>
       ) : (
         <>
-          <Flex w={"100%"} gap={"16px"} px={"25px"} pb={"10px"} justify={"center"}>
-            <Text
-              as={"h3"}
-              textAlign={"center"}
-              fontSize={"x-large"}
-              fontWeight={"bold"}
-              mt={"20px"}
-            >
-              Nenhum anúncio encontrado...
-            </Text>
+          <Flex
+            w={"100%"}
+            gap={"16px"}
+            align={"center"}
+            h={"max-content"}
+            minH={{ base: "298px", lg: "286px" }}
+            px={"25px"}
+            pb={"10px"}
+            justify={"center"}
+          >
+            {isLoading ? (
+              <Spinner
+                thickness="6px"
+                speed="0.8s"
+                emptyColor="brand.4"
+                color="brand.1"
+                size="xl"
+                height={"100px"}
+                width={"100px"}
+              />
+            ) : (
+              <Text
+                as={"h3"}
+                textAlign={"center"}
+                fontSize={"x-large"}
+                fontWeight={"bold"}
+                mt={"20px"}
+              >
+                Nenhum anúncio encontrado...
+              </Text>
+            )}
           </Flex>
         </>
       )}

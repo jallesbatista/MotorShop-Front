@@ -27,8 +27,9 @@ import { GetServerSideProps } from "next";
 import api from "@/services/api";
 
 const Login = () => {
-  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
   const { logIn } = authContext();
+  const [loginLoading, setLoginLoading] = useState<boolean>(false);
 
   const {
     handleSubmit,
@@ -43,8 +44,10 @@ const Login = () => {
     setUser(null);
   }, []);
 
-  const onSubmit = (data: IUserLogin) => {
-    logIn(data);
+  const onSubmit = async (data: IUserLogin) => {
+    setLoginLoading(true);
+    await logIn(data);
+    setLoginLoading(false);
   };
   return (
     <>
@@ -125,7 +128,14 @@ const Login = () => {
             Esqueci minha senha
           </Text>
           <VStack w={"100%"} spacing={"24px"}>
-            <Button size={"lg"} w={"100%"} type="submit" variant={"brand1"}>
+            <Button
+              isLoading={loginLoading}
+              loadingText="Entrando"
+              size={"lg"}
+              w={"100%"}
+              type="submit"
+              variant={"brand1"}
+            >
               Entrar
             </Button>
             <Text textAlign="center" fontSize={"body.2"}>

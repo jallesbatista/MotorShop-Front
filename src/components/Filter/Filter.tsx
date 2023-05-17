@@ -40,7 +40,7 @@ const Filter = ({ filters, query }: IFilterProps) => {
 
   return (
     <>
-      <Flex direction={"column"} minW={"230px"} w={"20%"} display={{ base: "none", lg: "flex" }}>
+      <Flex direction={"column"} maxW={"250px"} w={"50%"} display={{ base: "none", lg: "flex" }}>
         <Flex direction={"column"} gap={"12px"}>
           <TextFilter filterName="brand" filterList={filters?.brands} query={query}>
             Marca

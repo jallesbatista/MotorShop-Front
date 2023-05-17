@@ -242,11 +242,19 @@ const buttonTheme = defineStyleConfig({
       color: "white.1",
       _hover: {
         bg: "brand.2",
+        _loading: {
+          bg: "brand.2",
+        },
       },
     },
     brandOpacity: {
       bg: "brand.4",
       color: "brand.1",
+      _hover: {
+        _loading: {
+          bg: "brand.4",
+        },
+      },
     },
     light: {
       bg: "grey.10",
@@ -315,6 +323,11 @@ const buttonTheme = defineStyleConfig({
     brandDisable: {
       bg: "brand.3",
       color: "brand.4",
+      _hover: {
+        _loading: {
+          bg: "brand.3",
+        },
+      },
     },
   },
 });

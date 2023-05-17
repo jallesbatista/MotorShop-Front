@@ -14,7 +14,7 @@ import {
   FormErrorMessage,
 } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 interface ICommentEditModalProps {
@@ -38,7 +38,7 @@ const CommentEditModal = ({
   } = useForm<IUserComment>({
     resolver: zodResolver(commentSchema),
   });
-
+  const [editCommentLoading, setEditCommentLoading] = useState<boolean>(false);
   const { commentEdit } = posterContext();
 
   useEffect(() => {
@@ -49,7 +49,9 @@ const CommentEditModal = ({
 
   const onSubmit = async (data: IUserComment) => {
     if (commentToEdit) {
+      setEditCommentLoading(true);
       const commentUpdated = await commentEdit(commentToEdit.id, data);
+      setEditCommentLoading(false);
       if (commentUpdated) {
         setCommentList((old) =>
           old.map((el) => {
@@ -110,7 +112,14 @@ const CommentEditModal = ({
             >
               Cancelar
             </Button>
-            <Button type="submit" w={{ base: "100%", sm: "auto" }} size={"lg"} variant={"brand1"}>
+            <Button
+              isLoading={editCommentLoading}
+              loadingText="Salvando"
+              type="submit"
+              w={{ base: "100%", sm: "auto" }}
+              size={"lg"}
+              variant={"brand1"}
+            >
               Salvar alterações
             </Button>
           </Flex>
