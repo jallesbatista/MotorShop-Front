@@ -33,7 +33,9 @@ import nookies from "nookies";
 import api from "@/services/api";
 
 const Register = () => {
-  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [registerLoading, setRegisterLoading] = useState<boolean>(false);
+
   const { isOpen, onClose, onOpen } = useDisclosure();
 
   const { userCreate } = userContext();
@@ -66,9 +68,9 @@ const Register = () => {
 
   const onSubmit = async (formData: IRegister) => {
     const { user_type, confirmPassword, ...data } = formData;
-
+    setRegisterLoading(true);
     const showModal = await userCreate(data);
-
+    setRegisterLoading(false);
     if (showModal) {
       onOpen();
     }
@@ -331,7 +333,15 @@ const Register = () => {
                 <FormErrorMessage>{errors.confirmPassword?.message}</FormErrorMessage>
               </FormControl>
             </VStack>
-            <Button size={"lg"} type="submit" variant={"brand1"} alignSelf={"center"} w={"100%"}>
+            <Button
+              isLoading={registerLoading}
+              loadingText="Cadastrando"
+              size={"lg"}
+              type="submit"
+              variant={"brand1"}
+              alignSelf={"center"}
+              w={"100%"}
+            >
               Finalizar cadastro
             </Button>
           </VStack>

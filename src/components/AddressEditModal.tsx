@@ -20,10 +20,11 @@ import {
   ModalCloseButton,
 } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 const AddressEditModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
+  const [addressLoading, setAddressLoading] = useState<boolean>(false);
   const { userUpdate } = userContext();
   const { user } = authContext();
 
@@ -49,10 +50,12 @@ const AddressEditModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
         },
       });
     }
-  }, [, user]);
+  }, [, user, isOpen]);
 
-  const onSubmit = (data: TUpdateUserAddress) => {
-    userUpdate(data);
+  const onSubmit = async (data: TUpdateUserAddress) => {
+    setAddressLoading(true);
+    await userUpdate(data);
+    setAddressLoading(false);
   };
 
   return (
@@ -178,6 +181,8 @@ const AddressEditModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
                 w={{ base: "80%", sm: "auto" }}
                 size={"lg"}
                 variant={"brandDisable"}
+                isLoading={addressLoading}
+                loadingText="Salvando"
               >
                 Salvar Alterações
               </Button>

@@ -21,12 +21,13 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import DeleteModal from "./DeleteModal";
 
 const UserEditModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
   const { userUpdate, userDelete } = userContext();
+  const [userLoading, setUserLoading] = useState<boolean>(false);
   const { user } = authContext();
 
   const {
@@ -55,10 +56,12 @@ const UserEditModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => vo
         description: user.description!,
       });
     }
-  }, [, user]);
+  }, [, user, isOpen]);
 
-  const onSubmit = (data: TUserUpdate) => {
-    userUpdate(data);
+  const onSubmit = async (data: TUserUpdate) => {
+    setUserLoading(true);
+    await userUpdate(data);
+    setUserLoading(false);
   };
 
   return (
@@ -164,6 +167,8 @@ const UserEditModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => vo
                 variant={"brand1"}
                 w={{ base: "100%", sm: "50%" }}
                 type="submit"
+                isLoading={userLoading}
+                loadingText="Salvando"
               >
                 Salvar alterações
               </Button>

@@ -16,10 +16,12 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 const ForgotPassword = () => {
   const { sendResetPassworEmail } = userContext();
+  const [sendEmailLoading, setSendEmailLoading] = useState<boolean>(false);
 
   const {
     register,
@@ -30,7 +32,9 @@ const ForgotPassword = () => {
   });
 
   const onSubmit = async (formData: IForgotPassword) => {
-    sendResetPassworEmail(formData);
+    setSendEmailLoading(true);
+    await sendResetPassworEmail(formData);
+    setSendEmailLoading(false);
   };
 
   return (
@@ -82,6 +86,8 @@ const ForgotPassword = () => {
                 variant={"brand1"}
                 alignSelf={"center"}
                 w={"100%"}
+                isLoading={sendEmailLoading}
+                loadingText="Enviando email"
               >
                 Enviar email
               </Button>

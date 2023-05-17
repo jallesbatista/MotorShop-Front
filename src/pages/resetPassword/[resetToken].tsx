@@ -27,6 +27,7 @@ import SucessModal from "@/components/SuccessModal";
 
 const ResetPassword = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [resetPasswordLoading, setResetPasswordLoading] = useState<boolean>(false);
   const { isOpen, onClose, onOpen } = useDisclosure();
 
   const { resetPassword } = userContext();
@@ -44,8 +45,9 @@ const ResetPassword = () => {
   const onSubmit = async (formData: IResetPassword) => {
     const { confirmPassword, ...password } = formData;
 
+    setResetPasswordLoading(true);
     const showModal = await resetPassword(password, String(resetToken));
-
+    setResetPasswordLoading(false);
     if (showModal) {
       onOpen();
     }
@@ -135,7 +137,15 @@ const ResetPassword = () => {
               </InputGroup>
               <FormErrorMessage>{errors.confirmPassword?.message}</FormErrorMessage>
             </FormControl>
-            <Button size={"lg"} type="submit" variant={"brand1"} alignSelf={"center"} w={"100%"}>
+            <Button
+              size={"lg"}
+              isLoading={resetPasswordLoading}
+              loadingText="Salvando"
+              type="submit"
+              variant={"brand1"}
+              alignSelf={"center"}
+              w={"100%"}
+            >
               Criar nova senha
             </Button>
           </VStack>

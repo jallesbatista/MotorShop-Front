@@ -8,11 +8,12 @@ import {
   Button,
   Text,
 } from "@chakra-ui/react";
+import { useState } from "react";
 
 interface IDeleteModalProps {
   isOpen: boolean;
   onClose: () => void;
-  deleteFunction: () => void;
+  deleteFunction: () => Promise<void>;
   headingText: string;
   title: string;
   description: string;
@@ -28,6 +29,8 @@ const DeleteModal = ({
   description,
   buttonText,
 }: IDeleteModalProps) => {
+  const [deleteLoading, setDeleteLoading] = useState<boolean>(false);
+
   return (
     <>
       <Modal isOpen={isOpen} onClose={onClose}>
@@ -69,10 +72,16 @@ const DeleteModal = ({
                 Cancelar
               </Button>
               <Button
-                onClick={deleteFunction}
+                onClick={async () => {
+                  setDeleteLoading(true);
+                  await deleteFunction();
+                  setDeleteLoading(false);
+                }}
                 w={{ base: "100%", sm: "auto" }}
                 size={"lg"}
                 variant={"alert"}
+                isLoading={deleteLoading}
+                loadingText="Excluindo"
               >
                 {buttonText ? buttonText : "Sim, confirmar exclusão"}
               </Button>
