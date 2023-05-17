@@ -1,24 +1,62 @@
 import Footer from "@/components/Footer";
 import Header from "@/components/Header/Header";
+import Pagination from "@/components/Pagination";
 import PosterCreateEditModal from "@/components/PosterCreateEditModal";
 import PosterList from "@/components/PosterList";
 import SucessModal from "@/components/SuccessModal";
 import { authContext } from "@/contexts/AuthContext";
 import { IPosterGet } from "@/interfaces/poster.interfaces";
-import { IUser } from "@/interfaces/user.interfaces";
-import { mockedPosterList, mockedUserList } from "@/mocks";
 import api from "@/services/api";
-import { Avatar, Box, Button, Flex, Heading, Tag, Text, useDisclosure } from "@chakra-ui/react";
+import {
+  Avatar,
+  Box,
+  Button,
+  Flex,
+  Heading,
+  SkeletonText,
+  Tag,
+  Text,
+  useDisclosure,
+} from "@chakra-ui/react";
 import { GetServerSideProps, NextPage } from "next";
+import { useRouter } from "next/router";
 import nookies from "nookies";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-interface Props {
-  seller: IUser;
-  posterList: IPosterGet[];
-}
+const Profile: NextPage = () => {
+  const [posters, setPosters] = useState<IPosterGet[]>([]);
+  const [sellerProfileLoading, setSellerProfileLoading] = useState<boolean>(true);
+  const [count, setCount] = useState<number>(0);
+  const { user } = authContext();
+  const router = useRouter();
 
-const Profile: NextPage<Props> = ({ seller, posterList }) => {
+  useEffect(() => {
+    const getSellerProfileData = async () => {
+      setSellerProfileLoading(true);
+      const { id } = router.query;
+      if (id) {
+        try {
+          const response = await api.get(`/users/${id}/posters`, {
+            params: {
+              ...router.query,
+              perPage: 12,
+            },
+          });
+
+          setPosters(response.data.data);
+          setCount(response.data.count);
+          // setSeller(response.data.sellerData);
+        } catch (error: any) {
+          console.log(error.cause);
+
+          router.push("/404");
+        }
+      }
+      setSellerProfileLoading(false);
+    };
+    getSellerProfileData();
+  }, [router.query]);
+
   const {
     isOpen: isCreateModalOpen,
     onClose: onCreateModalClose,
@@ -31,14 +69,6 @@ const Profile: NextPage<Props> = ({ seller, posterList }) => {
     onOpen: onSucessModalOpen,
   } = useDisclosure();
 
-  const [posters, setPosters] = useState<IPosterGet[]>(posterList || []);
-
-  const { user } = authContext();
-
-  if (!user?.is_seller) {
-    return null;
-  }
-
   return (
     <>
       <Header />
@@ -49,7 +79,6 @@ const Profile: NextPage<Props> = ({ seller, posterList }) => {
           base: "linear(to-b, brand.1 0%, brand.1 20%, grey.8 20%, grey.8 100%)",
           md: "linear(to-b, brand.1 0px, brand.1 350px, grey.8 350px, grey.8 100%)",
         }}
-        pb={{ base: "45px", md: "73px" }}
       >
         {/* ORGANIZAÇÂO DO BODY EM PROFILE DATA E LISTAGEM DE ANUNCIOS */}
         <Flex direction={"column"} color={"grey.1"} w={"100%"} align={"center"} gap={"72px"}>
@@ -64,7 +93,7 @@ const Profile: NextPage<Props> = ({ seller, posterList }) => {
             gap={"24px"}
           >
             <Avatar
-              name={seller.name}
+              name={user?.name}
               width={{ base: "77px", md: "104px" }}
               h={{ base: "77px", md: "104px" }}
               sx={{
@@ -77,29 +106,38 @@ const Profile: NextPage<Props> = ({ seller, posterList }) => {
                 },
               }}
             />
-            <Flex direction={"row"} gap={"8px"}>
-              <Heading fontSize={"heading.6"} fontWeight={"semibold"} color={"grey.1"}>
-                {seller.name}
-              </Heading>
-              <Tag
-                fontWeight={"medium"}
-                fontSize={"body.2"}
-                bgColor={"brand.4"}
-                color={"brand.1"}
-                rounded={"4px"}
-                p={"4px 8px"}
-              >
-                Anunciante
-              </Tag>
-            </Flex>
+            <SkeletonText noOfLines={1} skeletonHeight="3" isLoaded={!!user}>
+              <Flex direction={"row"} gap={"8px"}>
+                <Heading fontSize={"heading.6"} fontWeight={"semibold"} color={"grey.1"}>
+                  {user?.name}
+                </Heading>
+                <Tag
+                  fontWeight={"medium"}
+                  fontSize={"body.2"}
+                  bgColor={"brand.4"}
+                  color={"brand.1"}
+                  rounded={"4px"}
+                  p={"4px 8px"}
+                >
+                  Anunciante
+                </Tag>
+              </Flex>
+            </SkeletonText>
 
             <Flex direction={"column"} gap={{ base: "12px", md: "36px" }}>
-              <Text fontSize={"body.1"} color={"grey.2"}>
-                {seller.description}
-              </Text>
+              <SkeletonText noOfLines={2} spacing={4} isLoaded={!!user}>
+                <Text fontSize={"body.1"} color={"grey.2"}>
+                  {user?.description}
+                </Text>
+              </SkeletonText>
 
               <Box>
-                <Button onClick={onCreateModalOpen} variant={"outlineBrand1"} size={"lg"}>
+                <Button
+                  isLoading={!user}
+                  onClick={onCreateModalOpen}
+                  variant={"outlineBrand1"}
+                  size={"lg"}
+                >
                   Criar anuncio
                 </Button>
               </Box>
@@ -115,34 +153,13 @@ const Profile: NextPage<Props> = ({ seller, posterList }) => {
             edit={true}
             maxColumns={4}
             showPromoTag={false}
-            showStatusTag={false}
+            showStatusTag={true}
             showSeller={false}
             setPosters={setPosters}
+            isLoading={sellerProfileLoading}
           />
 
-          <Flex
-            mt={{ base: "20px", lg: "104px" }}
-            direction={{ base: "column", md: "row" }}
-            align={"center"}
-            justify={"center"}
-            gap={"32px"}
-          >
-            <Heading
-              lineHeight={"heading.5"}
-              letterSpacing={"2px"}
-              color={"grey.4"}
-              fontSize={"heading.5"}
-              fontWeight={"semibold"}
-            >
-              <Text color={"grey.3"} as="span">
-                1
-              </Text>{" "}
-              de 2
-            </Heading>
-            <Heading role="button" color={"brand.1"} fontSize={"heading.5"} fontWeight={"semibold"}>
-              Seguinte {">"}
-            </Heading>
-          </Flex>
+          <Pagination count={count} page={Number(parseInt(router.query?.page! as string)) || 1} />
         </Flex>
       </Box>
       <Footer />
@@ -164,13 +181,12 @@ const Profile: NextPage<Props> = ({ seller, posterList }) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const { page } = ctx.query;
-
   const cookies = nookies.get(ctx);
   const userId = cookies["ecommerce.user.id"];
+  const isSeller = cookies["ecommerce.user.seller"];
   const token = cookies["ecommerce.token"];
 
-  if (!token || userId !== ctx.params!.id) {
+  if (!token || userId !== ctx.params!.id || isSeller !== "true") {
     return {
       redirect: {
         destination: `/seller/${ctx.params!.id}`,
@@ -178,21 +194,9 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       },
     };
   } else {
-    try {
-      const response = await api.get(`/users/${ctx.params!.id}/posters`);
-      return {
-        props: {
-          posterList: response.data.data,
-          seller: response.data.sellerData,
-          count: response.data.count,
-        },
-      };
-    } catch (error: any) {
-      console.log(error.cause);
-      return {
-        notFound: true,
-      };
-    }
+    return {
+      props: {},
+    };
   }
 };
 

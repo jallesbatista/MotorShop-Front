@@ -23,6 +23,7 @@ import {
   Image,
   List,
   ListItem,
+  Spinner,
   Tag,
   Text,
   Textarea,
@@ -46,18 +47,23 @@ const PosterDetail: NextPage<Props> = ({ poster }) => {
   const [posterImage, setPosterImage] = useState<string>("");
   const [comment, setComment] = useState<string>("");
   const [commentList, setCommentList] = useState<IComment[]>([]);
+  const [commentsLoading, setCommentsLoading] = useState<boolean>(true);
+  const [createCommentLoading, setCreateCommentLoading] = useState<boolean>(false);
+
   const router = useRouter();
   const { user } = authContext();
   const { commentGet, commentCreate } = posterContext();
 
   useEffect(() => {
     const findComments = async () => {
+      setCommentsLoading(true);
       try {
         const response = await commentGet(poster.id);
         if (response) {
           setCommentList(response);
         }
       } catch (error: any) {}
+      setCommentsLoading(false);
     };
     findComments();
   }, []);
@@ -78,7 +84,9 @@ const PosterDetail: NextPage<Props> = ({ poster }) => {
 
   const onSubmit = async (data: IUserComment) => {
     if (user) {
+      setCreateCommentLoading(true);
       const newComment = await commentCreate(poster.id, data);
+      setCreateCommentLoading(false);
       if (newComment) {
         setCommentList([newComment, ...commentList]);
         setComment("");
@@ -355,7 +363,7 @@ const PosterDetail: NextPage<Props> = ({ poster }) => {
               <Heading fontSize={"heading.6"} fontWeight={"bold"}>
                 Comentários
               </Heading>
-              {commentList?.length > 0 ? (
+              {commentList?.length > 0 && !commentsLoading ? (
                 <List display={"flex"} flexDirection={"column"} gap={"44px"}>
                   {commentList?.map((commentInfo, index) => (
                     <ListItem key={index}>
@@ -364,7 +372,21 @@ const PosterDetail: NextPage<Props> = ({ poster }) => {
                   ))}
                 </List>
               ) : (
-                <EmptyMessageBox>Não há comentarios aqui :/ </EmptyMessageBox>
+                <>
+                  {commentsLoading ? (
+                    <Spinner
+                      thickness="6px"
+                      speed="0.8s"
+                      emptyColor="brand.4"
+                      color="brand.1"
+                      size="xl"
+                      height={"100px"}
+                      width={"100px"}
+                    />
+                  ) : (
+                    <EmptyMessageBox>Não há comentarios aqui :/ </EmptyMessageBox>
+                  )}
+                </>
               )}
             </Flex>
             {/* LIST OF COMMENTS */}
@@ -428,6 +450,8 @@ const PosterDetail: NextPage<Props> = ({ poster }) => {
                   bottom={{ md: errors.content?.message ? "38" : "13" }}
                   right={{ md: "11" }}
                   w={"auto"}
+                  isLoading={createCommentLoading}
+                  loadingText="Comentando"
                   type={"submit"}
                   variant={user ? "brand1" : "disable"}
                   mt={{ base: "24px", md: "inherit" }}

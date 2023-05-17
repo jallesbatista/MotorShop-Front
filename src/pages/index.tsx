@@ -5,25 +5,54 @@ import PosterList from "@/components/PosterList";
 import { IPosterGet, IPosterFilters } from "@/interfaces/poster.interfaces";
 import api from "@/services/api";
 import { Box, Container, Flex, Heading, Text } from "@chakra-ui/react";
-import { GetServerSideProps, NextPage } from "next";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import bgImage from "../assets/bgHome.png";
+import Pagination from "@/components/Pagination";
+import { useRouter } from "next/router";
 
-interface Props {
-  posterList: IPosterGet[];
-  error: string;
-  filters: IPosterFilters;
-  query?: {
-    brand?: string;
-    model?: string;
-    color?: string;
-    year?: string;
-    fuel?: string;
-  };
-}
+const Home = () => {
+  const [posterList, setPosterList] = useState<IPosterGet[]>([]);
+  const [filters, setFilters] = useState<IPosterFilters>([] as any);
+  const [homeLoading, setHomeLoading] = useState<boolean>(true);
+  const [count, setCount] = useState<number>(0);
+  const router = useRouter();
 
-const Home: NextPage<Props> = ({ posterList, error, filters, query }) => {
-  const [page, setPage] = useState<number>(1);
+  useEffect(() => {
+    const getPostersAndFilters = async () => {
+      setHomeLoading(true);
+
+      try {
+        const [posters, filters] = await Promise.all([
+          // BUSCA ATUALIZADA DOS ANUNCIOS PUBLICADOS E FILTRO PARA OS MESMOS
+          api.get(`/posters`, {
+            timeout: 20000,
+            params: {
+              ...router.query,
+              perPage: 12,
+              published: 1,
+            },
+          }),
+          api.get(`/posters/filters`, {
+            timeout: 20000,
+            params: {
+              ...router.query,
+              published: 1,
+            },
+          }),
+        ]);
+        setPosterList(posters.data.data);
+        setFilters(filters.data);
+        setCount(posters.data.count);
+      } catch (error: any) {
+        console.log(error.cause);
+        setPosterList([]);
+        setFilters([] as any);
+      }
+      setHomeLoading(false);
+    };
+
+    getPostersAndFilters();
+  }, [router.query]);
 
   return (
     <>
@@ -31,7 +60,7 @@ const Home: NextPage<Props> = ({ posterList, error, filters, query }) => {
       <Box h={"80px"} />
       <Flex
         w={"100%"}
-        height={{ base: "60vh", md: "50vh" }}
+        height={"50vh"}
         color={"grey.10"}
         bg={`url(${bgImage.src}) no-repeat center`}
         position={"relative"}
@@ -73,7 +102,7 @@ const Home: NextPage<Props> = ({ posterList, error, filters, query }) => {
       </Flex>
       <Container p={0} maxWidth={"1600px"}>
         <Flex
-          gap={{ base: "80px", lg: "40px" }}
+          gap={{ base: "80px", lg: "30px" }}
           direction={{ base: "column", lg: "row-reverse" }}
           justify={{ base: "none", md: "space-between" }}
           p={{ base: "70px 0px 70px 0px", lg: "60px 63px 60px 30px" }}
@@ -87,91 +116,19 @@ const Home: NextPage<Props> = ({ posterList, error, filters, query }) => {
             showPromoTag={true}
             showStatusTag={false}
             showSeller={true}
+            isLoading={homeLoading}
           />
-          <Filter filters={filters} query={query} />
+          <Filter filters={filters!} query={router.query} />
         </Flex>
+        <Pagination
+          count={count}
+          page={Number(parseInt(router.query?.page! as string)) || 1}
+          query={router.query}
+        />
       </Container>
-      <Flex
-        mt={{ base: "20px", lg: "104px" }}
-        direction={{ base: "column", md: "row" }}
-        align={"center"}
-        justify={"center"}
-        gap={"32px"}
-        pb={{ base: "45px", md: "73px" }}
-      >
-        <Heading
-          lineHeight={"heading.5"}
-          letterSpacing={"2px"}
-          color={"grey.4"}
-          fontSize={"heading.5"}
-          fontWeight={"semibold"}
-        >
-          <Text color={"grey.3"} as="span">
-            {page}
-          </Text>{" "}
-          de 2
-        </Heading>
-        <Heading role="button" color={"brand.1"} fontSize={"heading.5"} fontWeight={"semibold"}>
-          Seguinte {">"}
-        </Heading>
-      </Flex>
       <Footer />
     </>
   );
-};
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const expectedFilters = [
-    "brand",
-    "model",
-    "color",
-    "year",
-    "fuel",
-    "priceMAX",
-    "priceMIN",
-    "kmMAX",
-    "kmMIN",
-  ];
-  let queryUrl = "?";
-
-  Object.entries(ctx.query).forEach(([key, value], index) => {
-    if (expectedFilters.includes(key)) {
-      if (index == 0) {
-        queryUrl += `${key}=${value}`;
-      } else {
-        queryUrl += `&${key}=${value}`;
-      }
-    }
-  });
-
-  try {
-    const [posters, filters] = await Promise.all([
-      // BUSCA ATUALIZADA DOS ANUNCIOS PUBLICADOS E FILTRO PARA OS MESMOS
-      api.get(
-        `/posters${queryUrl ? queryUrl + "&perPage=12&published=1" : "?perPage=12&published=1"}`
-      ),
-      api.get(`/posters/filters${queryUrl ? queryUrl + "&published=1" : "?published=1"}`),
-
-      // BUSCA GERAL DE TODOS OS ANUNCIO E FILTROS (DEIXAR SOMENTE PARA TESTES)
-      // api.get(`/posters${queryUrl ? queryUrl + "&perPage=12" : "?perPage=12"}`),
-      // api.get(`/posters/filters${queryUrl}`),
-    ]);
-    return {
-      props: {
-        posterList: posters.data.data,
-        filters: filters.data,
-        query: ctx.query,
-      },
-    };
-  } catch (error: any) {
-    console.log(error.cause);
-    return {
-      props: {
-        posterList: [],
-        filters: [],
-        query: ctx.query,
-      },
-    };
-  }
 };
 
 export default Home;

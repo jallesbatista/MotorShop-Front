@@ -37,4 +37,5 @@ export interface Iquery {
   priceMIN?: string;
   kmMAX?: string;
   kmMIN?: string;
+  page?: string;
 }

@@ -1,6 +1,7 @@
 import { Iquery } from "@/interfaces/poster.interfaces";
 import { Flex, Heading, Stack } from "@chakra-ui/react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 interface IFilterProps {
   filterList: string[];
@@ -9,20 +10,8 @@ interface IFilterProps {
   filterName: "brand" | "model" | "color" | "year" | "fuel";
 }
 
-const TextFilter = ({ filterList, children, query, filterName }: IFilterProps) => {
-  const redirect = () => {
-    let redirectLink = "?";
-
-    if (query) {
-      Object.entries(query).forEach(([key, value], index) => {
-        if (key !== String(filterName).toLowerCase()) {
-          redirectLink += `&${key}=${value}`;
-        }
-      });
-    }
-
-    return redirectLink;
-  };
+const TextFilter = ({ filterList, children, filterName }: IFilterProps) => {
+  const router = useRouter();
 
   return (
     <>
@@ -36,7 +25,13 @@ const TextFilter = ({ filterList, children, query, filterName }: IFilterProps) =
               <Heading
                 as={Link}
                 scroll={false}
-                href={`/${redirect()}&${String(filterName).toLowerCase()}=${filter}`}
+                href={{
+                  pathname: router.pathname,
+                  query: {
+                    ...router.query,
+                    [`${filterName}`]: filter,
+                  },
+                }}
                 key={index}
                 color={"grey.3"}
                 fontSize={"heading.6"}

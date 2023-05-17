@@ -34,6 +34,7 @@ import { editPosterSchema } from "@/schemas";
 import { posterContext } from "@/contexts/PosterContext";
 import CustomRadioButton from "./CustomRadioButton";
 import DeleteModal from "./DeleteModal";
+import Loading from "./Loading";
 
 interface IPosterCreateEditModal {
   isOpen: boolean;
@@ -78,6 +79,9 @@ const PosterCreateEditModal = ({
   const [carBrandModel, setCarBrandModel] = useState("");
 
   const [editPrevImages, setEditPrevImages] = useState<IPrevImages[]>([]);
+  const [createLoading, setCreateLoading] = useState<boolean>(false);
+  const [editLoading, setEditLoading] = useState<boolean>(false);
+  const [editDataLoading, setEditDataLoading] = useState<boolean>(true);
 
   const { posterCreate, posterEdit, posterDelete } = posterContext();
 
@@ -157,7 +161,6 @@ const PosterCreateEditModal = ({
 
         setEditPrevImages(filesArray);
       };
-
       getImages();
 
       reset({
@@ -175,7 +178,6 @@ const PosterCreateEditModal = ({
       });
       setBrandSearch(poster.brand);
       setRadioState(poster.is_published ? "y" : "n");
-      getImages();
     }
   }, [edit]);
 
@@ -290,6 +292,8 @@ const PosterCreateEditModal = ({
           fipe_price: "",
         });
       }
+
+      setEditDataLoading(false);
     };
 
     getCarData();
@@ -316,6 +320,7 @@ const PosterCreateEditModal = ({
   const closeAndReset = () => {
     onClose();
     setBrandSearch("");
+    setEditPrevImages([]);
     reset({
       brand: "",
       color: "",
@@ -343,6 +348,7 @@ const PosterCreateEditModal = ({
 
   const onSubmit = async (data: TCreatePoster) => {
     if (!edit) {
+      setCreateLoading(true);
       const createdPoster = await posterCreate(data);
       if (createdPoster) {
         setPosters((old) => [createdPoster, ...old]);
@@ -350,12 +356,12 @@ const PosterCreateEditModal = ({
       }
     } else {
       if (poster) {
+        setEditLoading(true);
         if (data.images) {
           data.images = [...editPrevImages!, ...data.images];
         } else {
           data.images = editPrevImages;
         }
-
         const updatedPoster = await posterEdit(poster.id, data);
         if (updatedPoster) {
           setPosters((old) =>
@@ -369,11 +375,23 @@ const PosterCreateEditModal = ({
         }
       }
     }
+    setCreateLoading(true);
+    setEditLoading(false);
     closeAndReset();
   };
+
+  if (edit && editDataLoading) {
+    return <Loading />;
+  }
+
   return (
     <>
-      <Modal isOpen={isOpen} onClose={closeAndReset} closeOnOverlayClick>
+      <Modal
+        isOpen={isOpen}
+        onClose={closeAndReset}
+        closeOnOverlayClick
+        preserveScrollBarGap={false}
+      >
         <ModalOverlay w={"100%"} h={"100%"} />
         <ModalContent
           color={"grey.1"}
@@ -820,6 +838,8 @@ const PosterCreateEditModal = ({
                   Excluir anúncio
                 </Button>
                 <Button
+                  isLoading={editLoading}
+                  loadingText="Salvando"
                   type="submit"
                   w={{ base: "50%", md: "40%" }}
                   size={"lg"}
@@ -834,7 +854,15 @@ const PosterCreateEditModal = ({
                 <Button onClick={onClose} w={"50%"} maxW={"130px"} size={"lg"} variant={"negative"}>
                   Cancelar
                 </Button>
-                <Button type="submit" w={"50%"} maxW={"190px"} size={"lg"} variant={"brandDisable"}>
+                <Button
+                  isLoading={createLoading}
+                  loadingText="Salvando"
+                  type="submit"
+                  w={"50%"}
+                  maxW={"190px"}
+                  size={"lg"}
+                  variant={"brandDisable"}
+                >
                   Criar anúncio
                 </Button>
               </Flex>
