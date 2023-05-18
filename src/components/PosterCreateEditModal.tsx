@@ -375,7 +375,7 @@ const PosterCreateEditModal = ({
         }
       }
     }
-    setCreateLoading(true);
+    setCreateLoading(false);
     setEditLoading(false);
     closeAndReset();
   };
