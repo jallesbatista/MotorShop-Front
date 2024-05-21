@@ -4,9 +4,9 @@ import Header from "@/components/Header/Header";
 import PosterList from "@/components/PosterList";
 import { IPosterGet, IPosterFilters } from "@/interfaces/poster.interfaces";
 import api from "@/services/api";
-import { Box, Container, Flex, Heading, Text } from "@chakra-ui/react";
+import { Box, Container, Flex, Heading } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
-import bgImage from "../assets/bgHome.png";
+import bgImage from "../assets/bgHome.jpg";
 import Pagination from "@/components/Pagination";
 import { useRouter } from "next/router";
 
@@ -62,7 +62,7 @@ const Home = () => {
         w={"100%"}
         height={"50vh"}
         color={"grey.10"}
-        bg={`url(${bgImage.src}) no-repeat center`}
+        bg={`url(${bgImage.src}) no-repeat center 40%`}
         position={"relative"}
         bgSize={"cover"}
       >
